@@ -1,5 +1,6 @@
 import { Bed, Bath, Square, MapPin, Heart } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface PropertyCardProps {
   image: string;
@@ -24,8 +25,10 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
+  const slug = title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+
   return (
-    <div className="group bg-card rounded-2xl overflow-hidden shadow-card border border-border">
+    <Link to={`/imovel/${slug}`} className="block group bg-card rounded-2xl overflow-hidden shadow-card border border-border hover:shadow-lg transition-shadow">
       {/* Image Container */}
       <div className="relative h-56 overflow-hidden">
         <img
@@ -93,7 +96,7 @@ const PropertyCard = ({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
