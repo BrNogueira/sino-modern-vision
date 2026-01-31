@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Phone, MapPin } from "lucide-react";
 import { Button } from "./ui/button";
+import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,14 +37,11 @@ const Header = () => {
         {/* Main header */}
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg gradient-hero flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">S</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xl text-primary leading-none">Sinos</span>
-              <span className="text-xs text-muted-foreground tracking-wide">IMÓVEIS</span>
-            </div>
+          <a href="#" className="flex items-center gap-3">
+            <img src={logoSinos} alt="Sinos Imóveis" className="h-12 md:h-14 w-auto" />
+            <span className="hidden sm:block text-xs text-muted-foreground font-medium leading-tight">
+              15 anos<br />realizando sonhos
+            </span>
           </a>
 
           {/* Desktop Navigation */}

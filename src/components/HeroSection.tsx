@@ -26,8 +26,7 @@ const HeroSection = () => {
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            Encontre o imóvel dos{" "}
-            <span className="text-accent">seus sonhos</span>
+            Encontre seu <span className="text-accent">Imóvel</span>
           </h1>
 
           {/* Subtitle */}
