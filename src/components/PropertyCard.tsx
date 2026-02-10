@@ -28,7 +28,7 @@ const PropertyCard = ({
   const slug = title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
 
   return (
-    <Link to={`/imovel/${slug}`} className="block group bg-card rounded-2xl overflow-hidden shadow-card border border-border hover:shadow-lg transition-shadow">
+    <Link to={`/imovel/${slug}`} className="block group bg-card rounded-2xl overflow-hidden shadow-card border border-border hover:border-accent/40 hover:shadow-lg transition-all">
       {/* Image Container */}
       <div className="relative h-56 overflow-hidden">
         <img
@@ -41,7 +41,7 @@ const PropertyCard = ({
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
         {/* Type Badge */}
-        <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+        <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold">
           {type}
         </div>
         
@@ -61,7 +61,7 @@ const PropertyCard = ({
       {/* Content */}
       <div className="p-5">
         {/* Price */}
-        <div className="text-2xl font-bold text-primary mb-2">{price}</div>
+        <div className="text-2xl font-bold text-accent mb-2">{price}</div>
         
         {/* Title */}
         <h3 className="font-semibold text-lg text-foreground mb-2 line-clamp-1 group-hover:text-primary transition-colors">
@@ -70,7 +70,7 @@ const PropertyCard = ({
         
         {/* Location */}
         <div className="flex items-center gap-1 text-muted-foreground text-sm mb-4">
-          <MapPin className="w-4 h-4 text-primary" />
+          <MapPin className="w-4 h-4 text-accent/70" />
           <span className="line-clamp-1">{location}</span>
         </div>
         

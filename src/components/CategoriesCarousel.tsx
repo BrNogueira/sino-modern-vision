@@ -48,11 +48,11 @@ const categories = [
 
 const CategoriesCarousel = () => {
   return (
-    <section id="categorias" className="py-20 bg-background">
+    <section id="categorias" className="py-20 bg-card">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider">
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">
             Explore
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
@@ -82,8 +82,8 @@ const CategoriesCarousel = () => {
             ))}
           </CarouselContent>
           <div className="flex justify-center gap-4 mt-8">
-            <CarouselPrevious className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground" />
-            <CarouselNext className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground" />
+            <CarouselPrevious className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground" />
+            <CarouselNext className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground" />
           </div>
         </Carousel>
       </div>
