@@ -10,33 +10,33 @@ const HeroSection = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
       </div>
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-accent/30 mb-6 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 backdrop-blur-sm border border-accent/30 mb-6 animate-fade-in">
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse-slow" />
-            <span className="text-primary-foreground text-sm font-medium">
+            <span className="text-accent text-sm font-medium">
               +500 imóveis disponíveis
             </span>
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
             Encontre seu <span className="text-accent">Imóvel</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-primary-foreground/80 mb-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-lg md:text-xl text-foreground/70 mb-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             Casas, apartamentos, terrenos e muito mais na região do Vale dos Sinos. 
             Sua nova história começa aqui.
           </p>
 
           {/* Search Box */}
-          <div className="bg-background/95 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-elegant animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="bg-card/90 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-elegant border border-accent/20 animate-fade-in" style={{ animationDelay: "0.3s" }}>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Location */}
               <div className="relative">
@@ -104,15 +104,15 @@ const HeroSection = () => {
           <div className="flex flex-wrap gap-8 mt-10 animate-fade-in" style={{ animationDelay: "0.4s" }}>
             <div className="text-center">
               <div className="text-3xl font-bold text-accent">500+</div>
-              <div className="text-sm text-primary-foreground/70">Imóveis</div>
+              <div className="text-sm text-foreground/60">Imóveis</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-accent">15+</div>
-              <div className="text-sm text-primary-foreground/70">Anos de experiência</div>
+              <div className="text-sm text-foreground/60">Anos de experiência</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-accent">1000+</div>
-              <div className="text-sm text-primary-foreground/70">Clientes satisfeitos</div>
+              <div className="text-sm text-foreground/60">Clientes satisfeitos</div>
             </div>
           </div>
         </div>

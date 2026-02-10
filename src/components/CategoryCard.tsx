@@ -31,7 +31,7 @@ const CategoryCard = ({ image, title, count }: CategoryCardProps) => {
       </div>
       
       {/* Hover Border Effect */}
-      <div className="absolute inset-0 border-4 border-accent rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="absolute inset-0 border-2 border-accent/60 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
     </a>
   );
 };

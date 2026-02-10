@@ -67,12 +67,12 @@ const properties = [
 
 const PropertyCarousel = () => {
   return (
-    <section id="imoveis" className="py-20 bg-secondary/30">
+    <section id="imoveis" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
           <div>
-            <span className="text-primary font-semibold text-sm uppercase tracking-wider">
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">
               Destaques
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
@@ -82,7 +82,7 @@ const PropertyCarousel = () => {
               Confira nossa seleção especial de imóveis com as melhores oportunidades do mercado
             </p>
           </div>
-          <Button variant="outline" size="lg">
+          <Button variant="outline" size="lg" className="border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground">
             Ver todos os imóveis
           </Button>
         </div>
@@ -106,8 +106,8 @@ const PropertyCarousel = () => {
             ))}
           </CarouselContent>
           <div className="flex justify-center gap-4 mt-8">
-            <CarouselPrevious className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground" />
-            <CarouselNext className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground" />
+            <CarouselPrevious className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground" />
+            <CarouselNext className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground" />
           </div>
         </Carousel>
       </div>
