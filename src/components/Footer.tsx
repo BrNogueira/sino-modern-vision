@@ -1,100 +1,61 @@
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
+import { Phone, MapPin, Mail, Instagram } from "lucide-react";
+import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Footer = () => {
   return (
-    <footer id="contato" className="bg-card text-foreground pt-16 pb-8 border-t border-accent/20">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* About */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                <span className="text-accent-foreground font-bold text-xl">S</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-xl text-accent leading-none">Sinos</span>
-                <span className="text-xs text-muted-foreground tracking-wide">IMÓVEIS</span>
-              </div>
-            </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Há mais de 15 anos ajudando famílias a encontrarem o lar dos sonhos na região do Vale dos Sinos.
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4">Links Rápidos</h4>
-            <ul className="space-y-2">
-              {["Início", "Imóveis", "Categorias", "Sobre Nós", "Contato"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-accent transition-colors text-sm">
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4">Categorias</h4>
-            <ul className="space-y-2">
-              {["Casas", "Apartamentos", "Terrenos", "Sítios", "Comerciais"].map((cat) => (
-                <li key={cat}>
-                  <a href="#" className="text-muted-foreground hover:text-accent transition-colors text-sm">
-                    {cat}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4">Contato</h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-sm">
-                <Phone className="w-5 h-5 text-accent" />
-                <span className="text-muted-foreground">(51) 3333-0000</span>
-              </li>
-              <li className="flex items-center gap-3 text-sm">
-                <Mail className="w-5 h-5 text-accent" />
-                <span className="text-muted-foreground">contato@sinosimoveis.com.br</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm">
-                <MapPin className="w-5 h-5 text-accent flex-shrink-0" />
-                <span className="text-muted-foreground">
-                  Rua General Osório, 123<br />
-                  Centro, Novo Hamburgo - RS
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom */}
-        <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-muted-foreground text-sm">
-            © 2024 Sinos Imóveis. Todos os direitos reservados.
+    <footer id="contato" className="bg-primary text-primary-foreground">
+      {/* Quote */}
+      <div className="bg-accent/30 py-8">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-foreground text-lg md:text-xl italic max-w-2xl mx-auto">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
           </p>
-          <div className="flex items-center gap-4">
-            <a
-              href="#"
-              className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all duration-300"
-            >
-              <Facebook className="w-5 h-5" />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all duration-300"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all duration-300"
-            >
-              <Linkedin className="w-5 h-5" />
+        </div>
+      </div>
+
+      {/* Footer Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+          {/* Logo */}
+          <div className="flex flex-col items-center md:items-start">
+            <img src={logoSinos} alt="Sinos Imóveis" className="h-16 w-auto" />
+            <span className="text-primary-foreground/80 text-xs mt-1">
+              <strong>15 anos</strong> realizando sonhos
+            </span>
+          </div>
+
+          {/* Contact Info */}
+          <div className="flex flex-col gap-3 text-sm">
+            <div className="flex items-center gap-3">
+              <Phone className="w-5 h-5" />
+              <span className="text-lg font-semibold">(XX) XXXXX-XXXX</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <span className="text-primary-foreground/80 text-xs">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              </span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <span className="text-primary-foreground/80 text-xs">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              </span>
+            </div>
+          </div>
+
+          {/* Social + Simulador */}
+          <div className="flex flex-col items-center md:items-end gap-4">
+            <div className="flex items-center gap-3">
+              <a href="#" className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+            </div>
+            <a href="#" className="text-primary-foreground font-semibold hover:underline">
+              Simulador Caixa
             </a>
           </div>
         </div>
