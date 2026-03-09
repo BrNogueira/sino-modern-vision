@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Phone, MapPin } from "lucide-react";
-import { Button } from "./ui/button";
+import { Menu, X } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Header = () => {
@@ -15,87 +14,40 @@ const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/98 backdrop-blur-md border-b border-accent/20">
-      <div className="container mx-auto px-4">
-        {/* Top bar */}
-        <div className="hidden md:flex items-center justify-between py-2 border-b border-border text-sm text-muted-foreground">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-accent" />
-              (51) 3333-0000
-            </span>
-            <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-accent" />
-              Novo Hamburgo, RS
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-primary transition-colors">Anuncie seu imóvel</a>
-          </div>
-        </div>
+    <header className="absolute top-0 left-0 right-0 z-50">
+      <div className="container mx-auto px-4 flex items-center justify-between py-4">
+        {/* Logo */}
+        <a href="#" className="flex flex-col items-start">
+          <img src={logoSinos} alt="Sinos Imóveis" className="h-16 md:h-20 w-auto" />
+          <span className="text-primary-foreground text-xs md:text-sm font-normal mt-1">
+            <strong>15 anos</strong> realizando sonhos
+          </span>
+        </a>
 
-        {/* Main header */}
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-3">
-            <img src={logoSinos} alt="Sinos Imóveis" className="h-12 md:h-14 w-auto" />
-            <span className="hidden sm:block text-xs text-muted-foreground font-medium leading-tight">
-              15 anos<br />realizando sonhos
-            </span>
-          </a>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-foreground/80 hover:text-primary font-medium transition-colors relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-          </nav>
-
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button variant="hero" size="lg">
-              Fale Conosco
-            </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
-          </button>
-        </div>
+        {/* Hamburger */}
+        <button
+          className="p-2 text-primary-foreground"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Menu"
+        >
+          {isMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+        </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile/Desktop Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border animate-fade-in">
-          <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
+        <div className="absolute top-full left-0 right-0 bg-primary border-b border-primary/80 shadow-lg">
+          <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+                className="text-primary-foreground hover:text-accent transition-colors py-2 text-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
               </a>
             ))}
-            <Button variant="hero" className="mt-2">
-              Fale Conosco
-            </Button>
           </nav>
         </div>
       )}

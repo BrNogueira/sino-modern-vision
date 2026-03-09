@@ -1,12 +1,3 @@
-import CategoryCard from "./CategoryCard";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
-
 import propertyApartment from "@/assets/property-apartment.jpg";
 import propertySitio from "@/assets/property-sitio.jpg";
 import propertyTerreno from "@/assets/property-terreno.jpg";
@@ -14,81 +5,53 @@ import propertyCasa from "@/assets/property-casa.jpg";
 import propertyComercial from "@/assets/property-comercial.jpg";
 
 const categories = [
-  {
-    image: propertyCasa,
-    title: "Casas",
-    count: 145,
-  },
-  {
-    image: propertyApartment,
-    title: "Apartamentos",
-    count: 89,
-  },
-  {
-    image: propertyTerreno,
-    title: "Terrenos",
-    count: 67,
-  },
-  {
-    image: propertySitio,
-    title: "Sítios",
-    count: 34,
-  },
-  {
-    image: propertyComercial,
-    title: "Comerciais",
-    count: 52,
-  },
-  {
-    image: propertyCasa,
-    title: "Condomínios",
-    count: 28,
-  },
+  { image: propertyCasa, title: "Aluguel" },
+  { image: propertySitio, title: "Sítios" },
+  { image: propertyCasa, title: "Casas" },
+  { image: propertyTerreno, title: "Terrenos" },
+  { image: propertyTerreno, title: "Terrenos de Esquina" },
+  { image: propertyApartment, title: "Apartamentos" },
+  { image: propertyApartment, title: "Coberturas" },
+  { image: propertyCasa, title: "Condomínios Horizontais" },
+  { image: propertyComercial, title: "Lançamentos" },
+  { image: propertyComercial, title: "Comerciais" },
+  { image: propertyComercial, title: "Pavilhões" },
+  { image: propertySitio, title: "Permuta" },
 ];
 
-const CategoriesCarousel = () => {
+const CategoriesSection = () => {
   return (
-    <section id="categorias" className="py-20 bg-card">
+    <section id="categorias" className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-            Explore
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
-            Categorias de Imóveis
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            Encontre o tipo de imóvel ideal para você. Navegue por nossas categorias e descubra as melhores opções.
-          </p>
-        </div>
+        <h2 className="text-2xl md:text-3xl text-center text-foreground mb-10">
+          Escolha sua categoria:
+        </h2>
 
-        {/* Carousel */}
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {categories.map((category, index) => (
-              <CarouselItem
-                key={index}
-                className="pl-4 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-              >
-                <CategoryCard {...category} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex justify-center gap-4 mt-8">
-            <CarouselPrevious className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground" />
-            <CarouselNext className="static translate-x-0 translate-y-0 h-12 w-12 border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground" />
-          </div>
-        </Carousel>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {categories.map((cat, index) => (
+            <a
+              key={index}
+              href="#"
+              className="group relative h-40 md:h-48 rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
+            >
+              <img
+                src={cat.image}
+                alt={cat.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3 flex items-end justify-between">
+                <span className="text-primary-foreground text-sm md:text-base font-normal">
+                  {cat.title}
+                </span>
+                <div className="w-5 h-5 border-2 border-primary-foreground/60 rounded-sm flex-shrink-0" />
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-export default CategoriesCarousel;
+export default CategoriesSection;
