@@ -1,4 +1,4 @@
-import { Bed, Bath, Car, Waves, Square, MapPin, Star } from "lucide-react";
+import { Bed, Bath, Car, Waves, GroupIcon, MapPin, Star } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
@@ -120,7 +120,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {property.area && !hasFeatureIcons && (
           <div className="flex items-center justify-center gap-1 mb-3">
             <span className="flex items-center gap-1 text-sm bg-muted px-3 py-1.5 rounded-md">
-              <Square className="w-4 h-4 text-primary" />
+              <GroupIcon className="w-4 h-4 text-primary" />
               {property.area}m² {property.areaDimensions && `(${property.areaDimensions})`}
             </span>
           </div>
