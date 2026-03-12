@@ -130,7 +130,7 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {lightbox.open && <LightboxOverlay images={gallery} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} />}
+      {lightbox.open && <LightboxOverlay images={gallery} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox({ open: true, index: i })} />}
 
       {/* ── Title Bar ── */}
       <div className="bg-card border-b border-border mt-16">
