@@ -38,16 +38,70 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 const generateSlug = (title: string) =>
   title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-/* ─── Lightbox ─── */
-const LightboxOverlay = ({ images, index, onClose, onPrev, onNext }: { images: string[]; index: number; onClose: () => void; onPrev: () => void; onNext: () => void }) => (
-  <div className="fixed inset-0 z-50 bg-foreground/90 flex items-center justify-center" onClick={onClose}>
-    <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/20 text-background flex items-center justify-center hover:bg-background/40 transition-colors"><X className="w-6 h-6" /></button>
-    <button onClick={(e) => { e.stopPropagation(); onPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-background/20 text-background flex items-center justify-center hover:bg-background/40"><ChevronLeft className="w-7 h-7" /></button>
-    <img src={images[index]} alt="" className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
-    <button onClick={(e) => { e.stopPropagation(); onNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-background/20 text-background flex items-center justify-center hover:bg-background/40"><ChevronRight className="w-7 h-7" /></button>
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-background/20 text-background text-sm">{index + 1} / {images.length}</div>
-  </div>
-);
+/* ─── Lightbox (fullscreen gallery like reference) ─── */
+const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { images: string[]; index: number; onClose: () => void; onPrev: () => void; onNext: () => void; onGoTo: (i: number) => void }) => {
+  const thumbContainerRef = useState<HTMLDivElement | null>(null);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-[hsl(0,0%,8%)] flex flex-col" onClick={(e) => e.stopPropagation()}>
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-4 py-3 flex-shrink-0">
+        <span className="text-[hsl(0,0%,70%)] text-sm font-medium">{index + 1} / {images.length}</span>
+        <div className="flex items-center gap-1">
+          <button onClick={onClose} className="w-10 h-10 rounded-lg flex items-center justify-center text-[hsl(0,0%,70%)] hover:text-[hsl(0,0%,100%)] hover:bg-[hsl(0,0%,20%)] transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Main image area */}
+      <div className="flex-1 relative flex items-center justify-center min-h-0 px-16">
+        {/* Left arrow */}
+        <button
+          onClick={onPrev}
+          className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"
+        >
+          <ChevronLeft className="w-8 h-8" />
+        </button>
+
+        {/* Image */}
+        <img
+          src={images[index]}
+          alt=""
+          className="max-w-full max-h-full object-contain select-none"
+          draggable={false}
+        />
+
+        {/* Right arrow */}
+        <button
+          onClick={onNext}
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"
+        >
+          <ChevronRight className="w-8 h-8" />
+        </button>
+      </div>
+
+      {/* Thumbnails strip */}
+      <div className="flex-shrink-0 bg-[hsl(0,0%,12%)] border-t border-[hsl(0,0%,20%)]">
+        <div className="flex gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
+          {images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => onGoTo(i)}
+              className={`flex-shrink-0 w-[90px] h-[60px] rounded overflow-hidden border-2 transition-all ${
+                i === index
+                  ? "border-[hsl(0,0%,100%)] opacity-100"
+                  : "border-transparent opacity-50 hover:opacity-80"
+              }`}
+            >
+              <img src={img} alt="" className="w-full h-full object-cover" draggable={false} />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /* ─── Main Page ─── */
 const PropertyDetail = () => {
@@ -76,7 +130,7 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {lightbox.open && <LightboxOverlay images={gallery} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} />}
+      {lightbox.open && <LightboxOverlay images={gallery} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox({ open: true, index: i })} />}
 
       {/* ── Title Bar ── */}
       <div className="bg-card border-b border-border mt-16">
