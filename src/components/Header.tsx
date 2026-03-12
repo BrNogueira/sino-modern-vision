@@ -29,7 +29,7 @@ const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between py-3">
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="h-20 md:h-24 w-auto" />
+          <img src={logoSinos} alt="Sinos Imóveis" className="h-20 md:h-60 w-auto" />
           <span className={`${isHome ? "text-primary-foreground" : "text-muted-foreground"} text-xs font-normal mt-0.5`}>
             <strong>15 anos</strong> realizando sonhos
           </span>
