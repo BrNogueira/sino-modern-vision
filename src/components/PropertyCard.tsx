@@ -1,4 +1,5 @@
 import { Bed, Bath, Car, Waves, Square, MapPin, Star } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
