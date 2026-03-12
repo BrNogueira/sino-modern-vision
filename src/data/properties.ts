@@ -244,6 +244,11 @@ export const properties: Property[] = [
     area: 50,
     areaConstruida: 50,
     gallery: [propertyApartment],
+    taxasAdicionais: [
+      { nome: "Condomínio", valor: "R$ 300,00" },
+      { nome: "IPTU", valor: "R$ 85,00/mês" },
+    ],
+    condicoesPagamento: "Aluguel + caução de 3 meses",
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
