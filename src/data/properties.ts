@@ -218,6 +218,12 @@ export const properties: Property[] = [
     fotosAreaComum: [propertyDetail2, propertyDetail3],
     amenidades: ["Portaria 24h", "Elevador", "Salão de festas"],
     acabamentos: ["Piso laminado", "Forro em gesso"],
+    taxasAdicionais: [
+      { nome: "Condomínio", valor: "R$ 450,00" },
+      { nome: "IPTU", valor: "R$ 120,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 35,00/mês" },
+    ],
+    condicoesPagamento: "Aluguel + caução de 3 meses",
     description: "Apartamento funcional e bem localizado no centro de Novo Hamburgo.",
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
