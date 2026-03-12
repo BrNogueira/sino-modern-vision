@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   ChevronLeft,
@@ -27,6 +27,11 @@ import {
   TreePine,
   Building,
   Store,
+  ZoomIn,
+  Play,
+  Pause,
+  Maximize,
+  LayoutGrid,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -40,60 +45,93 @@ const generateSlug = (title: string) =>
 
 /* ─── Lightbox (fullscreen gallery like reference) ─── */
 const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { images: string[]; index: number; onClose: () => void; onPrev: () => void; onNext: () => void; onGoTo: (i: number) => void }) => {
-  const thumbContainerRef = useState<HTMLDivElement | null>(null);
+  const [zoomed, setZoomed] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [gridView, setGridView] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Slideshow
+  useEffect(() => {
+    if (playing) {
+      intervalRef.current = setInterval(() => onNext(), 3000);
+    }
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [playing, onNext]);
+
+  // Keyboard
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") onPrev();
+      if (e.key === "ArrowRight") onNext();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose, onPrev, onNext]);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
+
+  const btnCls = "w-10 h-10 rounded-lg flex items-center justify-center text-[hsl(0,0%,70%)] hover:text-[hsl(0,0%,100%)] hover:bg-[hsl(0,0%,20%)] transition-colors";
+
+  if (gridView) {
+    return (
+      <div className="fixed inset-0 z-50 bg-[hsl(0,0%,8%)] flex flex-col overflow-auto">
+        <div className="flex items-center justify-between px-4 py-3 flex-shrink-0 sticky top-0 bg-[hsl(0,0%,8%)] z-10">
+          <span className="text-[hsl(0,0%,70%)] text-sm font-medium">{images.length} fotos</span>
+          <div className="flex items-center gap-1">
+            <button onClick={() => setGridView(false)} className={btnCls}><LayoutGrid className="w-5 h-5" /></button>
+            <button onClick={onClose} className={btnCls}><X className="w-5 h-5" /></button>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1 p-2">
+          {images.map((img, i) => (
+            <button key={i} onClick={() => { onGoTo(i); setGridView(false); }} className="aspect-[4/3] overflow-hidden rounded hover:opacity-80 transition-opacity">
+              <img src={img} alt="" className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[hsl(0,0%,8%)] flex flex-col" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 bg-[hsl(0,0%,8%)] flex flex-col">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 flex-shrink-0">
         <span className="text-[hsl(0,0%,70%)] text-sm font-medium">{index + 1} / {images.length}</span>
-        <div className="flex items-center gap-1">
-          <button onClick={onClose} className="w-10 h-10 rounded-lg flex items-center justify-center text-[hsl(0,0%,70%)] hover:text-[hsl(0,0%,100%)] hover:bg-[hsl(0,0%,20%)] transition-colors">
-            <X className="w-5 h-5" />
-          </button>
+        <div className="flex items-center gap-1 bg-[hsl(0,0%,15%)] rounded-lg px-1 py-1">
+          <button onClick={() => setZoomed(!zoomed)} className={btnCls} title="Zoom"><ZoomIn className="w-5 h-5" /></button>
+          <button onClick={() => setPlaying(!playing)} className={btnCls} title="Slideshow">{playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}</button>
+          <button onClick={toggleFullscreen} className={btnCls} title="Tela cheia"><Maximize className="w-5 h-5" /></button>
+          <button onClick={() => setGridView(true)} className={btnCls} title="Grade"><LayoutGrid className="w-5 h-5" /></button>
+          <button onClick={onClose} className={btnCls} title="Fechar"><X className="w-5 h-5" /></button>
         </div>
       </div>
 
       {/* Main image area */}
-      <div className="flex-1 relative flex items-center justify-center min-h-0 px-16">
-        {/* Left arrow */}
-        <button
-          onClick={onPrev}
-          className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"
-        >
-          <ChevronLeft className="w-8 h-8" />
-        </button>
-
-        {/* Image */}
+      <div className={`flex-1 relative flex items-center justify-center min-h-0 px-16 ${zoomed ? "cursor-zoom-out overflow-auto" : ""}`} onClick={() => zoomed && setZoomed(false)}>
+        <button onClick={onPrev} className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"><ChevronLeft className="w-8 h-8" /></button>
         <img
           src={images[index]}
           alt=""
-          className="max-w-full max-h-full object-contain select-none"
+          className={`select-none transition-transform duration-300 ${zoomed ? "max-w-none scale-150 cursor-zoom-out" : "max-w-full max-h-full object-contain cursor-zoom-in"}`}
           draggable={false}
+          onClick={(e) => { e.stopPropagation(); setZoomed(!zoomed); }}
         />
-
-        {/* Right arrow */}
-        <button
-          onClick={onNext}
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"
-        >
-          <ChevronRight className="w-8 h-8" />
-        </button>
+        <button onClick={onNext} className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"><ChevronRight className="w-8 h-8" /></button>
       </div>
 
       {/* Thumbnails strip */}
       <div className="flex-shrink-0 bg-[hsl(0,0%,12%)] border-t border-[hsl(0,0%,20%)]">
         <div className="flex gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
           {images.map((img, i) => (
-            <button
-              key={i}
-              onClick={() => onGoTo(i)}
-              className={`flex-shrink-0 w-[90px] h-[60px] rounded overflow-hidden border-2 transition-all ${
-                i === index
-                  ? "border-[hsl(0,0%,100%)] opacity-100"
-                  : "border-transparent opacity-50 hover:opacity-80"
-              }`}
-            >
+            <button key={i} onClick={() => onGoTo(i)} className={`flex-shrink-0 w-[90px] h-[60px] rounded overflow-hidden border-2 transition-all ${i === index ? "border-[hsl(0,0%,100%)] opacity-100" : "border-transparent opacity-50 hover:opacity-80"}`}>
               <img src={img} alt="" className="w-full h-full object-cover" draggable={false} />
             </button>
           ))}
