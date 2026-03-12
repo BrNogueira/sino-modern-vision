@@ -32,6 +32,9 @@ import {
   Pause,
   Maximize,
   LayoutGrid,
+  Printer,
+  Star,
+  DollarSign,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -367,7 +370,50 @@ const PropertyDetail = () => {
               </Button>
             </div>
 
-            {/* Corretor */}
+            {/* WhatsApp info + social buttons */}
+            <div className="rounded-xl border border-border bg-card p-4 text-center space-y-3">
+              <a
+                href={property.linkWhatsapp || "https://wa.me/555198765432"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 text-primary font-bold text-sm hover:underline"
+              >
+                <MessageCircle className="w-5 h-5" />
+                Mais Informações via WhatsApp
+              </a>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Os preços, disponibilidades e condições de pagamento poderão ser alterados sem prévia comunicação.
+              </p>
+              <div className="flex items-center justify-center gap-3 pt-1">
+                <button
+                  onClick={() => navigator.share?.({ title: property.title, url: window.location.href }) || navigator.clipboard.writeText(window.location.href)}
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                  title="Compartilhar"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => toggleFavorite(property.code)}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isFavorite(property.code) ? "bg-yellow-400 text-foreground" : "bg-foreground text-background hover:bg-foreground/80"}`}
+                  title="Favoritar"
+                >
+                  <Star className={`w-4 h-4 ${isFavorite(property.code) ? "fill-current" : ""}`} />
+                </button>
+                <button
+                  onClick={() => window.print()}
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                  title="Imprimir"
+                >
+                  <Printer className="w-4 h-4" />
+                </button>
+                <button
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                  title="Financiamento"
+                >
+                  <DollarSign className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
             {property.corretor && (
               <div className="rounded-xl border border-border bg-card p-4 mt-2">
                 <p className="text-xs text-muted-foreground mb-2">Corretor responsável</p>
