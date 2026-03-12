@@ -42,6 +42,8 @@ export interface Property {
   description?: string;
   linkWhatsapp?: string;
   emailContato?: string;
+  taxasAdicionais?: { nome: string; valor: string }[];
+  condicoesPagamento?: string;
   corretor?: {
     nome: string;
     creci: string;
