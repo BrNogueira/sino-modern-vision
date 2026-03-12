@@ -33,6 +33,7 @@ import {
   Maximize,
   LayoutGrid,
   Printer,
+  Star,
   DollarSign,
 } from "lucide-react";
 import Header from "@/components/Header";
