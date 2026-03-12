@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   ChevronLeft,
@@ -27,6 +27,11 @@ import {
   TreePine,
   Building,
   Store,
+  ZoomIn,
+  Play,
+  Pause,
+  Maximize,
+  LayoutGrid,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
