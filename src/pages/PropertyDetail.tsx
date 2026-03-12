@@ -133,7 +133,7 @@ const PropertyDetail = () => {
       {lightbox.open && <LightboxOverlay images={gallery} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox({ open: true, index: i })} />}
 
       {/* ── Title Bar ── */}
-      <div className="bg-card border-b border-border mt-16">
+      <div className="bg-card border-b border-border">
         <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-1">

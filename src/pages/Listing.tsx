@@ -76,7 +76,7 @@ const Listing = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="container mx-auto px-4 pt-28 pb-16">
+      <div className="container mx-auto px-4 pt-8 pb-16">
         {/* Results Bar */}
         <div className="flex items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3">
           <div>

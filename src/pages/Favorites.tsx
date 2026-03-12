@@ -20,7 +20,7 @@ const Favorites = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="container mx-auto px-4 pt-28 pb-16">
+      <div className="container mx-auto px-4 pt-8 pb-16">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Link to="/" className="p-2 rounded-lg bg-card border border-border hover:bg-muted transition-colors">
