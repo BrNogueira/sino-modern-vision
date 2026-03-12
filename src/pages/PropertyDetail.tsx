@@ -32,6 +32,8 @@ import {
   Pause,
   Maximize,
   LayoutGrid,
+  Printer,
+  DollarSign,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
