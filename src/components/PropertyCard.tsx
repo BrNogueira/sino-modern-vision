@@ -103,20 +103,19 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         )}
 
-        {/* Favorite Button */}
-        <button
-          onClick={() => toggleFavorite(property.code)}
-          className="flex items-center justify-center gap-2 mx-auto text-sm hover:opacity-80 transition-opacity"
-        >
-          <Star
-            className={`w-5 h-5 transition-colors ${
-              favorited ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
-            }`}
-          />
-          <span className={favorited ? "text-yellow-600 font-medium" : "text-muted-foreground"}>
-            Favoritar
-          </span>
-        </button>
+        {/* Favorite Button - icon only, right aligned */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => toggleFavorite(property.code)}
+            className="hover:opacity-80 transition-opacity"
+          >
+            <Star
+              className={`w-5 h-5 transition-colors ${
+                favorited ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
+              }`}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );
