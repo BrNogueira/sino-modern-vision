@@ -35,10 +35,14 @@ import {
   Printer,
   Star,
   DollarSign,
+  Facebook,
+  Youtube,
+  Info,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import PropertyCard from "@/components/PropertyCard";
 import { Button } from "@/components/ui/button";
 import { properties, type Property } from "@/data/properties";
 import { useFavorites } from "@/contexts/FavoritesContext";
@@ -53,7 +57,6 @@ const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { i
   const [gridView, setGridView] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Slideshow
   useEffect(() => {
     if (playing) {
       intervalRef.current = setInterval(() => onNext(), 3000);
@@ -61,7 +64,6 @@ const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { i
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [playing, onNext]);
 
-  // Keyboard
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -105,7 +107,6 @@ const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { i
 
   return (
     <div className="fixed inset-0 z-50 bg-[hsl(0,0%,8%)] flex flex-col">
-      {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 flex-shrink-0">
         <span className="text-[hsl(0,0%,70%)] text-sm font-medium">{index + 1} / {images.length}</span>
         <div className="flex items-center gap-1 bg-[hsl(0,0%,15%)] rounded-lg px-1 py-1">
@@ -116,21 +117,11 @@ const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { i
           <button onClick={onClose} className={btnCls} title="Fechar"><X className="w-5 h-5" /></button>
         </div>
       </div>
-
-      {/* Main image area */}
       <div className={`flex-1 relative flex items-center justify-center min-h-0 px-16 ${zoomed ? "cursor-zoom-out overflow-auto" : ""}`} onClick={() => zoomed && setZoomed(false)}>
         <button onClick={onPrev} className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"><ChevronLeft className="w-8 h-8" /></button>
-        <img
-          src={images[index]}
-          alt=""
-          className={`select-none transition-transform duration-300 ${zoomed ? "max-w-none scale-150 cursor-zoom-out" : "max-w-full max-h-full object-contain cursor-zoom-in"}`}
-          draggable={false}
-          onClick={(e) => { e.stopPropagation(); setZoomed(!zoomed); }}
-        />
+        <img src={images[index]} alt="" className={`select-none transition-transform duration-300 ${zoomed ? "max-w-none scale-150 cursor-zoom-out" : "max-w-full max-h-full object-contain cursor-zoom-in"}`} draggable={false} onClick={(e) => { e.stopPropagation(); setZoomed(!zoomed); }} />
         <button onClick={onNext} className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[hsl(0,0%,60%)] hover:text-[hsl(0,0%,100%)] transition-colors z-10"><ChevronRight className="w-8 h-8" /></button>
       </div>
-
-      {/* Thumbnails strip */}
       <div className="flex-shrink-0 bg-[hsl(0,0%,12%)] border-t border-[hsl(0,0%,20%)]">
         <div className="flex gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
           {images.map((img, i) => (
@@ -144,6 +135,13 @@ const LightboxOverlay = ({ images, index, onClose, onPrev, onNext, onGoTo }: { i
   );
 };
 
+/* ─── TikTok icon (not in lucide) ─── */
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.28 8.28 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.16z" />
+  </svg>
+);
+
 /* ─── Main Page ─── */
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -152,6 +150,7 @@ const PropertyDetail = () => {
   const gallery = property.gallery?.length ? property.gallery : [property.image];
   const [currentImage, setCurrentImage] = useState(0);
   const [lightbox, setLightbox] = useState<{ open: boolean; index: number }>({ open: false, index: 0 });
+  const [showTaxas, setShowTaxas] = useState(false);
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const nextImage = useCallback(() => setCurrentImage((i) => (i + 1) % gallery.length), [gallery.length]);
@@ -166,6 +165,13 @@ const PropertyDetail = () => {
   const hasAcabamentos = property.acabamentos && property.acabamentos.length > 0;
   const hasAmenidades = property.amenidades && property.amenidades.length > 0;
   const hasFotosAreaComum = property.fotosAreaComum && property.fotosAreaComum.length > 0;
+  const hasTaxas = property.taxasAdicionais && property.taxasAdicionais.length > 0;
+  const isAluguel = property.transactionType === "aluguel";
+
+  // Similar properties (same type or city, excluding current)
+  const similarProperties = properties
+    .filter((p) => p.code !== property.code && (p.type === property.type || p.city === property.city))
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
@@ -184,14 +190,17 @@ const PropertyDetail = () => {
               <span>/</span>
               <span className="text-foreground">{property.title}</span>
             </nav>
-            <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">{property.title}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
+              <span className="text-primary">{property.type}</span> — {property.title}
+            </h1>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <span className="px-4 py-1.5 rounded bg-primary text-primary-foreground text-sm font-bold">CÓD: {property.code}</span>
             <button onClick={() => toggleFavorite(property.code)} className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
               <Heart className={`w-4 h-4 ${isFavorite(property.code) ? "fill-red-500 text-red-500" : "text-muted-foreground"}`} />
             </button>
-            <button className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
+            <button className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+              onClick={() => navigator.share?.({ title: property.title, url: window.location.href }) || navigator.clipboard.writeText(window.location.href)}>
               <Share2 className="w-4 h-4 text-muted-foreground" />
             </button>
           </div>
@@ -205,15 +214,29 @@ const PropertyDetail = () => {
           {/* ══ LEFT COLUMN ══ */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Main image with Venda/Aluguel badge */}
+            {/* Main image with Venda/Aluguel rounded badges + favorite star */}
             <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
               <img src={gallery[currentImage]} alt={property.title} className="w-full h-full object-cover cursor-pointer" onClick={() => openLightbox(currentImage)} />
-              {/* Transaction badge */}
-              <div className="absolute top-4 left-4 flex flex-col gap-1">
-                <span className={`px-3 py-1 rounded text-xs font-bold uppercase ${property.transactionType === "venda" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>
-                  {property.transactionType === "venda" ? "Venda" : "Aluguel"}
-                </span>
+              {/* Transaction badges — rounded "bolinhas" */}
+              <div className="absolute top-4 left-4 flex gap-2">
+                {property.transactionType === "venda" && (
+                  <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase bg-primary text-primary-foreground shadow-md">
+                    Venda
+                  </span>
+                )}
+                {property.transactionType === "aluguel" && (
+                  <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase bg-accent text-accent-foreground shadow-md">
+                    Aluguel
+                  </span>
+                )}
               </div>
+              {/* Favorite star on top-right of image */}
+              <button
+                onClick={() => toggleFavorite(property.code)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/70 backdrop-blur-sm flex items-center justify-center hover:bg-background/90 transition-all shadow-md"
+              >
+                <Star className={`w-5 h-5 transition-colors ${isFavorite(property.code) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} />
+              </button>
               {gallery.length > 1 && (
                 <>
                   <button onClick={prevImage} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronLeft className="w-5 h-5" /></button>
@@ -227,14 +250,14 @@ const PropertyDetail = () => {
             {gallery.length > 1 && (
               <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
                 {gallery.map((img, i) => (
-                  <button key={i} onClick={() => { setCurrentImage(i); }} className={`aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${currentImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
+                  <button key={i} onClick={() => setCurrentImage(i)} className={`aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${currentImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
                     <img src={img} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
 
-            {/* Fotos de Área de Uso Comum — green header bar */}
+            {/* Fotos de Área de Uso Comum — only for condos */}
             {hasFotosAreaComum && (
               <div>
                 <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
@@ -271,19 +294,19 @@ const PropertyDetail = () => {
                 <div className="space-y-2">
                   {property.areaTerreno && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">terreno:</span>
+                      <span className="flex items-center gap-2 text-muted-foreground"><LandPlot className="w-4 h-4 text-primary" /> terreno:</span>
                       <span className="font-semibold text-foreground">{property.areaTerreno} m²</span>
                     </div>
                   )}
                   {property.areaConstruida && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">casa:</span>
+                      <span className="flex items-center gap-2 text-muted-foreground"><Home className="w-4 h-4 text-primary" /> casa:</span>
                       <span className="font-semibold text-foreground">{property.areaConstruida} m²</span>
                     </div>
                   )}
                   {property.area && !property.areaConstruida && !property.areaTerreno && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">área:</span>
+                      <span className="flex items-center gap-2 text-muted-foreground"><Square className="w-4 h-4 text-primary" /> área:</span>
                       <span className="font-semibold text-foreground">{property.area} m²</span>
                     </div>
                   )}
@@ -291,13 +314,14 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Características — two columns with bullet icons */}
+            {/* Características — with bullet circle before icon */}
             {characteristics.length > 0 && (
               <div className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-3 pb-2 border-b border-border">Características</h3>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                   {characteristics.map((c, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm py-0.5">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                       <c.icon className="w-4 h-4 text-primary flex-shrink-0" />
                       <span className="text-foreground">{c.value} {c.label}</span>
                     </div>
@@ -306,14 +330,14 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Acabamentos */}
+            {/* Acabamentos — with dashes */}
             {hasAcabamentos && (
               <div className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-3 pb-2 border-b border-border">Acabamentos</h3>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                   {property.acabamentos!.map((item, i) => (
                     <div key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-muted-foreground mt-0.5">~</span>
+                      <span className="text-primary mt-0.5 font-bold">—</span>
                       <span className="text-foreground">{item}</span>
                     </div>
                   ))}
@@ -321,7 +345,7 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Áreas de Uso Comum */}
+            {/* Áreas de Uso Comum — only for condos */}
             {hasAmenidades && (
               <div className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-3 pb-2 border-b border-border">Áreas de Uso Comum</h3>
@@ -349,29 +373,60 @@ const PropertyDetail = () => {
               <p className="text-2xl md:text-3xl font-bold text-foreground">{property.priceFormatted}</p>
             </div>
 
-            {/* Condições de pagamento */}
-            <div className="px-1">
-              <p className="text-xs text-muted-foreground italic">condições de pagamento:</p>
-            </div>
+            {/* Condições de pagamento / Taxas adicionais for aluguel */}
+            {isAluguel ? (
+              <div className="space-y-2">
+                {hasTaxas && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowTaxas(!showTaxas)}
+                      onMouseEnter={() => setShowTaxas(true)}
+                      onMouseLeave={() => setShowTaxas(false)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-accent-foreground font-bold text-sm uppercase hover:bg-accent/80 transition-colors"
+                    >
+                      <Info className="w-4 h-4" />
+                      Taxas Adicionais
+                    </button>
+                    {showTaxas && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg p-3 z-20">
+                        {property.taxasAdicionais!.map((taxa, i) => (
+                          <div key={i} className="flex justify-between text-sm py-1">
+                            <span className="text-muted-foreground">{taxa.nome}:</span>
+                            <span className="font-semibold text-foreground">{taxa.valor}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {property.condicoesPagamento && (
+                  <p className="text-xs text-muted-foreground italic px-1">Documentação para locação: {property.condicoesPagamento}</p>
+                )}
+              </div>
+            ) : (
+              <div className="px-1">
+                <p className="text-xs text-muted-foreground italic">condições de pagamento: {property.condicoesPagamento || "consulte"}</p>
+              </div>
+            )}
 
-            {/* CTAs */}
-            <div className="space-y-2">
-              <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-sm font-bold uppercase">
+            {/* CTAs — side by side */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase">
                 <a href={property.linkWhatsapp || "https://wa.me/555198765432"} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-5 h-5" />
-                  Conversar no WhatsApp
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="w-full gap-2 text-sm font-bold uppercase border-foreground text-foreground hover:bg-muted">
+              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted">
                 <a href={`mailto:${property.emailContato || "contato@sinosimoveis.com.br"}`}>
-                  <Mail className="w-5 h-5" />
-                  Receber Informações por E-mail
+                  <Mail className="w-4 h-4" />
+                  E-mail
                 </a>
               </Button>
             </div>
 
-            {/* WhatsApp info + social buttons */}
-            <div className="rounded-xl border border-border bg-card p-4 text-center space-y-3">
+            {/* Action buttons: share, favorite, print, financing */}
+            <div className="rounded-xl border border-border bg-card p-4 space-y-3">
               <a
                 href={property.linkWhatsapp || "https://wa.me/555198765432"}
                 target="_blank"
@@ -381,7 +436,7 @@ const PropertyDetail = () => {
                 <MessageCircle className="w-5 h-5" />
                 Mais Informações via WhatsApp
               </a>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed text-center">
                 Os preços, disponibilidades e condições de pagamento poderão ser alterados sem prévia comunicação.
               </p>
               <div className="flex items-center justify-center gap-3 pt-1">
@@ -408,12 +463,28 @@ const PropertyDetail = () => {
                 </button>
                 <button
                   className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
-                  title="Financiamento"
+                  title="Simulação Financeira"
+                  onClick={() => window.open("https://www.caixa.gov.br/voce/habitacao/Paginas/default.aspx", "_blank")}
                 >
                   <DollarSign className="w-4 h-4" />
                 </button>
               </div>
+
+              {/* Social media links */}
+              <div className="flex items-center justify-center gap-3 pt-2 border-t border-border">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors text-muted-foreground">
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors text-muted-foreground">
+                  <TikTokIcon className="w-4 h-4" />
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors text-muted-foreground">
+                  <Youtube className="w-4 h-4" />
+                </a>
+              </div>
             </div>
+
+            {/* Corretor */}
             {property.corretor && (
               <div className="rounded-xl border border-border bg-card p-4 mt-2">
                 <p className="text-xs text-muted-foreground mb-2">Corretor responsável</p>
@@ -431,6 +502,22 @@ const PropertyDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* ── Imóveis Semelhantes ── */}
+      {similarProperties.length > 0 && (
+        <section className="bg-muted/30 py-12">
+          <div className="container mx-auto px-4">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground text-center mb-8 uppercase tracking-wide">
+              Imóveis Semelhantes
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {similarProperties.map((p) => (
+                <PropertyCard key={p.code} property={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
       <WhatsAppButton />
