@@ -1,11 +1,13 @@
-// Estrutura de dados conforme API Zap Imóveis (formato XML ZAP)
+// Estrutura de dados conforme API Zap Imóveis + Sistema de ícones por categorias
 
-export type TipoImovel = 
-  | "Apartamento" 
-  | "Casa" 
-  | "Terreno" 
-  | "Rural" 
-  | "Flat/Aparthotel" 
+// ====== CLASSIFICAÇÃO ZAP IMÓVEIS ======
+
+export type TipoImovel =
+  | "Apartamento"
+  | "Casa"
+  | "Terreno"
+  | "Rural"
+  | "Flat/Aparthotel"
   | "Comercial/Industrial";
 
 export type SubTipoImovel =
@@ -52,162 +54,6 @@ export type CategoriaImovel =
 
 export type TipoOferta = 1 | 2 | 3 | 5 | 6;
 
-export interface CaracteristicasImovel {
-  escritorio: boolean;
-  esquina: boolean;
-  arCondicionado: boolean;
-  hidromassagem: boolean;
-  jardim: boolean;
-  churrasqueira: boolean;
-  lareira: boolean;
-  piscina: boolean;
-  quintal: boolean;
-  qtdElevador: number;
-  redeTelefone: boolean;
-  salaJantar: boolean;
-  sauna: boolean;
-  terraco: boolean;
-  tvCabo: boolean;
-  areaServico: boolean;
-  segurancaInterna: boolean;
-  playground: boolean;
-  quadraPoliEsportiva: boolean;
-  salaGinastica: boolean;
-  salaoJogos: boolean;
-  despensa: boolean;
-  interfone: boolean;
-  mobiliado: boolean;
-  lavanderiaColetiva: boolean;
-  quadraTenis: boolean;
-  acesso24Horas: boolean;
-  salaoFestas: boolean;
-  armarioCozinha: boolean;
-  armarioEmbutido: boolean;
-  copa: boolean;
-  closet: boolean;
-}
-
-export interface GarantiasAluguel {
-  depositoDeSeguranca: boolean;
-  fiador: boolean;
-  cartaFianca: boolean;
-  seguroFianca: boolean;
-  tituloDeCapitalizacao: boolean;
-}
-
-export interface ZapImovelPhoto {
-  url: string;
-  principal: boolean;
-}
-
-export interface ZapImovel {
-  id: string;
-  // Identificação
-  codigoImovel: string;
-  tituloImovel: string;
-
-  // Classificação
-  tipoImovel: TipoImovel;
-  subTipoImovel: SubTipoImovel;
-  categoriaImovel: CategoriaImovel;
-  tipoOferta: TipoOferta;
-
-  // Endereço
-  estado: string;
-  cidade: string;
-  zona: string;
-  bairro: string;
-  endereco: string;
-  numero: string;
-  complemento: string;
-  cep: string;
-  latitude: string;
-  longitude: string;
-
-  // Preços
-  precoVenda: number | null;
-  precoAluguel: number | null;
-  iptu: number | null;
-  valorCondominio: number | null;
-
-  // Áreas
-  areaTotal: number | null;
-  areaUtil: number | null;
-
-  // Quantidades
-  qtdDormitorios: number | null;
-  qtdSuites: number | null;
-  qtdBanheiros: number | null;
-  qtdVagas: number | null;
-
-  // Descrição
-  observacao: string;
-
-  // Mídia
-  fotos: ZapImovelPhoto[];
-  videoUrl: string;
-  linkTourVirtual: string;
-
-  // Características
-  caracteristicas: CaracteristicasImovel;
-
-  // Garantias (aluguel)
-  garantias: GarantiasAluguel;
-
-  // Ano construção
-  anoConstrucao: number | null;
-
-  // Controle interno
-  ativo: boolean;
-  destaque: boolean;
-  exclusivo: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export const defaultCaracteristicas: CaracteristicasImovel = {
-  escritorio: false,
-  esquina: false,
-  arCondicionado: false,
-  hidromassagem: false,
-  jardim: false,
-  churrasqueira: false,
-  lareira: false,
-  piscina: false,
-  quintal: false,
-  qtdElevador: 0,
-  redeTelefone: false,
-  salaJantar: false,
-  sauna: false,
-  terraco: false,
-  tvCabo: false,
-  areaServico: false,
-  segurancaInterna: false,
-  playground: false,
-  quadraPoliEsportiva: false,
-  salaGinastica: false,
-  salaoJogos: false,
-  despensa: false,
-  interfone: false,
-  mobiliado: false,
-  lavanderiaColetiva: false,
-  quadraTenis: false,
-  acesso24Horas: false,
-  salaoFestas: false,
-  armarioCozinha: false,
-  armarioEmbutido: false,
-  copa: false,
-  closet: false,
-};
-
-export const defaultGarantias: GarantiasAluguel = {
-  depositoDeSeguranca: false,
-  fiador: false,
-  cartaFianca: false,
-  seguroFianca: false,
-  tituloDeCapitalizacao: false,
-};
-
 export const tipoImovelOptions: TipoImovel[] = [
   "Apartamento",
   "Casa",
@@ -239,39 +85,191 @@ export const subTipoByTipo: Record<TipoImovel, SubTipoImovel[]> = {
   ],
 };
 
-export const caracteristicasLabels: Record<keyof CaracteristicasImovel, string> = {
-  escritorio: "Escritório",
-  esquina: "Imóvel de Esquina",
-  arCondicionado: "Ar Condicionado",
-  hidromassagem: "Hidromassagem",
-  jardim: "Jardim",
-  churrasqueira: "Churrasqueira",
-  lareira: "Lareira",
-  piscina: "Piscina",
-  quintal: "Quintal",
-  qtdElevador: "Elevador",
-  redeTelefone: "Cabeamento Estruturado",
-  salaJantar: "Sala de Jantar",
-  sauna: "Sauna",
-  terraco: "Varanda/Terraço",
-  tvCabo: "TV a Cabo",
-  areaServico: "Área de Serviço",
-  segurancaInterna: "Circuito de Segurança",
-  playground: "Playground",
-  quadraPoliEsportiva: "Quadra Poliesportiva",
-  salaGinastica: "Academia",
-  salaoJogos: "Salão de Jogos",
-  despensa: "Despensa",
-  interfone: "Interfone",
-  mobiliado: "Mobiliado",
-  lavanderiaColetiva: "Lavanderia",
-  quadraTenis: "Quadra de Tênis",
-  acesso24Horas: "Vigia 24h",
-  salaoFestas: "Salão de Festas",
-  armarioCozinha: "Armário na Cozinha",
-  armarioEmbutido: "Armário Embutido",
-  copa: "Copa",
-  closet: "Closet",
+// ====== SISTEMA DE CADASTRO POR ÍCONES ======
+
+export interface FeatureItem {
+  key: string;
+  label: string;
+  emoji: string;
+}
+
+export interface FeatureCategory {
+  key: string;
+  title: string;
+  emoji: string;
+  items: FeatureItem[];
+}
+
+export const featureCategories: FeatureCategory[] = [
+  {
+    key: "ambientes_internos",
+    title: "Ambientes Internos",
+    emoji: "🛋️",
+    items: [
+      { key: "sala_estar", label: "Sala de estar", emoji: "🛋️" },
+      { key: "sala_tv", label: "Sala de TV", emoji: "📺" },
+      { key: "sala_jantar", label: "Sala de jantar", emoji: "🍽️" },
+      { key: "cozinha", label: "Cozinha", emoji: "🍳" },
+      { key: "lavanderia", label: "Lavanderia", emoji: "🧺" },
+      { key: "dormitorios", label: "Dormitórios", emoji: "🛏️" },
+      { key: "banheiro_social", label: "Banheiro social", emoji: "🚿" },
+      { key: "suite", label: "Suíte", emoji: "🚿" },
+      { key: "closet", label: "Closet", emoji: "🧳" },
+      { key: "escritorio", label: "Escritório", emoji: "🖥️" },
+      { key: "hall_entrada", label: "Hall de entrada", emoji: "🚪" },
+    ],
+  },
+  {
+    key: "area_externa",
+    title: "Área Externa / Apoio",
+    emoji: "🚗",
+    items: [
+      { key: "garagem_coberta", label: "Garagem coberta", emoji: "🚗" },
+      { key: "vaga_descoberta", label: "Vaga descoberta", emoji: "🚙" },
+      { key: "churrasqueira", label: "Churrasqueira", emoji: "🍖" },
+      { key: "lareira", label: "Lareira", emoji: "🔥" },
+      { key: "sacada", label: "Sacada", emoji: "🌅" },
+      { key: "patio", label: "Pátio", emoji: "🌳" },
+      { key: "jardim", label: "Jardim", emoji: "🌿" },
+      { key: "piscina", label: "Piscina", emoji: "🏊" },
+      { key: "deposito", label: "Depósito", emoji: "🧱" },
+      { key: "banheiro_externo", label: "Banheiro externo", emoji: "🚿" },
+      { key: "canil", label: "Canil", emoji: "🐶" },
+    ],
+  },
+  {
+    key: "conforto",
+    title: "Conforto e Diferenciais",
+    emoji: "🛁",
+    items: [
+      { key: "banheira", label: "Banheira", emoji: "🛁" },
+      { key: "hidromassagem", label: "Hidromassagem", emoji: "🚿" },
+      { key: "vista_panoramica", label: "Vista panorâmica", emoji: "🌅" },
+      { key: "vista_serra_lago", label: "Vista serra / lago / cidade", emoji: "🌄" },
+      { key: "ar_condicionado_instalado", label: "Ar-condicionado instalado", emoji: "❄️" },
+      { key: "espera_ar_condicionado", label: "Espera para ar-condicionado", emoji: "❄️" },
+      { key: "energia_solar", label: "Energia solar", emoji: "☀️" },
+    ],
+  },
+  {
+    key: "acabamentos",
+    title: "Acabamentos e Padrão Construtivo",
+    emoji: "🧱",
+    items: [
+      // Parede
+      { key: "acabamento_reboco_pintura", label: "Reboco + pintura", emoji: "🧱" },
+      { key: "acabamento_massa_corrida", label: "Massa corrida", emoji: "🧱" },
+      { key: "acabamento_tijolo_vista", label: "Tijolo à vista", emoji: "🧱" },
+      { key: "acabamento_madeira_parede", label: "Madeira (parede)", emoji: "🧱" },
+      // Aberturas
+      { key: "abertura_aluminio", label: "Aberturas em alumínio", emoji: "🚪" },
+      { key: "abertura_madeira", label: "Aberturas em madeira", emoji: "🚪" },
+      { key: "abertura_pvc", label: "Aberturas em PVC", emoji: "🚪" },
+      // Forro
+      { key: "forro_gesso", label: "Forro em gesso", emoji: "🧯" },
+      { key: "forro_pvc", label: "Forro em PVC", emoji: "🧯" },
+      { key: "forro_madeira", label: "Forro em madeira", emoji: "🧯" },
+      // Piso
+      { key: "piso_ceramico", label: "Piso cerâmico", emoji: "🪨" },
+      { key: "piso_porcelanato", label: "Piso porcelanato", emoji: "🪨" },
+      { key: "piso_laminado", label: "Piso laminado", emoji: "🪨" },
+      { key: "piso_madeira", label: "Piso em madeira", emoji: "🪨" },
+    ],
+  },
+  {
+    key: "tipo_construcao",
+    title: "Tipo de Construção",
+    emoji: "🏗️",
+    items: [
+      { key: "concreto_laje", label: "Casa de concreto / laje", emoji: "🧱" },
+      { key: "alvenaria", label: "Alvenaria", emoji: "🧱" },
+      { key: "madeira_construcao", label: "Madeira", emoji: "🪵" },
+      { key: "mista", label: "Mista", emoji: "🧱" },
+      { key: "estrutura_segundo_piso", label: "Estrutura para segundo piso", emoji: "🏗️" },
+    ],
+  },
+  {
+    key: "infraestrutura",
+    title: "Infraestrutura e Tecnologia",
+    emoji: "🌐",
+    items: [
+      { key: "internet_fibra", label: "Internet fibra óptica", emoji: "🌐" },
+      { key: "internet_radio", label: "Internet via rádio", emoji: "📡" },
+      { key: "energia_eletrica", label: "Energia elétrica", emoji: "⚡" },
+      { key: "agua_encanada", label: "Água encanada", emoji: "💧" },
+      { key: "poco_artesiano", label: "Poço artesiano", emoji: "🚿" },
+      { key: "rua_asfaltada", label: "Rua asfaltada", emoji: "🛣️" },
+      { key: "rua_calcada", label: "Rua calçada", emoji: "🛤️" },
+    ],
+  },
+  {
+    key: "seguranca",
+    title: "Segurança",
+    emoji: "🔐",
+    items: [
+      { key: "portao_eletronico", label: "Portão eletrônico", emoji: "🔒" },
+      { key: "cameras", label: "Câmeras", emoji: "📹" },
+      { key: "alarme", label: "Alarme", emoji: "🚨" },
+      { key: "murada", label: "Murada", emoji: "🧱" },
+      { key: "gradeada", label: "Gradeada", emoji: "🧱" },
+    ],
+  },
+  {
+    key: "terreno",
+    title: "Terreno",
+    emoji: "📐",
+    items: [
+      { key: "terreno_plano", label: "Terreno plano", emoji: "📐" },
+      { key: "terreno_aclive", label: "Terreno em aclive", emoji: "📐" },
+      { key: "terreno_declive", label: "Terreno em declive", emoji: "📐" },
+      { key: "area_verde", label: "Área verde", emoji: "🌳" },
+      { key: "beira_lago", label: "Beira de lago / açude", emoji: "🌊" },
+    ],
+  },
+  {
+    key: "documentacao",
+    title: "Documentação / Financeiro",
+    emoji: "🏦",
+    items: [
+      { key: "apta_financiamento", label: "Apta a financiamento bancário", emoji: "🏦" },
+      { key: "escritura_registrada", label: "Escritura registrada", emoji: "📄" },
+      { key: "matricula_individual", label: "Matrícula individual", emoji: "📄" },
+      { key: "habite_se", label: "Habite-se", emoji: "📄" },
+      { key: "contrato_compra_venda", label: "Contrato de compra e venda", emoji: "📄" },
+      { key: "fracao_ideal", label: "Fração ideal", emoji: "📄" },
+    ],
+  },
+];
+
+// All feature keys as a flat set for the property data
+export type FeatureFlags = Record<string, boolean>;
+
+export const defaultFeatureFlags = (): FeatureFlags => {
+  const flags: FeatureFlags = {};
+  featureCategories.forEach((cat) =>
+    cat.items.forEach((item) => {
+      flags[item.key] = false;
+    })
+  );
+  return flags;
+};
+
+// ====== GARANTIAS (ALUGUEL) ======
+
+export interface GarantiasAluguel {
+  depositoDeSeguranca: boolean;
+  fiador: boolean;
+  cartaFianca: boolean;
+  seguroFianca: boolean;
+  tituloDeCapitalizacao: boolean;
+}
+
+export const defaultGarantias: GarantiasAluguel = {
+  depositoDeSeguranca: false,
+  fiador: false,
+  cartaFianca: false,
+  seguroFianca: false,
+  tituloDeCapitalizacao: false,
 };
 
 export const garantiasLabels: Record<keyof GarantiasAluguel, string> = {
@@ -281,3 +279,76 @@ export const garantiasLabels: Record<keyof GarantiasAluguel, string> = {
   seguroFianca: "Seguro Fiança",
   tituloDeCapitalizacao: "Título de Capitalização",
 };
+
+// ====== FOTO ======
+
+export interface ZapImovelPhoto {
+  url: string;
+  principal: boolean;
+}
+
+// ====== IMÓVEL COMPLETO ======
+
+export interface ZapImovel {
+  id: string;
+
+  // Obrigatório Zap
+  codigoImovel: string;
+  tituloImovel: string;
+  tipoImovel: TipoImovel;
+  subTipoImovel: SubTipoImovel;
+  categoriaImovel: CategoriaImovel;
+  tipoOferta: TipoOferta;
+
+  // Endereço (CEP obrigatório)
+  cep: string;
+  estado: string;
+  cidade: string;
+  zona: string;
+  bairro: string;
+  endereco: string;
+  numero: string;
+  complemento: string;
+  latitude: string;
+  longitude: string;
+
+  // Preço (ao menos um obrigatório)
+  precoVenda: number | null;
+  precoAluguel: number | null;
+  iptu: number | null;
+  valorCondominio: number | null;
+
+  // Área (ao menos um obrigatório)
+  areaTotal: number | null;
+  areaUtil: number | null;
+
+  // Quantidades
+  qtdDormitorios: number | null;
+  qtdSuites: number | null;
+  qtdBanheiros: number | null;
+  qtdVagas: number | null;
+
+  // Descrição (obrigatório, 50-3000 chars)
+  observacao: string;
+
+  // Mídia
+  fotos: ZapImovelPhoto[];
+  videoUrl: string;
+  linkTourVirtual: string;
+
+  // Sistema de ícones — features
+  features: FeatureFlags;
+
+  // Garantias (aluguel)
+  garantias: GarantiasAluguel;
+
+  // Ano construção
+  anoConstrucao: number | null;
+
+  // Controle interno
+  ativo: boolean;
+  destaque: boolean;
+  exclusivo: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
