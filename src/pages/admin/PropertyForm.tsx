@@ -20,15 +20,13 @@ import {
   ZapImovel,
   TipoImovel,
   SubTipoImovel,
-  CategoriaImovel,
   TipoOferta,
-  defaultCaracteristicas,
+  defaultFeatureFlags,
   defaultGarantias,
   tipoImovelOptions,
   subTipoByTipo,
-  caracteristicasLabels,
+  featureCategories,
   garantiasLabels,
-  CaracteristicasImovel,
   GarantiasAluguel,
 } from "@/types/zapImoveis";
 
@@ -41,6 +39,7 @@ const emptyForm: FormData = {
   subTipoImovel: "Casa Padrão",
   categoriaImovel: "Padrão",
   tipoOferta: 1,
+  cep: "",
   estado: "Rio Grande do Sul",
   cidade: "",
   zona: "",
@@ -48,7 +47,6 @@ const emptyForm: FormData = {
   endereco: "",
   numero: "",
   complemento: "",
-  cep: "",
   latitude: "",
   longitude: "",
   precoVenda: null,
@@ -65,7 +63,7 @@ const emptyForm: FormData = {
   fotos: [],
   videoUrl: "",
   linkTourVirtual: "",
-  caracteristicas: { ...defaultCaracteristicas },
+  features: defaultFeatureFlags(),
   garantias: { ...defaultGarantias },
   anoConstrucao: null,
   ativo: true,
@@ -96,10 +94,10 @@ const PropertyForm = () => {
   const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
-  const setCaracteristica = (key: keyof CaracteristicasImovel, value: boolean | number) =>
+  const toggleFeature = (featureKey: string) =>
     setForm((prev) => ({
       ...prev,
-      caracteristicas: { ...prev.caracteristicas, [key]: value },
+      features: { ...prev.features, [featureKey]: !prev.features[featureKey] },
     }));
 
   const setGarantia = (key: keyof GarantiasAluguel, value: boolean) =>
@@ -138,6 +136,10 @@ const PropertyForm = () => {
       toast({ title: "Erro", description: "Informe ao menos um preço (venda ou aluguel).", variant: "destructive" });
       return;
     }
+    if (!form.areaTotal && !form.areaUtil) {
+      toast({ title: "Erro", description: "Informe ao menos uma área (total ou útil).", variant: "destructive" });
+      return;
+    }
 
     if (isEditing && id) {
       updateProperty(id, form);
@@ -149,9 +151,11 @@ const PropertyForm = () => {
     navigate("/admin/imoveis");
   };
 
-  const numericField = (label: string, key: keyof FormData, placeholder = "") => (
+  const numericField = (label: string, key: keyof FormData, placeholder = "", required = false) => (
     <div className="space-y-1.5">
-      <Label className="text-foreground text-sm">{label}</Label>
+      <Label className="text-foreground text-sm">
+        {label} {required && <span className="text-destructive">*</span>}
+      </Label>
       <Input
         type="number"
         placeholder={placeholder}
@@ -161,9 +165,11 @@ const PropertyForm = () => {
     </div>
   );
 
-  const textField = (label: string, key: keyof FormData, placeholder = "", maxLength = 200) => (
+  const textField = (label: string, key: keyof FormData, placeholder = "", maxLength = 200, required = false) => (
     <div className="space-y-1.5">
-      <Label className="text-foreground text-sm">{label}</Label>
+      <Label className="text-foreground text-sm">
+        {label} {required && <span className="text-destructive">*</span>}
+      </Label>
       <Input
         placeholder={placeholder}
         value={String(form[key] || "")}
@@ -172,6 +178,8 @@ const PropertyForm = () => {
       />
     </div>
   );
+
+  const selectedFeaturesCount = Object.values(form.features).filter(Boolean).length;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -184,7 +192,7 @@ const PropertyForm = () => {
             {isEditing ? "Editar Imóvel" : "Novo Imóvel"}
           </h1>
           <p className="text-muted-foreground text-sm">
-            Campos conforme padrão Zap Imóveis / VRSync
+            Campos obrigatórios conforme padrão Zap Imóveis
           </p>
         </div>
       </div>
@@ -192,19 +200,23 @@ const PropertyForm = () => {
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Identificação */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Identificação</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            📋 Identificação
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {textField("Código do Imóvel *", "codigoImovel", "CA0003", 50)}
-            {textField("Título do Imóvel *", "tituloImovel", "Lindo Apartamento a venda em São Paulo", 100)}
+            {textField("Código do Imóvel", "codigoImovel", "CA0003", 50, true)}
+            {textField("Título do Imóvel (10-100 chars)", "tituloImovel", "Lindo Apartamento a venda em São Paulo", 100, true)}
           </div>
         </section>
 
         {/* Classificação */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Classificação</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            🏷️ Classificação
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-foreground text-sm">Tipo do Imóvel</Label>
+              <Label className="text-foreground text-sm">Tipo do Imóvel <span className="text-destructive">*</span></Label>
               <Select value={form.tipoImovel} onValueChange={(v) => handleTipoChange(v as TipoImovel)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -215,7 +227,7 @@ const PropertyForm = () => {
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-foreground text-sm">Subtipo</Label>
+              <Label className="text-foreground text-sm">Subtipo <span className="text-destructive">*</span></Label>
               <Select value={form.subTipoImovel} onValueChange={(v) => set("subTipoImovel", v as SubTipoImovel)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -243,12 +255,13 @@ const PropertyForm = () => {
 
         {/* Endereço */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Endereço</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            📍 Endereço
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {textField("CEP *", "cep", "93700000", 8)}
+            {textField("CEP", "cep", "93700000", 8, true)}
             {textField("Estado", "estado", "Rio Grande do Sul")}
             {textField("Cidade", "cidade", "Novo Hamburgo")}
-            {textField("Zona", "zona", "Zona Sul")}
             {textField("Bairro", "bairro", "Centro")}
             {textField("Endereço", "endereco", "Rua das Flores")}
             {textField("Número", "numero", "123", 20)}
@@ -260,7 +273,9 @@ const PropertyForm = () => {
 
         {/* Preços */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Preços e Valores</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            💰 Preços e Valores <span className="text-sm font-normal text-muted-foreground">(ao menos um obrigatório)</span>
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {numericField("Preço Venda (R$)", "precoVenda", "150000")}
             {numericField("Preço Aluguel (R$/mês)", "precoAluguel", "1800")}
@@ -271,10 +286,12 @@ const PropertyForm = () => {
 
         {/* Áreas e Quantidades */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Áreas e Quantidades</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            📐 Áreas e Quantidades
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {numericField("Área Total (m²)", "areaTotal")}
-            {numericField("Área Útil (m²)", "areaUtil")}
+            {numericField("Área Total (m²)", "areaTotal", "", true)}
+            {numericField("Área Útil (m²)", "areaUtil", "", true)}
             {numericField("Dormitórios", "qtdDormitorios")}
             {numericField("Suítes", "qtdSuites")}
             {numericField("Banheiros", "qtdBanheiros")}
@@ -285,7 +302,9 @@ const PropertyForm = () => {
 
         {/* Descrição */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Descrição (Observação) *</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            📝 Descrição <span className="text-destructive">*</span>
+          </h2>
           <Textarea
             placeholder="Mínimo 50, máximo 3000 caracteres. Descreva o imóvel com detalhes..."
             value={form.observacao}
@@ -298,51 +317,78 @@ const PropertyForm = () => {
 
         {/* Mídia */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Mídia</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            🎥 Mídia
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {textField("URL do Vídeo (YouTube)", "videoUrl", "https://youtu.be/...", 500)}
             {textField("Link Tour Virtual (HTTPS)", "linkTourVirtual", "https://...", 500)}
           </div>
           <p className="text-xs text-muted-foreground">
-            As fotos serão gerenciadas via upload quando o backend estiver integrado.
+            Fotos serão gerenciadas via upload quando o backend estiver integrado.
           </p>
         </section>
 
-        {/* Características */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Características</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {(Object.keys(caracteristicasLabels) as (keyof CaracteristicasImovel)[]).map((key) => {
-              if (key === "qtdElevador") {
-                return (
-                  <div key={key} className="space-y-1">
-                    <Label className="text-foreground text-sm">{caracteristicasLabels[key]}</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={form.caracteristicas.qtdElevador}
-                      onChange={(e) => setCaracteristica("qtdElevador", Number(e.target.value))}
-                      className="h-8"
-                    />
-                  </div>
-                );
-              }
-              return (
-                <label key={key} className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={form.caracteristicas[key] as boolean}
-                    onCheckedChange={(checked) => setCaracteristica(key, !!checked)}
-                  />
-                  <span className="text-sm text-foreground">{caracteristicasLabels[key]}</span>
-                </label>
-              );
-            })}
+        {/* ====== SISTEMA DE ÍCONES ====== */}
+        <section className="bg-card rounded-xl border border-border p-6 space-y-6">
+          <div className="border-b border-border pb-2">
+            <h2 className="text-lg font-semibold text-foreground">
+              📋 Características do Imóvel
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {selectedFeaturesCount} {selectedFeaturesCount === 1 ? "item selecionado" : "itens selecionados"}
+            </p>
           </div>
+
+          {featureCategories.map((category) => {
+            const categorySelectedCount = category.items.filter(
+              (item) => form.features[item.key]
+            ).length;
+
+            return (
+              <div key={category.key} className="space-y-3">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <span className="text-lg">{category.emoji}</span>
+                  {category.title}
+                  {categorySelectedCount > 0 && (
+                    <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">
+                      {categorySelectedCount}
+                    </span>
+                  )}
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {category.items.map((item) => {
+                    const isSelected = form.features[item.key];
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onClick={() => toggleFeature(item.key)}
+                        className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-left text-sm transition-all ${
+                          isSelected
+                            ? "border-primary bg-primary/5 text-foreground shadow-sm"
+                            : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:bg-muted/30"
+                        }`}
+                      >
+                        <span className="text-base flex-shrink-0">{item.emoji}</span>
+                        <span className="truncate">{item.label}</span>
+                        {isSelected && (
+                          <span className="ml-auto text-primary font-bold text-xs">✓</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </section>
 
         {/* Garantias */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Garantias (Aluguel)</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            🔐 Garantias (Aluguel)
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {(Object.keys(garantiasLabels) as (keyof GarantiasAluguel)[]).map((key) => (
               <label key={key} className="flex items-center gap-2 cursor-pointer">
@@ -358,7 +404,9 @@ const PropertyForm = () => {
 
         {/* Controle */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">Controle Interno</h2>
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            ⚙️ Controle Interno
+          </h2>
           <div className="flex flex-wrap gap-8">
             <label className="flex items-center gap-3">
               <Switch checked={form.ativo} onCheckedChange={(v) => set("ativo", v)} />
@@ -376,7 +424,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Submit */}
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-3 pb-8">
           <Button variant="outline" type="button" onClick={() => navigate("/admin/imoveis")}>
             Cancelar
           </Button>

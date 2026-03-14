@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import {
   ZapImovel,
-  defaultCaracteristicas,
+  defaultFeatureFlags,
   defaultGarantias,
 } from "@/types/zapImoveis";
 
@@ -48,7 +48,14 @@ const initialProperties: ZapImovel[] = [
     fotos: [],
     videoUrl: "",
     linkTourVirtual: "",
-    caracteristicas: { ...defaultCaracteristicas, piscina: true, churrasqueira: true, jardim: true },
+    features: {
+      ...defaultFeatureFlags(),
+      piscina: true,
+      churrasqueira: true,
+      jardim: true,
+      apta_financiamento: true,
+      escritura_registrada: true,
+    },
     garantias: defaultGarantias,
     anoConstrucao: 2023,
     ativo: true,
@@ -89,7 +96,11 @@ const initialProperties: ZapImovel[] = [
     fotos: [],
     videoUrl: "",
     linkTourVirtual: "",
-    caracteristicas: { ...defaultCaracteristicas, interfone: true, salaoFestas: true },
+    features: {
+      ...defaultFeatureFlags(),
+      portao_eletronico: true,
+      internet_fibra: true,
+    },
     garantias: { ...defaultGarantias, seguroFianca: true },
     anoConstrucao: 2018,
     ativo: true,
