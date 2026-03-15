@@ -16,6 +16,8 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import PropertyForm from "./pages/admin/PropertyForm";
+import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
+import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
 
 const queryClient = new QueryClient();
 
