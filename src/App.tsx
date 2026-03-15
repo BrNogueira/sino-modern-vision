@@ -18,6 +18,13 @@ import AdminProperties from "./pages/admin/AdminProperties";
 import PropertyForm from "./pages/admin/PropertyForm";
 import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
 import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
+import AgenciamentosPage from "./pages/admin/corretor/AgenciamentosPage";
+import PreCadastrosPage from "./pages/admin/corretor/PreCadastrosPage";
+import MapaPage from "./pages/admin/corretor/MapaPage";
+import PesquisarPage from "./pages/admin/corretor/PesquisarPage";
+import AgendaPage from "./pages/admin/corretor/AgendaPage";
+import CadastroProprietarioPage from "./pages/admin/corretor/CadastroProprietarioPage";
+import CadastroClientePage from "./pages/admin/corretor/CadastroClientePage";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +52,13 @@ const App = () => (
                   <Route path="imoveis/editar/:id" element={<PropertyForm />} />
                   <Route path="corretor" element={<AdminCorretorProfile />} />
                   <Route path="corretor/imoveis" element={<AdminCorretorImoveis />} />
+                  <Route path="corretor/agenciamentos" element={<AgenciamentosPage />} />
+                  <Route path="corretor/pre-cadastros" element={<PreCadastrosPage />} />
+                  <Route path="corretor/mapa" element={<MapaPage />} />
+                  <Route path="corretor/pesquisar" element={<PesquisarPage />} />
+                  <Route path="corretor/agenda" element={<AgendaPage />} />
+                  <Route path="corretor/proprietario" element={<CadastroProprietarioPage />} />
+                  <Route path="corretor/cliente" element={<CadastroClientePage />} />
                 </Route>
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
