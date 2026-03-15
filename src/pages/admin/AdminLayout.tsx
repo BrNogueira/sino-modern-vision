@@ -10,15 +10,29 @@ import {
   ChevronRight,
   UserCircle,
   Home,
+  Briefcase,
+  FileText,
+  Map,
+  Search,
+  Calendar,
+  UserPlus,
+  Users,
 } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 import { useState } from "react";
 
 const navItems = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Painel", href: "/admin", icon: LayoutDashboard },
   { label: "Imóveis", href: "/admin/imoveis", icon: Building2 },
+  { label: "Agenciamentos", href: "/admin/corretor/agenciamentos", icon: Briefcase },
+  { label: "Pré Cadastros", href: "/admin/corretor/pre-cadastros", icon: FileText },
+  { label: "Mapa", href: "/admin/corretor/mapa", icon: Map },
+  { label: "Pesquisar", href: "/admin/corretor/pesquisar", icon: Search },
   { label: "Meu Cadastro", href: "/admin/corretor", icon: UserCircle },
-  { label: "Meus Imóveis", href: "/admin/corretor/imoveis", icon: Home },
+  { label: "Agenda", href: "/admin/corretor/agenda", icon: Calendar },
+  { label: "Cadastrar Proprietário", href: "/admin/corretor/proprietario", icon: UserPlus },
+  { label: "Cadastrar Cliente", href: "/admin/corretor/cliente", icon: Users },
+  { label: "Cadastrar Imóvel", href: "/admin/imoveis/novo", icon: Home },
 ];
 
 const AdminLayout = () => {
