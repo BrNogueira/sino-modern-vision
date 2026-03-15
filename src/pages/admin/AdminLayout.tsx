@@ -8,6 +8,8 @@ import {
   Menu,
   X,
   ChevronRight,
+  UserCircle,
+  Home,
 } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 import { useState } from "react";
