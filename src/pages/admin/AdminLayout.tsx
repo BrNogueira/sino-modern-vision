@@ -8,6 +8,8 @@ import {
   Menu,
   X,
   ChevronRight,
+  UserCircle,
+  Home,
 } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 import { useState } from "react";
@@ -15,6 +17,8 @@ import { useState } from "react";
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Imóveis", href: "/admin/imoveis", icon: Building2 },
+  { label: "Meu Cadastro", href: "/admin/corretor", icon: UserCircle },
+  { label: "Meus Imóveis", href: "/admin/corretor/imoveis", icon: Home },
 ];
 
 const AdminLayout = () => {

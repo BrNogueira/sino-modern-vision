@@ -16,6 +16,8 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import PropertyForm from "./pages/admin/PropertyForm";
+import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
+import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,8 @@ const App = () => (
                   <Route path="imoveis" element={<AdminProperties />} />
                   <Route path="imoveis/novo" element={<PropertyForm />} />
                   <Route path="imoveis/editar/:id" element={<PropertyForm />} />
+                  <Route path="corretor" element={<AdminCorretorProfile />} />
+                  <Route path="corretor/imoveis" element={<AdminCorretorImoveis />} />
                 </Route>
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
