@@ -22,15 +22,13 @@ const Header = () => {
 
   return (
     <header
-      className={`${
-        isHome ? "absolute top-0 left-0 right-0" : "sticky top-0 bg-card border-b border-border shadow-sm"
-      } z-50`}
+      className="sticky top-0 z-50 bg-primary border-b border-primary/80 shadow-sm"
     >
-      <div className="container mx-auto px-4 flex items-center justify-between py-3">
+      <div className="container mx-auto px-4 flex items-center justify-between py-2">
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="h-20 md:h-60 w-auto" />
-          <span className={`${isHome ? "text-primary-foreground" : "text-muted-foreground"} text-xs font-normal mt-0.5`}>
+          <img src={logoSinos} alt="Sinos Imóveis" className="h-12 md:h-16 w-auto" />
+          <span className="text-primary-foreground/80 text-xs font-normal mt-0.5">
             <strong>15 anos</strong> realizando sonhos
           </span>
         </Link>
