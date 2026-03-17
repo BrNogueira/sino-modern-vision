@@ -32,19 +32,19 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-6">
           <Link
             to="/favoritos"
-            className={`flex items-center gap-1.5 ${textClass} hover:text-primary transition-colors`}
+            className="flex items-center gap-1.5 text-primary-foreground hover:text-primary-foreground/80 transition-colors"
           >
             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
             <span className="text-sm font-semibold">Favoritos</span>
             {count > 0 && (
-              <span className="bg-[hsl(45,100%,50%)] text-foreground text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+              <span className="bg-accent text-accent-foreground text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
                 {count}
               </span>
             )}
           </Link>
 
           <button
-            className={`p-2 ${menuBtnClass}`}
+            className="p-2 text-primary-foreground"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -54,16 +54,16 @@ const Header = () => {
 
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-3">
-          <Link to="/favoritos" className={`relative ${textClass}`}>
+          <Link to="/favoritos" className="relative text-primary-foreground">
             <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
             {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[hsl(45,100%,50%)] text-foreground text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
+              <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
                 {count}
               </span>
             )}
           </Link>
           <button
-            className={`p-2 ${menuBtnClass}`}
+            className="p-2 text-primary-foreground"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
