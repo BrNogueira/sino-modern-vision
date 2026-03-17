@@ -86,7 +86,7 @@ const AdminLogin = () => {
               </div>
             )}
 
-            <Button type="submit" className="w-full" size="lg">
+            <Button type="submit" className="w-full bg-[hsl(48,100%,50%)] text-foreground hover:bg-[hsl(48,100%,45%)] font-bold" size="lg">
               Entrar
             </Button>
           </form>
