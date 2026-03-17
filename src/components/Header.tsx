@@ -17,8 +17,8 @@ const Header = () => {
     { label: "Contato", href: "/#contato" },
   ];
 
-  const textClass = isHome ? "text-primary-foreground" : "text-foreground";
-  const menuBtnClass = isHome ? "text-primary-foreground" : "text-foreground";
+  const textClass = "text-primary-foreground";
+  const menuBtnClass = "text-primary-foreground";
 
   return (
     <header
