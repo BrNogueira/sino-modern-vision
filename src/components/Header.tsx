@@ -7,8 +7,6 @@ import logoSinos from "@/assets/logo-sinos-imoveis.png";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { count } = useFavorites();
-  const location = useLocation();
-  const isHome = location.pathname === "/";
 
   const navLinks = [
     { label: "Início", href: "/" },
@@ -16,9 +14,6 @@ const Header = () => {
     { label: "Categorias", href: "/#categorias" },
     { label: "Contato", href: "/#contato" },
   ];
-
-  const textClass = isHome ? "text-primary-foreground" : "text-foreground";
-  const menuBtnClass = isHome ? "text-primary-foreground" : "text-foreground";
 
   return (
     <header
