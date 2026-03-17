@@ -64,7 +64,7 @@ const AdminLogin = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Senha</Label>
+              <Label htmlFor="password" className="text-primary-foreground">Senha</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
