@@ -3,10 +3,10 @@ import { MessageCircle } from "lucide-react";
 const WhatsAppButton = () => {
   return (
     <a
-      href="https://wa.me/5551999999999"
+      href="https://web.whatsapp.com/send?phone=555195951446"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 group md:hidden"
+      className="fixed bottom-6 right-6 z-50 group"
     >
       <div className="relative">
         <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-25" />
