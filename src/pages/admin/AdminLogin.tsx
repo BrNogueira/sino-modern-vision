@@ -91,7 +91,7 @@ const AdminLogin = () => {
             </Button>
           </form>
 
-          <p className="text-xs text-muted-foreground text-center mt-6">
+          <p className="text-xs text-primary-foreground/60 text-center mt-6">
             Protótipo — autenticação mock para desenvolvimento
           </p>
         </div>
