@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, X, Star } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
