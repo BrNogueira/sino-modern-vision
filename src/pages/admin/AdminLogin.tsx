@@ -39,16 +39,16 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-card rounded-2xl shadow-xl border border-border p-8">
+        <div className="bg-primary rounded-2xl shadow-xl border border-primary/80 p-8">
           <div className="flex flex-col items-center mb-8">
             <img src={logoSinos} alt="Sinos Imóveis" className="h-20 w-auto mb-4" />
-            <h1 className="text-2xl font-semibold text-foreground">Painel Administrativo</h1>
-            <p className="text-muted-foreground text-sm mt-1">Acesse com suas credenciais</p>
+            <h1 className="text-2xl font-semibold text-primary-foreground">Painel Administrativo</h1>
+            <p className="text-primary-foreground/70 text-sm mt-1">Acesse com suas credenciais</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">E-mail</Label>
+              <Label htmlFor="email" className="text-primary-foreground">E-mail</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -64,7 +64,7 @@ const AdminLogin = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Senha</Label>
+              <Label htmlFor="password" className="text-primary-foreground">Senha</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -86,12 +86,12 @@ const AdminLogin = () => {
               </div>
             )}
 
-            <Button type="submit" className="w-full" size="lg">
+            <Button type="submit" className="w-full bg-[hsl(48,100%,50%)] text-foreground hover:bg-[hsl(48,100%,45%)] font-bold" size="lg">
               Entrar
             </Button>
           </form>
 
-          <p className="text-xs text-muted-foreground text-center mt-6">
+          <p className="text-xs text-primary-foreground/60 text-center mt-6">
             Protótipo — autenticação mock para desenvolvimento
           </p>
         </div>
