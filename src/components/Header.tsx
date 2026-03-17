@@ -74,13 +74,13 @@ const Header = () => {
 
       {/* Menu Dropdown */}
       {isMenuOpen && (
-        <div className={`absolute top-full left-0 right-0 ${isHome ? "bg-primary" : "bg-card"} border-b border-border shadow-lg`}>
+        <div className="absolute top-full left-0 right-0 bg-primary border-b border-primary/80 shadow-lg">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.href}
-                className={`${isHome ? "text-primary-foreground hover:text-accent" : "text-foreground hover:text-primary"} transition-colors py-2 text-lg`}
+                className="text-primary-foreground hover:text-primary-foreground/70 transition-colors py-2 text-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
