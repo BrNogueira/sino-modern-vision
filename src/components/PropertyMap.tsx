@@ -30,7 +30,7 @@ const generateSlug = (title: string) =>
 let scriptLoadPromise: Promise<void> | null = null;
 const loadGoogleMaps = (): Promise<void> => {
   if (scriptLoadPromise) return scriptLoadPromise;
-  if (window.google?.maps) return Promise.resolve();
+  if ((window as any).google?.maps) return Promise.resolve();
 
   scriptLoadPromise = new Promise((resolve, reject) => {
     const script = document.createElement("script");
