@@ -197,9 +197,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
-  },
-  {
-    code: "5985",
+    latitude: -29.7280,
+    longitude: -51.0600,
     image: propertyCasa,
     title: "Apartamento 2 Dormitórios",
     type: "Apartamento",
