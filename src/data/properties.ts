@@ -285,5 +285,7 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7500,
+    longitude: -51.0350,
   },
 ];
