@@ -29,7 +29,6 @@ export interface Property {
   hasPool?: boolean;
   featured?: boolean;
   exclusive?: boolean;
-  // Extended fields for detail page
   areaTerreno?: number;
   areaConstruida?: number;
   salas?: number;
@@ -44,6 +43,8 @@ export interface Property {
   emailContato?: string;
   taxasAdicionais?: { nome: string; valor: string }[];
   condicoesPagamento?: string;
+  latitude?: number;
+  longitude?: number;
   corretor?: {
     nome: string;
     creci: string;
@@ -83,6 +84,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.6842,
+    longitude: -51.0497,
   },
   {
     code: "5980",
@@ -111,6 +114,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7220,
+    longitude: -51.0680,
   },
   {
     code: "5981",
@@ -133,6 +138,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7350,
+    longitude: -51.0550,
   },
   {
     code: "5982",
@@ -152,6 +159,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7100,
+    longitude: -51.0800,
   },
   {
     code: "5983",
@@ -178,6 +187,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7400,
+    longitude: -51.0450,
   },
   {
     code: "5984",
@@ -197,6 +208,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7280,
+    longitude: -51.0600,
   },
   {
     code: "5985",
@@ -228,6 +241,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.6880,
+    longitude: -51.0720,
   },
   {
     code: "5986",
@@ -252,6 +267,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7656,
+    longitude: -51.0339,
   },
   {
     code: "5987",
@@ -285,5 +302,7 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
+    latitude: -29.7500,
+    longitude: -51.0350,
   },
 ];
