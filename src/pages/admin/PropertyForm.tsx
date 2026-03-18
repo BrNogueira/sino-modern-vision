@@ -183,7 +183,7 @@ const PhotoUploadSection = ({
       {photos.length > 0 && (
         <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
           <img
-            src={photos[carouselIndex]}
+            src={photos[carouselIndex].url}
             alt={`Foto ${carouselIndex + 1}`}
             className="w-full h-full object-contain bg-muted"
           />
