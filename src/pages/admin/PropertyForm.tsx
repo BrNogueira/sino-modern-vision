@@ -71,6 +71,208 @@ const emptyForm: FormData = {
   exclusivo: false,
 };
 
+/* ─── Photo Upload Section ─── */
+const PhotoUploadSection = ({
+  photos,
+  onChange,
+}: {
+  photos: string[];
+  onChange: (photos: string[]) => void;
+}) => {
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const dragItemRef = useRef<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const addPhotos = useCallback(
+    (files: FileList | File[]) => {
+      const fileArray = Array.from(files).filter((f) => f.type.startsWith("image/"));
+      if (!fileArray.length) return;
+
+      const newUrls = fileArray.map((f) => URL.createObjectURL(f));
+      onChange([...photos, ...newUrls]);
+    },
+    [photos, onChange]
+  );
+
+  const removePhoto = (index: number) => {
+    const updated = photos.filter((_, i) => i !== index);
+    onChange(updated);
+    if (carouselIndex >= updated.length) setCarouselIndex(Math.max(0, updated.length - 1));
+  };
+
+  const handleDragStart = (index: number) => {
+    dragItemRef.current = index;
+  };
+
+  const handleDragEnter = (index: number) => {
+    setDragOverIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    if (dragItemRef.current === null || dragOverIndex === null || dragItemRef.current === dragOverIndex) {
+      setDragOverIndex(null);
+      dragItemRef.current = null;
+      return;
+    }
+
+    const updated = [...photos];
+    const [moved] = updated.splice(dragItemRef.current, 1);
+    updated.splice(dragOverIndex, 0, moved);
+    onChange(updated);
+    setDragOverIndex(null);
+    dragItemRef.current = null;
+  };
+
+  const handleFileDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    if (e.dataTransfer.files.length) {
+      addPhotos(e.dataTransfer.files);
+    }
+  };
+
+  const prevSlide = () => setCarouselIndex((i) => (i - 1 + photos.length) % photos.length);
+  const nextSlide = () => setCarouselIndex((i) => (i + 1) % photos.length);
+
+  return (
+    <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+      <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+        📷 Fotos do Imóvel
+        <span className="text-sm font-normal text-muted-foreground ml-2">
+          ({photos.length} {photos.length === 1 ? "foto" : "fotos"} — ilimitado)
+        </span>
+      </h2>
+
+      {/* Drop zone */}
+      <div
+        className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
+          isDraggingOver
+            ? "border-primary bg-primary/5"
+            : "border-border hover:border-primary/50"
+        }`}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDraggingOver(true);
+        }}
+        onDragLeave={() => setIsDraggingOver(false)}
+        onDrop={handleFileDrop}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        <Upload className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
+        <p className="text-sm text-muted-foreground">
+          Arraste fotos aqui ou <span className="text-primary font-semibold">clique para selecionar</span>
+        </p>
+        <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WEBP — sem limite de quantidade</p>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => e.target.files && addPhotos(e.target.files)}
+        />
+      </div>
+
+      {/* Carousel preview */}
+      {photos.length > 0 && (
+        <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
+          <img
+            src={photos[carouselIndex]}
+            alt={`Foto ${carouselIndex + 1}`}
+            className="w-full h-full object-contain bg-muted"
+          />
+          {photos.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={prevSlide}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-all shadow"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                onClick={nextSlide}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-all shadow"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">
+                {carouselIndex + 1} / {photos.length}
+              </div>
+            </>
+          )}
+          <button
+            type="button"
+            onClick={() => removePhoto(carouselIndex)}
+            className="absolute top-2 right-2 w-8 h-8 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:bg-destructive/90 shadow"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Gallery grid with drag-and-drop reorder */}
+      {photos.length > 0 && (
+        <div>
+          <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+            <GripVertical className="w-3 h-3" /> Arraste para reordenar • A primeira foto será a capa
+          </p>
+          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2">
+            {photos.map((photo, index) => (
+              <div
+                key={`${photo}-${index}`}
+                draggable
+                onDragStart={() => handleDragStart(index)}
+                onDragEnter={() => handleDragEnter(index)}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => e.preventDefault()}
+                onClick={() => setCarouselIndex(index)}
+                className={`relative aspect-square rounded-lg overflow-hidden border-2 cursor-grab active:cursor-grabbing transition-all group ${
+                  carouselIndex === index
+                    ? "border-primary ring-2 ring-primary/30"
+                    : dragOverIndex === index
+                    ? "border-accent scale-105"
+                    : "border-transparent hover:border-muted-foreground/30"
+                }`}
+              >
+                <img src={photo} alt={`Foto ${index + 1}`} className="w-full h-full object-cover" />
+                {index === 0 && (
+                  <span className="absolute top-0.5 left-0.5 bg-primary text-primary-foreground text-[9px] font-bold px-1 rounded">
+                    CAPA
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removePhoto(index);
+                  }}
+                  className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+                <div className="absolute bottom-0 left-0 right-0 bg-foreground/60 text-primary-foreground text-[9px] text-center py-0.5">
+                  {index + 1}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {photos.length === 0 && (
+        <div className="flex items-center gap-2 text-muted-foreground text-sm py-4 justify-center">
+          <ImageIcon className="w-5 h-5" />
+          Nenhuma foto adicionada ainda
+        </div>
+      )}
+    </section>
+  );
+};
+
 const PropertyForm = () => {
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
