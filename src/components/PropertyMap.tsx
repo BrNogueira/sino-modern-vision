@@ -1,4 +1,4 @@
-/// <reference types="google.maps" />
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -282,6 +282,18 @@ const PropertyDetail = () => {
                 <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
               </div>
             )}
+
+            {/* Map */}
+            {property.latitude && property.longitude && (
+              <div>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
+                  <h3 className="text-sm font-bold uppercase tracking-wide">Localização no Mapa</h3>
+                </div>
+                <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
+                  <PropertyMap properties={properties} highlightCode={property.code} className="h-[400px] w-full" />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* ══ RIGHT SIDEBAR ══ */}
