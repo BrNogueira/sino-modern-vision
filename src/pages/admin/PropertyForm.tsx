@@ -77,8 +77,8 @@ const PhotoUploadSection = ({
   photos,
   onChange,
 }: {
-  photos: string[];
-  onChange: (photos: string[]) => void;
+  photos: ZapImovelPhoto[];
+  onChange: (photos: ZapImovelPhoto[]) => void;
 }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -91,8 +91,11 @@ const PhotoUploadSection = ({
       const fileArray = Array.from(files).filter((f) => f.type.startsWith("image/"));
       if (!fileArray.length) return;
 
-      const newUrls = fileArray.map((f) => URL.createObjectURL(f));
-      onChange([...photos, ...newUrls]);
+      const newPhotos: ZapImovelPhoto[] = fileArray.map((f, i) => ({
+        url: URL.createObjectURL(f),
+        principal: photos.length === 0 && i === 0,
+      }));
+      onChange([...photos, ...newPhotos]);
     },
     [photos, onChange]
   );
