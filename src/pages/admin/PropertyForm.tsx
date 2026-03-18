@@ -315,18 +315,21 @@ const PropertyForm = () => {
           <p className="text-xs text-muted-foreground">{form.observacao.length}/3000 caracteres</p>
         </section>
 
-        {/* Mídia */}
+        {/* Fotos e Mídia */}
+        <PhotoUploadSection
+          photos={form.fotos}
+          onChange={(fotos) => set("fotos", fotos)}
+        />
+
+        {/* Vídeo e Tour */}
         <section className="bg-card rounded-xl border border-border p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
-            🎥 Mídia
+            🎥 Vídeo e Tour Virtual
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {textField("URL do Vídeo (YouTube)", "videoUrl", "https://youtu.be/...", 500)}
             {textField("Link Tour Virtual (HTTPS)", "linkTourVirtual", "https://...", 500)}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Fotos serão gerenciadas via upload quando o backend estiver integrado.
-          </p>
         </section>
 
         {/* ====== SISTEMA DE ÍCONES ====== */}
