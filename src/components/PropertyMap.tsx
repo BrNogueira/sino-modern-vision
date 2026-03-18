@@ -2,6 +2,8 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { type Property } from "@/data/properties";
+
 const GOOGLE_MAPS_API_KEY = "AIzaSyBWfv_IOOgHTpY4ZdTp8sRDcP17ml7_4SA";
 const DEFAULT_CENTER = { lat: -29.7656, lng: -51.0339 };
 const DEFAULT_ZOOM = 12;
