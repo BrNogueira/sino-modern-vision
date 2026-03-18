@@ -136,9 +136,8 @@ export const properties: Property[] = [
     linkWhatsapp: "https://wa.me/555198765432",
     emailContato: "contato@sinosimoveis.com.br",
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
-  },
-  {
-    code: "5982",
+    latitude: -29.7350,
+    longitude: -51.0550,
     image: propertySitio,
     title: "Sítio com Vista para Serra",
     type: "Sítio",
