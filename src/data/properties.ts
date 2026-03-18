@@ -44,6 +44,8 @@ export interface Property {
   emailContato?: string;
   taxasAdicionais?: { nome: string; valor: string }[];
   condicoesPagamento?: string;
+  latitude?: number;
+  longitude?: number;
   corretor?: {
     nome: string;
     creci: string;
