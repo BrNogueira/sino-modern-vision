@@ -29,7 +29,6 @@ export interface Property {
   hasPool?: boolean;
   featured?: boolean;
   exclusive?: boolean;
-  // Extended fields for detail page
   areaTerreno?: number;
   areaConstruida?: number;
   salas?: number;
@@ -117,6 +116,9 @@ export const properties: Property[] = [
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
     latitude: -29.7220,
     longitude: -51.0680,
+  },
+  {
+    code: "5981",
     image: propertyTerreno,
     title: "Terreno Plano em Condomínio",
     type: "Terreno",
@@ -138,6 +140,9 @@ export const properties: Property[] = [
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
     latitude: -29.7350,
     longitude: -51.0550,
+  },
+  {
+    code: "5982",
     image: propertySitio,
     title: "Sítio com Vista para Serra",
     type: "Sítio",
@@ -156,6 +161,9 @@ export const properties: Property[] = [
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
     latitude: -29.7100,
     longitude: -51.0800,
+  },
+  {
+    code: "5983",
     image: propertyComercial,
     title: "Casa Colonial Completa",
     type: "Casa",
@@ -181,6 +189,9 @@ export const properties: Property[] = [
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
     latitude: -29.7400,
     longitude: -51.0450,
+  },
+  {
+    code: "5984",
     image: propertyTerreno,
     title: "Terreno de Esquina",
     type: "Terreno",
@@ -199,6 +210,9 @@ export const properties: Property[] = [
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
     latitude: -29.7280,
     longitude: -51.0600,
+  },
+  {
+    code: "5985",
     image: propertyCasa,
     title: "Apartamento 2 Dormitórios",
     type: "Apartamento",
@@ -229,6 +243,9 @@ export const properties: Property[] = [
     corretor: { nome: "João Martins", creci: "CRECI 12345", telefone: "(51) 9876-5432" },
     latitude: -29.6880,
     longitude: -51.0720,
+  },
+  {
+    code: "5986",
     image: propertyApartment,
     title: "Sala Comercial 50m²",
     type: "Comercial",
