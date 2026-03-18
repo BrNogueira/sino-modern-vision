@@ -54,11 +54,11 @@ interface PropertyMapProps {
 
 const PropertyMap = ({ properties, highlightCode, className = "h-[70vh] w-full" }: PropertyMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const mapInstanceRef = useRef<any>(null);
   const navigate = useNavigate();
 
   const initMap = useCallback(() => {
-    if (!mapRef.current || !window.google?.maps) return;
+    if (!mapRef.current || !(window as any).google?.maps) return;
 
     const geoProperties = properties.filter((p) => p.latitude && p.longitude);
 
