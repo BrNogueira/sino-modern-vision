@@ -242,7 +242,7 @@ const PhotoUploadSection = ({
                     : "border-transparent hover:border-muted-foreground/30"
                 }`}
               >
-                <img src={photo} alt={`Foto ${index + 1}`} className="w-full h-full object-cover" />
+                <img src={photo.url} alt={`Foto ${index + 1}`} className="w-full h-full object-cover" />
                 {index === 0 && (
                   <span className="absolute top-0.5 left-0.5 bg-primary text-primary-foreground text-[9px] font-bold px-1 rounded">
                     CAPA
