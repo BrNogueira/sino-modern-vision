@@ -73,7 +73,8 @@ const PropertyMap = ({ properties, highlightCode, className = "h-[70vh] w-full" 
 
     const zoom = highlighted ? 15 : DEFAULT_ZOOM;
 
-    const map = new google.maps.Map(mapRef.current, {
+    const gmaps = (window as any).google.maps;
+    const map = new gmaps.Map(mapRef.current, {
       zoom,
       center,
       mapTypeControl: true,
@@ -87,17 +88,17 @@ const PropertyMap = ({ properties, highlightCode, className = "h-[70vh] w-full" 
     geoProperties.forEach((property) => {
       const isHighlighted = property.code === highlightCode;
 
-      const marker = new google.maps.Marker({
+      const marker = new gmaps.Marker({
         position: { lat: property.latitude!, lng: property.longitude! },
         map,
         title: `${property.title} - CÓD: ${property.code}`,
         icon: getMarkerIcon(property.type),
-        animation: isHighlighted ? google.maps.Animation.BOUNCE : undefined,
+        animation: isHighlighted ? gmaps.Animation.BOUNCE : undefined,
         zIndex: isHighlighted ? 999 : 1,
       });
 
       // Info window
-      const infoWindow = new google.maps.InfoWindow({
+      const infoWindow = new gmaps.InfoWindow({
         content: `
           <div style="max-width:220px;font-family:sans-serif;">
             <strong style="font-size:14px;">${property.title}</strong>
