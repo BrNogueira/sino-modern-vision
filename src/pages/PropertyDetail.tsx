@@ -43,6 +43,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import PropertyCard from "@/components/PropertyCard";
+import PropertyMap from "@/components/PropertyMap";
 import { Button } from "@/components/ui/button";
 import { properties, type Property } from "@/data/properties";
 import { useFavorites } from "@/contexts/FavoritesContext";
