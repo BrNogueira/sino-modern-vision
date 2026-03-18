@@ -28,6 +28,8 @@ import {
   featureCategories,
   garantiasLabels,
   GarantiasAluguel,
+  GarantiasAluguel,
+  ZapImovelPhoto,
 } from "@/types/zapImoveis";
 
 type FormData = Omit<ZapImovel, "id" | "createdAt" | "updatedAt">;
