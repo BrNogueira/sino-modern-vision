@@ -28,7 +28,6 @@ import {
   featureCategories,
   garantiasLabels,
   GarantiasAluguel,
-  GarantiasAluguel,
   ZapImovelPhoto,
 } from "@/types/zapImoveis";
 
