@@ -32,7 +32,7 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className={`${isHome ? "h-20 md:h-60" : "h-12 md:h-16"} w-auto`} />
-          <span className={`${isHome ? "text-primary-foreground" : "text-primary-foreground/80"} text-xs font-normal mt-0.5`}>
+          <span className="text-foreground text-sm md:text-base font-normal -mt-1">
             <strong>15 anos</strong> realizando sonhos
           </span>
         </Link>
