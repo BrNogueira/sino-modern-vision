@@ -35,6 +35,7 @@ const App = () => (
       <FavoritesProvider>
         <AdminAuthProvider>
           <AdminPropertiesProvider>
+          <ChangeLogProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
