@@ -53,14 +53,6 @@ const Header = () => {
 
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-3">
-          <Link to="/favoritos" className={`relative ${textClass}`}>
-            <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-            {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
-                {count}
-              </span>
-            )}
-          </Link>
           <button
             className={`p-2 ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
