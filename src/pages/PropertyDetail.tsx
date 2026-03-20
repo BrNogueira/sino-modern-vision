@@ -149,7 +149,21 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 /* ─── Main Page ─── */
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const property = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
+  const baseProperty = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
+  const { isAuthenticated } = useAdminAuth();
+
+  // Editable state for inline editing
+  const [editableFields, setEditableFields] = useState<Record<string, string>>({});
+  const property = {
+    ...baseProperty,
+    title: editableFields.title || baseProperty.title,
+    description: editableFields.description || baseProperty.description,
+    priceFormatted: editableFields.priceFormatted || baseProperty.priceFormatted,
+  };
+
+  const updateField = (field: string, value: string) => {
+    setEditableFields((prev) => ({ ...prev, [field]: value }));
+  };
 
   const gallery = property.gallery?.length ? property.gallery : [property.image];
   const [currentImage, setCurrentImage] = useState(0);
