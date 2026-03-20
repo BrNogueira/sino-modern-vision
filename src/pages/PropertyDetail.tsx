@@ -404,7 +404,9 @@ const PropertyDetail = () => {
 
             {/* Price */}
             <div className="rounded-xl border-2 border-foreground bg-card p-4 text-center">
-              <p className="text-2xl md:text-3xl font-bold text-foreground">{property.priceFormatted}</p>
+              <InlineEditField value={property.priceFormatted} field="Preço" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("priceFormatted", v)}>
+                <p className="text-2xl md:text-3xl font-bold text-foreground">{property.priceFormatted}</p>
+              </InlineEditField>
             </div>
 
             {/* Condições de pagamento / Taxas adicionais for aluguel */}
