@@ -1,5 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
+import InlineEditField from "@/components/InlineEditField";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { useChangeLog } from "@/contexts/ChangeLogContext";
 import {
   ChevronLeft,
   ChevronRight,
