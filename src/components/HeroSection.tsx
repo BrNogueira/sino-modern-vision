@@ -6,6 +6,7 @@ import heroImage from "@/assets/hero-house.jpg";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { count } = useFavorites();
   const [searchText, setSearchText] = useState("");
   const [modalidade, setModalidade] = useState<string[]>([]);
   const [modalidadeOpen, setModalidadeOpen] = useState(false);
