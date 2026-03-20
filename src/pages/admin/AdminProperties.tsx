@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
-const AdminProperties = () => {
+const generateSlug = (title: string) =>
+  title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const { properties, deleteProperty, updateProperty } = useAdminProperties();
   const [search, setSearch] = useState("");
   const { toast } = useToast();
