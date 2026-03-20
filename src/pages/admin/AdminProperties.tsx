@@ -1,7 +1,7 @@
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Plus, Pencil, Trash2, Search, Eye, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye, EyeOff, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import {
@@ -16,6 +16,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+
+const generateSlug = (title: string) =>
+  title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const AdminProperties = () => {
   const { properties, deleteProperty, updateProperty } = useAdminProperties();
@@ -118,7 +121,17 @@ const AdminProperties = () => {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="ghost" size="icon" asChild title="Visualizar imóvel">
+                          <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
+                            <Eye className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild title="Editar na página">
+                          <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
+                            <ExternalLink className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild title="Editar no formulário">
                           <Link to={`/admin/imoveis/editar/${p.id}`}>
                             <Pencil className="w-4 h-4" />
                           </Link>
