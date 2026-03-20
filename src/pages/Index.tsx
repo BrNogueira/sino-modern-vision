@@ -10,8 +10,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <HeroSection />
-      <PropertyCarousel />
       <CategoriesCarousel />
+      <PropertyCarousel />
       <Footer />
       <WhatsAppButton />
     </div>
