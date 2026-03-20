@@ -28,13 +28,13 @@ const CategoriesSection = () => {
           Escolha sua categoria:
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {categories.map((cat, index) => (
             <Link
               key={index}
               to={`/imoveis?${cat.filter}`}
-              className="group relative rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
-              style={{ width: 250, height: 250 }}
+              className="group relative aspect-square rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
+            >
             >
               <img
                 src={cat.image}
