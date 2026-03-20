@@ -5,7 +5,6 @@ import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { count } = useFavorites();
   const location = useLocation();
   const isHome = location.pathname === "/";
 
