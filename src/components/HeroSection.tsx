@@ -245,6 +245,14 @@ const HeroSection = () => {
           </a>
         </div>
       </div>
+
+      {/* Gradient transition from water color to page background */}
+      <div
+        className="h-24 md:h-32"
+        style={{
+          background: "linear-gradient(to bottom, #89A0B7 0%, hsl(0 0% 96%) 100%)",
+        }}
+      />
     </section>
   );
 };
