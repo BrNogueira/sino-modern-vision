@@ -448,14 +448,16 @@ const PropertyDetail = () => {
             {hasAcabamentos && (
               <div className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-3 pb-2 border-b border-border">Acabamentos</h3>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-                  {property.acabamentos!.map((item, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-primary mt-0.5 font-bold">—</span>
-                      <span className="text-foreground">{item}</span>
-                    </div>
-                  ))}
-                </div>
+                <InlineEditField value={(property.acabamentos || []).join(", ")} field="Acabamentos" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("acabamentos", v)} type="textarea">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    {property.acabamentos!.map((item, i) => (
+                      <div key={i} className="flex items-start gap-2 text-sm">
+                        <span className="text-primary mt-0.5 font-bold">—</span>
+                        <span className="text-foreground">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </InlineEditField>
               </div>
             )}
 
@@ -463,14 +465,16 @@ const PropertyDetail = () => {
             {hasAmenidades && (
               <div className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-3 pb-2 border-b border-border">Áreas de Uso Comum</h3>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-                  {property.amenidades!.map((item, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm">
-                      <AmenidadeIcon name={item} />
-                      <span className="text-foreground">{item}</span>
-                    </div>
-                  ))}
-                </div>
+                <InlineEditField value={(property.amenidades || []).join(", ")} field="Amenidades" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("amenidades", v)} type="textarea">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    {property.amenidades!.map((item, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm">
+                        <AmenidadeIcon name={item} />
+                        <span className="text-foreground">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </InlineEditField>
               </div>
             )}
 
