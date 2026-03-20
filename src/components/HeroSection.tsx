@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, ChevronDown, Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Search, ChevronDown, Check, Star } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import heroImage from "@/assets/hero-house.jpg";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { count } = useFavorites();
   const [searchText, setSearchText] = useState("");
   const [modalidade, setModalidade] = useState<string[]>([]);
   const [modalidadeOpen, setModalidadeOpen] = useState(false);
@@ -244,6 +246,17 @@ const HeroSection = () => {
             </svg>
           </a>
         </div>
+      </div>
+
+      {/* Favoritos link below search bar */}
+      <div className="container mx-auto px-4 flex justify-start mt-3">
+        <Link
+          to="/favoritos"
+          className="flex items-center gap-1.5 text-primary-foreground hover:opacity-80 transition-colors"
+        >
+          <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+          <span className="text-sm font-semibold">{count} Meus Favoritos</span>
+        </Link>
       </div>
 
       {/* Gradient transition from water color to page background */}
