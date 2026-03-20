@@ -144,6 +144,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </button>
         </div>
       </div>
+      </div>
     </div>
   );
 };
