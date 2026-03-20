@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import propertyApartment from "@/assets/property-apartment.jpg";
 import propertySitio from "@/assets/property-sitio.jpg";
 import propertyTerreno from "@/assets/property-terreno.jpg";
@@ -5,18 +6,18 @@ import propertyCasa from "@/assets/property-casa.jpg";
 import propertyComercial from "@/assets/property-comercial.jpg";
 
 const categories = [
-  { image: propertyCasa, title: "Aluguel" },
-  { image: propertySitio, title: "Sítios" },
-  { image: propertyCasa, title: "Casas" },
-  { image: propertyTerreno, title: "Terrenos" },
-  { image: propertyTerreno, title: "Terrenos de Esquina" },
-  { image: propertyApartment, title: "Apartamentos" },
-  { image: propertyApartment, title: "Coberturas" },
-  { image: propertyCasa, title: "Condomínios Horizontais" },
-  { image: propertyComercial, title: "Lançamentos" },
-  { image: propertyComercial, title: "Comerciais" },
-  { image: propertyComercial, title: "Pavilhões" },
-  { image: propertySitio, title: "Permuta" },
+  { image: propertyCasa, title: "Aluguel", filter: "transacao=Aluguel" },
+  { image: propertySitio, title: "Sítios", filter: "tipo=Sítio" },
+  { image: propertyCasa, title: "Casas", filter: "tipo=Casa" },
+  { image: propertyTerreno, title: "Terrenos", filter: "tipo=Terreno" },
+  { image: propertyTerreno, title: "Terrenos de Esquina", filter: "tipo=Terreno de Esquina" },
+  { image: propertyApartment, title: "Apartamentos", filter: "tipo=Apartamento" },
+  { image: propertyApartment, title: "Coberturas", filter: "tipo=Cobertura" },
+  { image: propertyCasa, title: "Condomínios Horizontais", filter: "tipo=Condomínio Horizontal" },
+  { image: propertyComercial, title: "Lançamentos", filter: "tipo=Lançamento" },
+  { image: propertyComercial, title: "Comerciais", filter: "tipo=Comercial" },
+  { image: propertyComercial, title: "Pavilhões", filter: "tipo=Pavilhão" },
+  { image: propertySitio, title: "Permuta", filter: "transacao=Permuta" },
 ];
 
 const CategoriesSection = () => {
@@ -29,9 +30,9 @@ const CategoriesSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {categories.map((cat, index) => (
-            <a
+            <Link
               key={index}
-              href="#"
+              to={`/imoveis?${cat.filter}`}
               className="group relative h-40 md:h-48 rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
             >
               <img
@@ -45,7 +46,7 @@ const CategoriesSection = () => {
                   {cat.title}
                 </span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
