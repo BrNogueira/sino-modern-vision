@@ -307,7 +307,6 @@ const PropertyDetail = () => {
                 </div>
               )}
             </InlinePhotoEditor>
-            )}
 
             {/* Fotos de Área de Uso Comum — only for condos */}
             {hasFotosAreaComum && (
