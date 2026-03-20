@@ -38,21 +38,21 @@ const HeroSection = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
-        {/* Bottom fade to light */}
+        {/* Bottom fade matching water color */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-[100px]"
+          className="absolute bottom-0 left-0 right-0 h-[120px]"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 0%, hsl(210 15% 94% / 0.5) 50%, hsl(210 15% 94%) 100%)",
+              "linear-gradient(to bottom, transparent 0%, #89A0B7 100%)",
           }}
         />
       </div>
 
       {/* Search block + WhatsApp row */}
-      <div className="relative -mt-12 z-10 flex items-start justify-center gap-3 px-4">
+      <div className="relative z-10 flex items-start justify-center gap-3 px-4" style={{ marginTop: 0 }}>
         {/* Search block */}
         <div
-          className="w-full max-w-[700px] rounded-2xl shadow-md p-3 md:p-4 flex flex-col gap-2.5"
+          className="w-full max-w-[1300px] rounded-2xl shadow-md px-5 md:px-6 py-4 flex flex-col gap-3"
           style={{ backgroundColor: "#8B8B8B" }}
         >
           {/* Row 1: search input + buscar */}
