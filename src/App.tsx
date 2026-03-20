@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
-import { AdminPropertiesProvider } from "@/contexts/AdminPropertiesContext";
+import { ChangeLogProvider } from "@/contexts/ChangeLogContext";
 import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
 import Listing from "./pages/Listing";
