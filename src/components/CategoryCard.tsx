@@ -21,7 +21,7 @@ const CategoryCard = ({ image, title, count }: CategoryCardProps) => {
       <div className="absolute inset-0 gradient-card-overlay" />
       
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 text-primary-foreground">
+      <div className="absolute bottom-0 left-0 right-0 p-6 text-primary-foreground text-center">
         <h3 className="text-2xl font-bold mb-1 transform transition-transform duration-300 group-hover:translate-x-2">
           {title}
         </h3>
