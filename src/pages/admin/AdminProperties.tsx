@@ -18,7 +18,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 const generateSlug = (title: string) =>
-  title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const AdminProperties = () => {
   const { properties, deleteProperty, updateProperty } = useAdminProperties();
   const [search, setSearch] = useState("");
   const { toast } = useToast();
