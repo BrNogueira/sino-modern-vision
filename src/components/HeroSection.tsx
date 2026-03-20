@@ -37,6 +37,7 @@ const HeroSection = () => {
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (searchText) params.set("q", searchText);
+    if (modalidade.length) params.set("modalidade", modalidade.join(","));
     if (filters.code) params.set("codigo", filters.code);
     if (filters.state) params.set("estado", filters.state);
     if (filters.city) params.set("cidade", filters.city);
