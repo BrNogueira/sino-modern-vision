@@ -520,12 +520,16 @@ const PropertyDetail = () => {
                   </div>
                 )}
                 {property.condicoesPagamento && (
-                  <p className="text-xs text-muted-foreground italic px-1">Documentação para locação: {property.condicoesPagamento}</p>
+                  <InlineEditField value={property.condicoesPagamento} field="Documentação Locação" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
+                    <p className="text-xs text-muted-foreground italic px-1">Documentação para locação: {property.condicoesPagamento}</p>
+                  </InlineEditField>
                 )}
               </div>
             ) : (
               <div className="px-1">
-                <p className="text-xs text-muted-foreground italic">condições de pagamento: {property.condicoesPagamento || "consulte"}</p>
+                <InlineEditField value={property.condicoesPagamento || "consulte"} field="Condições Pagamento" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
+                  <p className="text-xs text-muted-foreground italic">condições de pagamento: {property.condicoesPagamento || "consulte"}</p>
+                </InlineEditField>
               </div>
             )}
 
