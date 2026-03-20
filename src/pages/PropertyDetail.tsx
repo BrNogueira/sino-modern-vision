@@ -190,8 +190,9 @@ const PropertyDetail = () => {
   const updateField = (field: string, value: string) => {
     setEditableFields((prev) => ({ ...prev, [field]: value }));
   };
+  const [editableGallery, setEditableGallery] = useState<string[] | null>(null);
 
-  const gallery = property.gallery?.length ? property.gallery : [property.image];
+  const gallery = editableGallery || (property.gallery?.length ? property.gallery : [property.image]);
   const [currentImage, setCurrentImage] = useState(0);
   const [lightbox, setLightbox] = useState<{ open: boolean; index: number }>({ open: false, index: 0 });
   const [showTaxas, setShowTaxas] = useState(false);
