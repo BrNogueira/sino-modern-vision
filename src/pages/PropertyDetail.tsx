@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import InlineEditField from "@/components/InlineEditField";
+import InlinePhotoEditor from "@/components/InlinePhotoEditor";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { useChangeLog } from "@/contexts/ChangeLogContext";
 import {
@@ -189,8 +190,9 @@ const PropertyDetail = () => {
   const updateField = (field: string, value: string) => {
     setEditableFields((prev) => ({ ...prev, [field]: value }));
   };
+  const [editableGallery, setEditableGallery] = useState<string[] | null>(null);
 
-  const gallery = property.gallery?.length ? property.gallery : [property.image];
+  const gallery = editableGallery || (property.gallery?.length ? property.gallery : [property.image]);
   const [currentImage, setCurrentImage] = useState(0);
   const [lightbox, setLightbox] = useState<{ open: boolean; index: number }>({ open: false, index: 0 });
   const [showTaxas, setShowTaxas] = useState(false);
@@ -261,48 +263,50 @@ const PropertyDetail = () => {
           {/* ══ LEFT COLUMN ══ */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Main image with Venda/Aluguel rounded badges + favorite star */}
-            <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
-              <img src={gallery[currentImage]} alt={property.title} className="w-full h-full object-cover cursor-pointer" onClick={() => openLightbox(currentImage)} />
-              {/* Transaction badges — rounded "bolinhas" */}
-              <div className="absolute top-4 left-4 flex gap-2">
-                {property.transactionType === "venda" && (
-                  <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase bg-primary text-primary-foreground shadow-md">
-                    Venda
-                  </span>
-                )}
-                {property.transactionType === "aluguel" && (
-                  <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase bg-accent text-accent-foreground shadow-md">
-                    Aluguel
-                  </span>
+            <InlinePhotoEditor photos={gallery} propertyCode={property.code} propertyTitle={property.title} onSave={(newPhotos) => { setEditableGallery(newPhotos); setCurrentImage(0); }}>
+              {/* Main image with Venda/Aluguel rounded badges + favorite star */}
+              <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
+                <img src={gallery[currentImage]} alt={property.title} className="w-full h-full object-cover cursor-pointer" onClick={() => openLightbox(currentImage)} />
+                {/* Transaction badges — rounded "bolinhas" */}
+                <div className="absolute top-4 left-4 flex gap-2">
+                  {property.transactionType === "venda" && (
+                    <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase bg-primary text-primary-foreground shadow-md">
+                      Venda
+                    </span>
+                  )}
+                  {property.transactionType === "aluguel" && (
+                    <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase bg-accent text-accent-foreground shadow-md">
+                      Aluguel
+                    </span>
+                  )}
+                </div>
+                {/* Favorite star on top-right of image */}
+                <button
+                  onClick={() => toggleFavorite(property.code)}
+                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/70 backdrop-blur-sm flex items-center justify-center hover:bg-background/90 transition-all shadow-md"
+                >
+                  <Star className={`w-5 h-5 transition-colors ${isFavorite(property.code) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} />
+                </button>
+                {gallery.length > 1 && (
+                  <>
+                    <button onClick={prevImage} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronLeft className="w-5 h-5" /></button>
+                    <button onClick={nextImage} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronRight className="w-5 h-5" /></button>
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">{currentImage + 1} / {gallery.length}</div>
+                  </>
                 )}
               </div>
-              {/* Favorite star on top-right of image */}
-              <button
-                onClick={() => toggleFavorite(property.code)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/70 backdrop-blur-sm flex items-center justify-center hover:bg-background/90 transition-all shadow-md"
-              >
-                <Star className={`w-5 h-5 transition-colors ${isFavorite(property.code) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} />
-              </button>
-              {gallery.length > 1 && (
-                <>
-                  <button onClick={prevImage} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronLeft className="w-5 h-5" /></button>
-                  <button onClick={nextImage} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronRight className="w-5 h-5" /></button>
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">{currentImage + 1} / {gallery.length}</div>
-                </>
-              )}
-            </div>
 
-            {/* Thumbnail gallery grid */}
-            {gallery.length > 1 && (
-              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
-                {gallery.map((img, i) => (
-                  <button key={i} onClick={() => setCurrentImage(i)} className={`aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${currentImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
-                    <img src={img} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
+              {/* Thumbnail gallery grid */}
+              {gallery.length > 1 && (
+                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 mt-4">
+                  {gallery.map((img, i) => (
+                    <button key={i} onClick={() => setCurrentImage(i)} className={`aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${currentImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
+                      <img src={img} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </InlinePhotoEditor>
 
             {/* Fotos de Área de Uso Comum — only for condos */}
             {hasFotosAreaComum && (
