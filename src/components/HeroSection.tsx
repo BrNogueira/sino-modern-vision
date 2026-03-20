@@ -250,13 +250,13 @@ const HeroSection = () => {
 
       {/* Favoritos link below search bar */}
       <div className="container mx-auto px-4 flex justify-start mt-3">
-        <a
-          href="/favoritos"
+        <Link
+          to="/favoritos"
           className="flex items-center gap-1.5 text-primary-foreground hover:opacity-80 transition-colors"
         >
           <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-          <span className="text-sm font-semibold">Meus Favoritos</span>
-        </a>
+          <span className="text-sm font-semibold">{count} Meus Favoritos</span>
+        </Link>
       </div>
 
       {/* Gradient transition from water color to page background */}
