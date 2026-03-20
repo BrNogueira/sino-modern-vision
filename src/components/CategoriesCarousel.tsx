@@ -28,12 +28,13 @@ const CategoriesSection = () => {
           Escolha sua categoria:
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
           {categories.map((cat, index) => (
             <Link
               key={index}
               to={`/imoveis?${cat.filter}`}
-              className="group relative h-40 md:h-48 rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
+              className="group relative rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
+              style={{ width: 250, height: 250 }}
             >
               <img
                 src={cat.image}
@@ -41,7 +42,7 @@ const CategoriesSection = () => {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-green-800/80 via-green-700/40 to-transparent" style={{ top: '50%' }} />
-              <div className="absolute bottom-0 left-0 right-0 p-3">
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
                 <span className="text-primary-foreground text-sm md:text-base font-normal">
                   {cat.title}
                 </span>

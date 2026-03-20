@@ -111,44 +111,8 @@ const HeroSection = () => {
                 />
               </div>
 
-              {/* Modalidade multi-select */}
-              <div className="relative flex-1 min-w-[110px]" ref={modalidadeRef}>
-                <button
-                  type="button"
-                  onClick={() => setModalidadeOpen(!modalidadeOpen)}
-                  className="appearance-none bg-white text-[#6b6b6b] text-xs md:text-sm rounded-full px-3 md:px-4 py-2 h-9 outline-none cursor-pointer w-full text-left pr-7 truncate"
-                >
-                  {modalidade.length === 0
-                    ? "Aluguel / Venda"
-                    : modalidade.join(", ")}
-                </button>
-                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
-                {modalidadeOpen && (
-                  <div className="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-[#e5e5e5] py-1 z-50 min-w-[160px]">
-                    {["Venda", "Aluguel"].map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => toggleModalidade(opt)}
-                        className="flex items-center gap-2 w-full px-3 py-2 text-xs md:text-sm text-[#2F2F2F] hover:bg-[#f5f5f5] transition-colors"
-                      >
-                        <span
-                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
-                            modalidade.includes(opt)
-                              ? "bg-[#F2C21A] border-[#F2C21A]"
-                              : "border-[#ccc]"
-                          }`}
-                        >
-                          {modalidade.includes(opt) && (
-                            <Check className="w-3 h-3 text-[#2F2F2F]" />
-                          )}
-                        </span>
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+
+
 
               <div className="relative flex-1 min-w-[110px]">
                 <select
@@ -229,6 +193,45 @@ const HeroSection = () => {
                   <option value="1000000+">Acima de R$ 1M</option>
                 </select>
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
+              </div>
+
+              {/* Modalidade multi-select */}
+              <div className="relative flex-1 min-w-[110px]" ref={modalidadeRef}>
+                <button
+                  type="button"
+                  onClick={() => setModalidadeOpen(!modalidadeOpen)}
+                  className="appearance-none bg-white text-[#6b6b6b] text-xs md:text-sm rounded-full px-3 md:px-4 py-2 h-9 outline-none cursor-pointer w-full text-left pr-7 truncate"
+                >
+                  {modalidade.length === 0
+                    ? "Aluguel / Venda"
+                    : modalidade.join(", ")}
+                </button>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
+                {modalidadeOpen && (
+                  <div className="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-[#e5e5e5] py-1 z-50 min-w-[160px]">
+                    {["Venda", "Aluguel"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleModalidade(opt)}
+                        className="flex items-center gap-2 w-full px-3 py-2 text-xs md:text-sm text-[#2F2F2F] hover:bg-[#f5f5f5] transition-colors"
+                      >
+                        <span
+                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                            modalidade.includes(opt)
+                              ? "bg-[#F2C21A] border-[#F2C21A]"
+                              : "border-[#ccc]"
+                          }`}
+                        >
+                          {modalidade.includes(opt) && (
+                            <Check className="w-3 h-3 text-[#2F2F2F]" />
+                          )}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
