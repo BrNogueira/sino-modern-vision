@@ -349,27 +349,33 @@ const PropertyDetail = () => {
           <div className="lg:col-span-1 space-y-4">
 
             {/* Metragem */}
-            {(property.areaTerreno || property.areaConstruida) && (
+            {(property.areaTerreno || property.areaConstruida || property.area) && (
               <div className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-3 pb-2 border-b border-border">Metragem</h3>
                 <div className="space-y-2">
                   {property.areaTerreno && (
-                    <div className="flex justify-between text-sm">
-                      <span className="flex items-center gap-2 text-muted-foreground"><LandPlot className="w-4 h-4 text-primary" /> terreno:</span>
-                      <span className="font-semibold text-foreground">{property.areaTerreno} m²</span>
-                    </div>
+                    <InlineEditField value={String(property.areaTerreno)} field="Área Terreno" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaTerreno", v)} type="number">
+                      <div className="flex justify-between text-sm w-full">
+                        <span className="flex items-center gap-2 text-muted-foreground"><LandPlot className="w-4 h-4 text-primary" /> terreno:</span>
+                        <span className="font-semibold text-foreground">{property.areaTerreno} m²</span>
+                      </div>
+                    </InlineEditField>
                   )}
                   {property.areaConstruida && (
-                    <div className="flex justify-between text-sm">
-                      <span className="flex items-center gap-2 text-muted-foreground"><Home className="w-4 h-4 text-primary" /> casa:</span>
-                      <span className="font-semibold text-foreground">{property.areaConstruida} m²</span>
-                    </div>
+                    <InlineEditField value={String(property.areaConstruida)} field="Área Construída" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaConstruida", v)} type="number">
+                      <div className="flex justify-between text-sm w-full">
+                        <span className="flex items-center gap-2 text-muted-foreground"><Home className="w-4 h-4 text-primary" /> casa:</span>
+                        <span className="font-semibold text-foreground">{property.areaConstruida} m²</span>
+                      </div>
+                    </InlineEditField>
                   )}
                   {property.area && !property.areaConstruida && !property.areaTerreno && (
-                    <div className="flex justify-between text-sm">
-                      <span className="flex items-center gap-2 text-muted-foreground"><Square className="w-4 h-4 text-primary" /> área:</span>
-                      <span className="font-semibold text-foreground">{property.area} m²</span>
-                    </div>
+                    <InlineEditField value={String(property.area)} field="Área" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("area", v)} type="number">
+                      <div className="flex justify-between text-sm w-full">
+                        <span className="flex items-center gap-2 text-muted-foreground"><Square className="w-4 h-4 text-primary" /> área:</span>
+                        <span className="font-semibold text-foreground">{property.area} m²</span>
+                      </div>
+                    </InlineEditField>
                   )}
                 </div>
               </div>
