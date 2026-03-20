@@ -101,7 +101,7 @@ const InlineEditField = ({
       {children}
       <button
         onClick={() => { setEditValue(value); setEditing(true); }}
-        className="opacity-0 group-hover/edit:opacity-100 transition-opacity w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground flex-shrink-0"
+        className="opacity-70 hover:opacity-100 transition-opacity w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/80 flex-shrink-0 shadow-sm"
         title={`Editar ${field}`}
       >
         <Pencil className="w-3 h-3" />
