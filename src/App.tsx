@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 import { AdminPropertiesProvider } from "@/contexts/AdminPropertiesContext";
+import { ChangeLogProvider } from "@/contexts/ChangeLogContext";
 import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
 import Listing from "./pages/Listing";
@@ -34,6 +35,7 @@ const App = () => (
       <FavoritesProvider>
         <AdminAuthProvider>
           <AdminPropertiesProvider>
+          <ChangeLogProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
@@ -65,6 +67,7 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
+          </ChangeLogProvider>
           </AdminPropertiesProvider>
         </AdminAuthProvider>
       </FavoritesProvider>

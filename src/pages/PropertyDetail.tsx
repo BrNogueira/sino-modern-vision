@@ -1,5 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
+import InlineEditField from "@/components/InlineEditField";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { useChangeLog } from "@/contexts/ChangeLogContext";
 import {
   ChevronLeft,
   ChevronRight,
@@ -146,7 +149,21 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 /* ─── Main Page ─── */
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const property = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
+  const baseProperty = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
+  const { isAuthenticated } = useAdminAuth();
+
+  // Editable state for inline editing
+  const [editableFields, setEditableFields] = useState<Record<string, string>>({});
+  const property = {
+    ...baseProperty,
+    title: editableFields.title || baseProperty.title,
+    description: editableFields.description || baseProperty.description,
+    priceFormatted: editableFields.priceFormatted || baseProperty.priceFormatted,
+  };
+
+  const updateField = (field: string, value: string) => {
+    setEditableFields((prev) => ({ ...prev, [field]: value }));
+  };
 
   const gallery = property.gallery?.length ? property.gallery : [property.image];
   const [currentImage, setCurrentImage] = useState(0);
@@ -191,9 +208,11 @@ const PropertyDetail = () => {
               <span>/</span>
               <span className="text-foreground">{property.title}</span>
             </nav>
-            <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
-              <span className="text-primary">{property.type}</span> — {property.title}
-            </h1>
+            <InlineEditField value={property.title} field="Título" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("title", v)}>
+              <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
+                <span className="text-primary">{property.type}</span> — {property.title}
+              </h1>
+            </InlineEditField>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <span className="px-4 py-1.5 rounded bg-primary text-primary-foreground text-sm font-bold">CÓD: {property.code}</span>
@@ -280,7 +299,9 @@ const PropertyDetail = () => {
             {property.description && (
               <div className="rounded-xl border border-border bg-card p-5">
                 <h3 className="text-base font-bold text-foreground mb-2">Descrição do Imóvel</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
+                <InlineEditField value={property.description || ""} field="Descrição" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("description", v)} type="textarea">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
+                </InlineEditField>
               </div>
             )}
 
@@ -383,7 +404,9 @@ const PropertyDetail = () => {
 
             {/* Price */}
             <div className="rounded-xl border-2 border-foreground bg-card p-4 text-center">
-              <p className="text-2xl md:text-3xl font-bold text-foreground">{property.priceFormatted}</p>
+              <InlineEditField value={property.priceFormatted} field="Preço" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("priceFormatted", v)}>
+                <p className="text-2xl md:text-3xl font-bold text-foreground">{property.priceFormatted}</p>
+              </InlineEditField>
             </div>
 
             {/* Condições de pagamento / Taxas adicionais for aluguel */}
