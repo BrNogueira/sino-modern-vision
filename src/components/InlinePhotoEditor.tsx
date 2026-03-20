@@ -27,8 +27,6 @@ const InlinePhotoEditor = ({
   const dragItemRef = useRef<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!isAuthenticated) return <>{children}</>;
-
   const addPhotos = useCallback(
     (files: FileList | File[]) => {
       const fileArray = Array.from(files).filter((f) => f.type.startsWith("image/"));
