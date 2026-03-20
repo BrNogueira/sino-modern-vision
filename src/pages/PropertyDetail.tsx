@@ -208,9 +208,11 @@ const PropertyDetail = () => {
               <span>/</span>
               <span className="text-foreground">{property.title}</span>
             </nav>
-            <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
-              <span className="text-primary">{property.type}</span> — {property.title}
-            </h1>
+            <InlineEditField value={property.title} field="Título" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("title", v)}>
+              <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
+                <span className="text-primary">{property.type}</span> — {property.title}
+              </h1>
+            </InlineEditField>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <span className="px-4 py-1.5 rounded bg-primary text-primary-foreground text-sm font-bold">CÓD: {property.code}</span>
