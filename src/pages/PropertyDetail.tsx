@@ -154,11 +154,36 @@ const PropertyDetail = () => {
 
   // Editable state for inline editing
   const [editableFields, setEditableFields] = useState<Record<string, string>>({});
+  const getField = (field: string, original: any) => editableFields[field] !== undefined ? editableFields[field] : String(original ?? "");
+  const getNumField = (field: string, original: any) => editableFields[field] !== undefined ? (editableFields[field] ? Number(editableFields[field]) : undefined) : original;
+  const getArrayField = (field: string, original: string[] | undefined) => {
+    if (editableFields[field] !== undefined) {
+      return editableFields[field] ? editableFields[field].split(",").map(s => s.trim()).filter(Boolean) : [];
+    }
+    return original;
+  };
+
   const property = {
     ...baseProperty,
-    title: editableFields.title || baseProperty.title,
-    description: editableFields.description || baseProperty.description,
-    priceFormatted: editableFields.priceFormatted || baseProperty.priceFormatted,
+    title: getField("title", baseProperty.title),
+    description: getField("description", baseProperty.description),
+    priceFormatted: getField("priceFormatted", baseProperty.priceFormatted),
+    code: getField("code", baseProperty.code),
+    location: getField("location", baseProperty.location),
+    city: getField("city", baseProperty.city),
+    neighborhood: getField("neighborhood", baseProperty.neighborhood),
+    areaTerreno: getNumField("areaTerreno", baseProperty.areaTerreno),
+    areaConstruida: getNumField("areaConstruida", baseProperty.areaConstruida),
+    area: getNumField("area", baseProperty.area),
+    bedrooms: getNumField("bedrooms", baseProperty.bedrooms),
+    suites: getNumField("suites", baseProperty.suites),
+    bathrooms: getNumField("bathrooms", baseProperty.bathrooms),
+    parking: getNumField("parking", baseProperty.parking),
+    salas: getNumField("salas", baseProperty.salas),
+    lavabos: getNumField("lavabos", baseProperty.lavabos),
+    acabamentos: getArrayField("acabamentos", baseProperty.acabamentos),
+    amenidades: getArrayField("amenidades", baseProperty.amenidades),
+    condicoesPagamento: getField("condicoesPagamento", baseProperty.condicoesPagamento),
   };
 
   const updateField = (field: string, value: string) => {
