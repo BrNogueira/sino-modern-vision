@@ -121,7 +121,17 @@ const AdminProperties = () => {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="ghost" size="icon" asChild title="Visualizar imóvel">
+                          <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
+                            <Eye className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild title="Editar na página">
+                          <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
+                            <ExternalLink className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild title="Editar no formulário">
                           <Link to={`/admin/imoveis/editar/${p.id}`}>
                             <Pencil className="w-4 h-4" />
                           </Link>
