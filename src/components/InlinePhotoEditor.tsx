@@ -90,6 +90,8 @@ const InlinePhotoEditor = ({
     setEditing(false);
   };
 
+  if (!isAuthenticated) return <>{children}</>;
+
   if (editing) {
     return (
       <div className="space-y-4">
