@@ -249,16 +249,14 @@ const HeroSection = () => {
       </div>
 
       {/* Favoritos link below search bar */}
-      <div className="bg-muted/80 py-2">
-        <div className="container mx-auto px-4 flex justify-start">
-          <Link
-            to="/favoritos"
-            className="flex items-center gap-1.5 text-foreground hover:opacity-70 transition-colors"
-          >
-            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-semibold">{count} Meus Favoritos</span>
-          </Link>
-        </div>
+      <div className="relative z-10 flex justify-center mt-3">
+        <Link
+          to="/favoritos"
+          className="flex items-center gap-1.5 text-foreground hover:opacity-70 transition-colors"
+        >
+          <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+          <span className="text-sm font-semibold">{count} Meus Favoritos</span>
+        </Link>
       </div>
 
       {/* Gradient transition from water color to page background */}
