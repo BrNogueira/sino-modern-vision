@@ -299,7 +299,9 @@ const PropertyDetail = () => {
             {property.description && (
               <div className="rounded-xl border border-border bg-card p-5">
                 <h3 className="text-base font-bold text-foreground mb-2">Descrição do Imóvel</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
+                <InlineEditField value={property.description || ""} field="Descrição" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("description", v)} type="textarea">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
+                </InlineEditField>
               </div>
             )}
 
