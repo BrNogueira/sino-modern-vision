@@ -33,7 +33,7 @@ const HeroSection = () => {
   return (
     <section className="relative">
       {/* Hero banner */}
-      <div className="relative h-[400px] md:h-[900px] overflow-hidden">
+      <div className="relative h-[300px] md:h-[500px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
