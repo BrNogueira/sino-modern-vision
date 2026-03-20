@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { Search, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Search, ChevronDown, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-house.jpg";
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
+  const [modalidade, setModalidade] = useState<string[]>([]);
+  const [modalidadeOpen, setModalidadeOpen] = useState(false);
+  const modalidadeRef = useRef<HTMLDivElement>(null);
   const [filters, setFilters] = useState({
     code: "",
     state: "",
@@ -15,9 +18,26 @@ const HeroSection = () => {
     priceRange: "",
   });
 
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (modalidadeRef.current && !modalidadeRef.current.contains(e.target as Node)) {
+        setModalidadeOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const toggleModalidade = (val: string) => {
+    setModalidade((prev) =>
+      prev.includes(val) ? prev.filter((v) => v !== val) : [...prev, val]
+    );
+  };
+
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (searchText) params.set("q", searchText);
+    if (modalidade.length) params.set("modalidade", modalidade.join(","));
     if (filters.code) params.set("codigo", filters.code);
     if (filters.state) params.set("estado", filters.state);
     if (filters.city) params.set("cidade", filters.city);
@@ -87,6 +107,45 @@ const HeroSection = () => {
                   onChange={(e) => setFilters({ ...filters, code: e.target.value })}
                   className="bg-white text-[#6b6b6b] text-xs md:text-sm rounded-full px-3 md:px-4 py-2 h-9 outline-none w-full"
                 />
+              </div>
+
+              {/* Modalidade multi-select */}
+              <div className="relative flex-1 min-w-[110px]" ref={modalidadeRef}>
+                <button
+                  type="button"
+                  onClick={() => setModalidadeOpen(!modalidadeOpen)}
+                  className="appearance-none bg-white text-[#6b6b6b] text-xs md:text-sm rounded-full px-3 md:px-4 py-2 h-9 outline-none cursor-pointer w-full text-left pr-7 truncate"
+                >
+                  {modalidade.length === 0
+                    ? "Aluguel / Venda"
+                    : modalidade.join(", ")}
+                </button>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
+                {modalidadeOpen && (
+                  <div className="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-[#e5e5e5] py-1 z-50 min-w-[160px]">
+                    {["Venda", "Aluguel"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleModalidade(opt)}
+                        className="flex items-center gap-2 w-full px-3 py-2 text-xs md:text-sm text-[#2F2F2F] hover:bg-[#f5f5f5] transition-colors"
+                      >
+                        <span
+                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                            modalidade.includes(opt)
+                              ? "bg-[#F2C21A] border-[#F2C21A]"
+                              : "border-[#ccc]"
+                          }`}
+                        >
+                          {modalidade.includes(opt) && (
+                            <Check className="w-3 h-3 text-[#2F2F2F]" />
+                          )}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="relative flex-1 min-w-[110px]">
