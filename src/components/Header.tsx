@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Menu, X, Star } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useFavorites } from "@/contexts/FavoritesContext";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { count } = useFavorites();
   const location = useLocation();
   const isHome = location.pathname === "/";
 
@@ -42,19 +40,6 @@ const Header = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          <Link
-            to="/favoritos"
-            className={`flex items-center gap-1.5 ${textClass} hover:opacity-80 transition-colors`}
-          >
-            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-semibold">Favoritos</span>
-            {count > 0 && (
-              <span className="bg-accent text-accent-foreground text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
-                {count}
-              </span>
-            )}
-          </Link>
-
           <button
             className={`p-2 ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -66,14 +51,6 @@ const Header = () => {
 
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-3">
-          <Link to="/favoritos" className={`relative ${textClass}`}>
-            <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-            {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
-                {count}
-              </span>
-            )}
-          </Link>
           <button
             className={`p-2 ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
