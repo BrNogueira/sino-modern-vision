@@ -42,19 +42,6 @@ const Header = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          <Link
-            to="/favoritos"
-            className={`flex items-center gap-1.5 ${textClass} hover:opacity-80 transition-colors`}
-          >
-            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-semibold">Favoritos</span>
-            {count > 0 && (
-              <span className="bg-accent text-accent-foreground text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
-                {count}
-              </span>
-            )}
-          </Link>
-
           <button
             className={`p-2 ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
