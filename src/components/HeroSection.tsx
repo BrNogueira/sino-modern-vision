@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { Search, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Search, ChevronDown, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-house.jpg";
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
+  const [modalidade, setModalidade] = useState<string[]>([]);
+  const [modalidadeOpen, setModalidadeOpen] = useState(false);
+  const modalidadeRef = useRef<HTMLDivElement>(null);
   const [filters, setFilters] = useState({
     code: "",
     state: "",
@@ -14,6 +17,22 @@ const HeroSection = () => {
     type: "",
     priceRange: "",
   });
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (modalidadeRef.current && !modalidadeRef.current.contains(e.target as Node)) {
+        setModalidadeOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const toggleModalidade = (val: string) => {
+    setModalidade((prev) =>
+      prev.includes(val) ? prev.filter((v) => v !== val) : [...prev, val]
+    );
+  };
 
   const handleSearch = () => {
     const params = new URLSearchParams();
