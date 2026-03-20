@@ -23,30 +23,32 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   return (
     <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow relative">
       {/* Code Badge */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
         <div className="bg-primary text-primary-foreground text-xs font-semibold px-4 py-1 rounded-b-lg">
           CÓD: {property.code}
         </div>
       </div>
 
-      {/* Image */}
-      <Link to={`/imovel/${slug}`} className="block relative h-52 overflow-hidden">
-        <img
-          src={property.image}
-          alt={property.title}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          loading="lazy"
-        />
-        {/* Price overlay - centered bottom, overlapping */}
-        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-md whitespace-nowrap">
+      {/* Image + Price wrapper */}
+      <div className="relative">
+        <Link to={`/imovel/${slug}`} className="block h-52 overflow-hidden">
+          <img
+            src={property.image}
+            alt={property.title}
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+          />
+        </Link>
+        {/* Price - centered, overlapping bottom edge */}
+        <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
+          <span className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
             {property.priceFormatted}
           </span>
         </div>
-      </Link>
+      </div>
 
       {/* Content */}
-      <div className="p-4 text-center">
+      <div className="p-4 pt-6 text-center">
         {/* Type */}
         <h3 className="text-xl font-bold text-foreground uppercase tracking-wide mb-1">
           {property.type}
