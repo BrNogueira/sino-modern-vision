@@ -37,9 +37,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
         />
-        {/* Price overlay */}
-        <div className="absolute bottom-3 left-3">
-          <span className="bg-primary text-primary-foreground text-sm font-semibold px-3 py-1.5 rounded-md">
+        {/* Price overlay - centered bottom, overlapping */}
+        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 z-10">
+          <span className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-md whitespace-nowrap">
             {property.priceFormatted}
           </span>
         </div>
