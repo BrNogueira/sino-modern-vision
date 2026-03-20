@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, ChevronDown, Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Search, ChevronDown, Check, Star } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import heroImage from "@/assets/hero-house.jpg";
 
 const HeroSection = () => {
