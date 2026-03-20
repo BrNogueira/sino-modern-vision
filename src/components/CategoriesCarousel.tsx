@@ -33,7 +33,8 @@ const CategoriesSection = () => {
             <Link
               key={index}
               to={`/imoveis?${cat.filter}`}
-              className="group relative h-40 md:h-48 rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
+              className="group relative rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
+              style={{ width: 250, height: 250 }}
             >
               <img
                 src={cat.image}
