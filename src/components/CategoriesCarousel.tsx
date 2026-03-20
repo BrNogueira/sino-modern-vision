@@ -35,7 +35,6 @@ const CategoriesSection = () => {
               to={`/imoveis?${cat.filter}`}
               className="group relative aspect-square rounded-xl overflow-hidden block shadow-md hover:shadow-lg transition-shadow"
             >
-            >
               <img
                 src={cat.image}
                 alt={cat.title}
