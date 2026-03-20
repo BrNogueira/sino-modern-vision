@@ -21,13 +21,15 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const hasFeatureIcons = property.suites || property.bedrooms || property.bathrooms || property.parking || property.hasPool;
 
   return (
-    <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow relative">
-      {/* Code Badge */}
+    <div className="relative pt-4">
+      {/* Code Badge - 50% outside card */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
-        <div className="bg-primary text-primary-foreground text-xs font-semibold px-4 py-1 rounded-b-lg">
+        <div className="bg-primary text-primary-foreground text-xs font-semibold px-4 py-1.5 rounded-lg shadow-sm">
           CÓD: {property.code}
         </div>
       </div>
+
+      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow">
 
       {/* Image + Price wrapper */}
       <div className="relative">
@@ -141,6 +143,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             />
           </button>
         </div>
+      </div>
       </div>
     </div>
   );
