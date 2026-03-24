@@ -101,6 +101,7 @@ const HeroSection = () => {
 
             {/* Row 2: filters */}
             <div className="flex items-center gap-2 md:gap-2.5 flex-wrap md:flex-nowrap">
+              {/* 1. Código */}
               <div className="relative flex-1 min-w-[80px]">
                 <input
                   type="text"
@@ -111,9 +112,38 @@ const HeroSection = () => {
                 />
               </div>
 
+              {/* 2. Estado */}
+              <div className="relative flex-1 min-w-[75px]">
+                <select
+                  value={filters.state}
+                  onChange={(e) =>
+                    setFilters({ ...filters, state: e.target.value, city: "", neighborhood: "" })
+                  }
+                  className={selectClass}
+                >
+                  <option value="">Estado</option>
+                  <option value="RS">RS</option>
+                </select>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
+              </div>
 
+              {/* 3. Bairro */}
+              <div className="relative flex-1 min-w-[75px]">
+                <select
+                  value={filters.neighborhood}
+                  onChange={(e) => setFilters({ ...filters, neighborhood: e.target.value })}
+                  className={selectClass}
+                >
+                  <option value="">Bairro</option>
+                  <option value="Centro">Centro</option>
+                  <option value="Lomba Grande">Lomba Grande</option>
+                  <option value="Colina do Sol">Colina do Sol</option>
+                  <option value="Rondônia">Rondônia</option>
+                </select>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
+              </div>
 
-
+              {/* 4. Tipo de Imóvel */}
               <div className="relative flex-1 min-w-[110px]">
                 <select
                   value={filters.type}
@@ -134,52 +164,7 @@ const HeroSection = () => {
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
               </div>
 
-              <div className="relative flex-1 min-w-[75px]">
-                <select
-                  value={filters.state}
-                  onChange={(e) =>
-                    setFilters({ ...filters, state: e.target.value, city: "", neighborhood: "" })
-                  }
-                  className={selectClass}
-                >
-                  <option value="">Estado</option>
-                  <option value="RS">RS</option>
-                </select>
-                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
-              </div>
-
-              <div className="relative flex-1 min-w-[80px]">
-                <select
-                  value={filters.city}
-                  onChange={(e) =>
-                    setFilters({ ...filters, city: e.target.value, neighborhood: "" })
-                  }
-                  className={selectClass}
-                >
-                  <option value="">Cidade</option>
-                  <option value="Novo Hamburgo">Novo Hamburgo</option>
-                  <option value="São Leopoldo">São Leopoldo</option>
-                  <option value="Campo Bom">Campo Bom</option>
-                  <option value="Estância Velha">Estância Velha</option>
-                </select>
-                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
-              </div>
-
-              <div className="relative flex-1 min-w-[75px]">
-                <select
-                  value={filters.neighborhood}
-                  onChange={(e) => setFilters({ ...filters, neighborhood: e.target.value })}
-                  className={selectClass}
-                >
-                  <option value="">Bairro</option>
-                  <option value="Centro">Centro</option>
-                  <option value="Lomba Grande">Lomba Grande</option>
-                  <option value="Colina do Sol">Colina do Sol</option>
-                  <option value="Rondônia">Rondônia</option>
-                </select>
-                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
-              </div>
-
+              {/* 5. Valor */}
               <div className="relative flex-1 min-w-[75px]">
                 <select
                   value={filters.priceRange}
@@ -195,7 +180,7 @@ const HeroSection = () => {
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
               </div>
 
-              {/* Modalidade multi-select */}
+              {/* 6. Aluguel / Venda */}
               <div className="relative flex-1 min-w-[110px]" ref={modalidadeRef}>
                 <button
                   type="button"
