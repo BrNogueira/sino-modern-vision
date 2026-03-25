@@ -129,7 +129,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         )}
 
         {/* Favorite Button - icon only, right aligned */}
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-auto">
           <button
             onClick={() => toggleFavorite(property.code)}
             className="hover:opacity-80 transition-opacity"
