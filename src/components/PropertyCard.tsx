@@ -29,7 +29,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
       </div>
 
-      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow">
+      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col" style={{ height: "375px" }}>
 
       {/* Image + Price wrapper */}
       <div className="relative">
@@ -50,7 +50,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 pt-6 text-center">
+      <div className="p-4 pt-6 text-center flex flex-col flex-1">
         {/* Type */}
         <h3 className="text-xl font-bold text-foreground uppercase tracking-wide mb-1">
           {property.type}
@@ -62,63 +62,61 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <span className="uppercase text-xs font-medium">{property.location}</span>
         </div>
 
-        {/* Feature Icons (if available) */}
-        {hasFeatureIcons && (
-          <TooltipProvider delayDuration={200}>
-            <div className="flex items-center justify-center gap-3 mb-3">
-              {property.suites !== undefined && property.suites > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.suites}<Bed className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.suites} suítes</TooltipContent>
-                </Tooltip>
-              )}
-              {property.bedrooms !== undefined && property.bedrooms > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.bedrooms}<Bed className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.bedrooms} quartos</TooltipContent>
-                </Tooltip>
-              )}
-              {property.bathrooms !== undefined && property.bathrooms > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.bathrooms}<Bath className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.bathrooms} banheiros</TooltipContent>
-                </Tooltip>
-              )}
-              {property.parking !== undefined && property.parking > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.parking}<Car className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.parking} vagas</TooltipContent>
-                </Tooltip>
-              )}
-              {property.hasPool && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      <Waves className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>Piscina</TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-          </TooltipProvider>
-        )}
+        {/* Feature Icons (always show row for consistent height) */}
+        <TooltipProvider delayDuration={200}>
+          <div className="flex items-center justify-center gap-3 mb-3 min-h-[24px]">
+            {property.suites !== undefined && property.suites > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.suites}<Bed className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.suites} suítes</TooltipContent>
+              </Tooltip>
+            )}
+            {property.bedrooms !== undefined && property.bedrooms > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.bedrooms}<Bed className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.bedrooms} quartos</TooltipContent>
+              </Tooltip>
+            )}
+            {property.bathrooms !== undefined && property.bathrooms > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.bathrooms}<Bath className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.bathrooms} banheiros</TooltipContent>
+              </Tooltip>
+            )}
+            {property.parking !== undefined && property.parking > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.parking}<Car className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.parking} vagas</TooltipContent>
+              </Tooltip>
+            )}
+            {property.hasPool && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    <Waves className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>Piscina</TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+        </TooltipProvider>
 
         {/* Area (for terrenos) */}
         {property.area && !hasFeatureIcons && (
@@ -131,7 +129,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         )}
 
         {/* Favorite Button - icon only, right aligned */}
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-auto">
           <button
             onClick={() => toggleFavorite(property.code)}
             className="hover:opacity-80 transition-opacity"
