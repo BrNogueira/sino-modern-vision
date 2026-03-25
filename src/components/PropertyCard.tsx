@@ -24,7 +24,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <div className="relative pt-4">
       {/* Code Badge - 50% outside card */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
-        <div className="bg-primary text-primary-foreground text-xs font-semibold px-4 py-1.5 rounded-lg shadow-sm">
+        <div className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-lg shadow-sm">
           CÓD: {property.code}
         </div>
       </div>
