@@ -4,17 +4,6 @@ import logoSinos from "@/assets/logo-sinos-imoveis.png";
 const Footer = () => {
   return (
     <footer id="contato" className="text-white">
-      {/* Top decorative shape - green band with gray clipped box */}
-      <div style={{ background: "#1f8a57", padding: "0 40px 40px" }}>
-        <div style={{
-          background: "#e9e9e9",
-          textAlign: "center",
-          padding: "24px 32px 38px",
-          color: "#555",
-          fontSize: "18px",
-          clipPath: "polygon(0 0, 100% 0, 100% 78%, 74% 78%, 70% 100%, 30% 100%, 26% 78%, 0 78%)"
-        }} />
-      </div>
 
       {/* Main footer */}
       <div style={{ backgroundColor: "#0a6936" }}>
