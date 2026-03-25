@@ -4,13 +4,16 @@ import logoSinos from "@/assets/logo-sinos-imoveis.png";
 const Footer = () => {
   return (
     <footer id="contato" className="text-white">
-      {/* Top decorative shape - 3 segments: high, low, high */}
-      <div className="relative overflow-hidden" style={{ backgroundColor: "hsl(0 0% 96%)" }}>
-        <svg viewBox="0 0 1200 50" className="w-full block" preserveAspectRatio="none" style={{ height: "35px" }}>
-          <path d="M0,50 L0,15 Q200,15 300,15 L300,15 Q400,15 400,15 L400,50 Z" fill="#0a6936" />
-          <path d="M400,50 L400,25 Q600,25 800,25 L800,50 Z" fill="#0a6936" />
-          <path d="M800,50 L800,15 Q1000,15 1200,15 L1200,50 Z" fill="#0a6936" />
-        </svg>
+      {/* Top decorative shape - green band with gray clipped box */}
+      <div style={{ background: "#1f8a57", padding: "0 40px 40px" }}>
+        <div style={{
+          background: "#e9e9e9",
+          textAlign: "center",
+          padding: "24px 32px 38px",
+          color: "#555",
+          fontSize: "18px",
+          clipPath: "polygon(0 0, 100% 0, 100% 78%, 74% 78%, 70% 100%, 30% 100%, 26% 78%, 0 78%)"
+        }} />
       </div>
 
       {/* Main footer */}
