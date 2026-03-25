@@ -24,7 +24,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <div className="relative pt-4">
       {/* Code Badge - 50% outside card */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
-        <div className="bg-primary text-primary-foreground text-xs font-semibold px-4 py-1.5 rounded-lg shadow-sm">
+        <div className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-lg shadow-sm">
           CÓD: {property.code}
         </div>
       </div>
@@ -43,7 +43,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </Link>
         {/* Price - centered, overlapping bottom edge */}
         <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
+          <span className="bg-primary text-primary-foreground text-lg font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
             {property.priceFormatted}
           </span>
         </div>
