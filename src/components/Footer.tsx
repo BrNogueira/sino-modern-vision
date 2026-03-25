@@ -4,11 +4,9 @@ import logoSinos from "@/assets/logo-sinos-imoveis.png";
 const Footer = () => {
   return (
     <footer id="contato" className="text-white">
-      {/* Top decorative shape */}
-      <div className="relative">
-        <svg viewBox="0 0 1440 60" className="w-full block" preserveAspectRatio="none" style={{ height: "40px" }}>
-          <path d="M0,60 L0,20 Q360,0 720,20 Q1080,40 1440,20 L1440,60 Z" fill="#0a6936" />
-        </svg>
+      {/* Top decorative shape - matching reference */}
+      <div className="relative" style={{ backgroundColor: "hsl(0 0% 96%)" }}>
+        <div style={{ backgroundColor: "#0a6936", height: "30px", borderRadius: "12px 12px 0 0", margin: "0 5%", marginTop: "-1px" }} />
       </div>
 
       {/* Main footer */}
