@@ -50,7 +50,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 pt-6 text-center">
+      <div className="p-4 pt-6 text-center flex flex-col flex-1">
         {/* Type */}
         <h3 className="text-xl font-bold text-foreground uppercase tracking-wide mb-1">
           {property.type}
