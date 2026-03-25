@@ -77,9 +77,29 @@ const HeroSection = () => {
             className="w-full max-w-[1300px] rounded-2xl shadow-lg px-4 md:px-6 py-4 flex flex-col gap-3"
             style={{ backgroundColor: "#8B8B8B" }}
           >
-            {/* Row 1: Aluguel/Venda + Search input with embedded Buscar */}
+            {/* Row 1: Search input + Aluguel/Venda on the right */}
             <div className="flex items-center gap-2">
-              {/* Aluguel / Venda select */}
+              {/* Search input + Buscar */}
+              <div className="flex items-center flex-1 bg-white rounded-full h-11 pl-4 pr-1">
+                <Search className="w-4 h-4 text-[#2F2F2F] mr-2 shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Clique para iniciar sua busca"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  className="flex-1 bg-transparent outline-none text-sm text-[#2F2F2F] placeholder:text-[#999] min-w-0"
+                />
+                <button
+                  onClick={handleSearch}
+                  className="shrink-0 rounded-full px-5 py-1.5 h-9 text-sm font-bold transition-colors hover:brightness-95 active:scale-[0.97]"
+                  style={{ backgroundColor: "#F2C21A", color: "#2F2F2F" }}
+                >
+                  Buscar
+                </button>
+              </div>
+
+              {/* Aluguel / Venda select - right side */}
               <div className="relative shrink-0" ref={modalidadeRef}>
                 <button
                   type="button"
@@ -92,7 +112,7 @@ const HeroSection = () => {
                 </button>
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#999] pointer-events-none" />
                 {modalidadeOpen && (
-                  <div className="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-[#e5e5e5] py-1 z-50 min-w-[160px]">
+                  <div className="absolute top-full right-0 mt-1 bg-white rounded-xl shadow-lg border border-[#e5e5e5] py-1 z-50 min-w-[160px]">
                     {["Venda", "Aluguel"].map((opt) => (
                       <button
                         key={opt}
@@ -116,26 +136,6 @@ const HeroSection = () => {
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* Search input + Buscar */}
-              <div className="flex items-center flex-1 bg-white rounded-full h-11 pl-4 pr-1">
-                <Search className="w-4 h-4 text-[#2F2F2F] mr-2 shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Clique para iniciar sua busca"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="flex-1 bg-transparent outline-none text-sm text-[#2F2F2F] placeholder:text-[#999] min-w-0"
-                />
-                <button
-                  onClick={handleSearch}
-                  className="shrink-0 rounded-full px-5 py-1.5 h-9 text-sm font-bold transition-colors hover:brightness-95 active:scale-[0.97]"
-                  style={{ backgroundColor: "#F2C21A", color: "#2F2F2F" }}
-                >
-                  Buscar
-                </button>
               </div>
             </div>
 
