@@ -29,7 +29,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
       </div>
 
-      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow">
+      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col" style={{ height: "375px" }}>
 
       {/* Image + Price wrapper */}
       <div className="relative">
