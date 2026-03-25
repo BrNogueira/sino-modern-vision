@@ -62,63 +62,61 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <span className="uppercase text-xs font-medium">{property.location}</span>
         </div>
 
-        {/* Feature Icons (if available) */}
-        {hasFeatureIcons && (
-          <TooltipProvider delayDuration={200}>
-            <div className="flex items-center justify-center gap-3 mb-3">
-              {property.suites !== undefined && property.suites > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.suites}<Bed className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.suites} suítes</TooltipContent>
-                </Tooltip>
-              )}
-              {property.bedrooms !== undefined && property.bedrooms > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.bedrooms}<Bed className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.bedrooms} quartos</TooltipContent>
-                </Tooltip>
-              )}
-              {property.bathrooms !== undefined && property.bathrooms > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.bathrooms}<Bath className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.bathrooms} banheiros</TooltipContent>
-                </Tooltip>
-              )}
-              {property.parking !== undefined && property.parking > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      {property.parking}<Car className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>{property.parking} vagas</TooltipContent>
-                </Tooltip>
-              )}
-              {property.hasPool && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                      <Waves className="w-4 h-4" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>Piscina</TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-          </TooltipProvider>
-        )}
+        {/* Feature Icons (always show row for consistent height) */}
+        <TooltipProvider delayDuration={200}>
+          <div className="flex items-center justify-center gap-3 mb-3 min-h-[24px]">
+            {property.suites !== undefined && property.suites > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.suites}<Bed className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.suites} suítes</TooltipContent>
+              </Tooltip>
+            )}
+            {property.bedrooms !== undefined && property.bedrooms > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.bedrooms}<Bed className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.bedrooms} quartos</TooltipContent>
+              </Tooltip>
+            )}
+            {property.bathrooms !== undefined && property.bathrooms > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.bathrooms}<Bath className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.bathrooms} banheiros</TooltipContent>
+              </Tooltip>
+            )}
+            {property.parking !== undefined && property.parking > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    {property.parking}<Car className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{property.parking} vagas</TooltipContent>
+              </Tooltip>
+            )}
+            {property.hasPool && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
+                    <Waves className="w-4 h-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>Piscina</TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+        </TooltipProvider>
 
         {/* Area (for terrenos) */}
         {property.area && !hasFeatureIcons && (
