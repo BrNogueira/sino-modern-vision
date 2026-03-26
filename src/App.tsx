@@ -21,6 +21,11 @@ import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
 import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminPermissoes from "./pages/admin/AdminPermissoes";
+import AdminCondominios from "./pages/admin/AdminCondominios";
+import AdminLeads from "./pages/admin/AdminLeads";
+import AdminRelatorios from "./pages/admin/AdminRelatorios";
+import AdminCorretores from "./pages/admin/AdminCorretores";
+import AdminConfiguracoes from "./pages/admin/AdminConfiguracoes";
 import AgenciamentosPage from "./pages/admin/corretor/AgenciamentosPage";
 import PreCadastrosPage from "./pages/admin/corretor/PreCadastrosPage";
 import MapaPage from "./pages/admin/corretor/MapaPage";
@@ -57,6 +62,11 @@ const App = () => (
                   <Route path="imoveis/editar/:id" element={<PropertyForm />} />
                   <Route path="usuarios" element={<AdminUsuarios />} />
                   <Route path="permissoes" element={<AdminPermissoes />} />
+                  <Route path="condominios" element={<AdminCondominios />} />
+                  <Route path="leads" element={<AdminLeads />} />
+                  <Route path="relatorios" element={<AdminRelatorios />} />
+                  <Route path="corretores" element={<AdminCorretores />} />
+                  <Route path="configuracoes" element={<AdminConfiguracoes />} />
                   <Route path="corretor" element={<AdminCorretorProfile />} />
                   <Route path="corretor/imoveis" element={<AdminCorretorImoveis />} />
                   <Route path="corretor/agenciamentos" element={<AgenciamentosPage />} />
@@ -67,13 +77,7 @@ const App = () => (
                   <Route path="corretor/proprietario" element={<CadastroProprietarioPage />} />
                   <Route path="corretor/cliente" element={<CadastroClientePage />} />
                   <Route path="canal-pro" element={<CanalProPage />} />
-                  {/* Placeholder routes */}
-                  <Route path="corretores" element={<div className="text-muted-foreground">Gestão de Corretores — em breve</div>} />
-                  <Route path="condominios" element={<div className="text-muted-foreground">Gestão de Condomínios — em breve</div>} />
-                  <Route path="leads" element={<div className="text-muted-foreground">Leads & Contatos — em breve</div>} />
                   <Route path="agenda" element={<AgendaPage />} />
-                  <Route path="relatorios" element={<div className="text-muted-foreground">Relatórios — em breve</div>} />
-                  <Route path="configuracoes" element={<div className="text-muted-foreground">Configurações — em breve</div>} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
