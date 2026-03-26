@@ -67,6 +67,10 @@ const emptyForm: FormData = {
   features: defaultFeatureFlags(),
   garantias: { ...defaultGarantias },
   anoConstrucao: null,
+  proprietarioNome: "",
+  proprietarioTelefone: "",
+  proprietarioEmail: "",
+  proprietarioDocumento: "",
   ativo: true,
   destaque: false,
   exclusivo: false,
@@ -608,6 +612,19 @@ const PropertyForm = () => {
                 <span className="text-sm text-foreground">{garantiasLabels[key]}</span>
               </label>
             ))}
+          </div>
+        </section>
+
+        {/* Proprietário */}
+        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            👤 Proprietário
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {textField("Nome do Proprietário", "proprietarioNome", "João da Silva", 200)}
+            {textField("Telefone", "proprietarioTelefone", "(51) 99999-9999", 20)}
+            {textField("E-mail", "proprietarioEmail", "proprietario@email.com", 200)}
+            {textField("CPF/CNPJ", "proprietarioDocumento", "000.000.000-00", 20)}
           </div>
         </section>
 
