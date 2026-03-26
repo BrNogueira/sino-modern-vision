@@ -5,13 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
-import { Lock, Mail, AlertCircle } from "lucide-react";
+import { Lock, Mail, AlertCircle, UserPlus, LogIn } from "lucide-react";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
-  const { login, isAuthenticated } = useAdminAuth();
+  const [isRegister, setIsRegister] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { login, register, isAuthenticated } = useAdminAuth();
   const navigate = useNavigate();
 
   if (isAuthenticated) {
@@ -19,20 +22,43 @@ const AdminLogin = () => {
     return null;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     if (!email.trim() || !password.trim()) {
       setError("Preencha todos os campos.");
+      setLoading(false);
       return;
     }
 
-    const success = login(email.trim(), password.trim());
-    if (success) {
-      navigate("/admin");
-    } else {
-      setError("E-mail ou senha incorretos.");
+    if (isRegister && !fullName.trim()) {
+      setError("Preencha o nome completo.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      if (isRegister) {
+        const result = await register(email.trim(), password.trim(), fullName.trim());
+        if (!result.success) {
+          setError(result.error || "Erro ao criar conta.");
+        } else {
+          navigate("/admin");
+        }
+      } else {
+        const result = await login(email.trim(), password.trim());
+        if (!result.success) {
+          setError(result.error || "E-mail ou senha incorretos.");
+        } else {
+          navigate("/admin");
+        }
+      }
+    } catch {
+      setError("Erro inesperado. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,11 +68,32 @@ const AdminLogin = () => {
         <div className="bg-primary rounded-2xl shadow-xl border border-primary/80 p-8">
           <div className="flex flex-col items-center mb-8">
             <img src={logoSinos} alt="Sinos Imóveis" className="h-20 w-auto mb-4" />
-            <h1 className="text-2xl font-semibold text-primary-foreground">Painel Administrativo</h1>
-            <p className="text-primary-foreground/70 text-sm mt-1">Acesse com suas credenciais</p>
+            <h1 className="text-2xl font-semibold text-primary-foreground">
+              {isRegister ? "Criar Conta" : "Painel Administrativo"}
+            </h1>
+            <p className="text-primary-foreground/70 text-sm mt-1">
+              {isRegister ? "Preencha seus dados para cadastro" : "Acesse com suas credenciais"}
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {isRegister && (
+              <div className="space-y-2">
+                <Label htmlFor="fullName" className="text-primary-foreground">Nome Completo</Label>
+                <div className="relative">
+                  <UserPlus className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="Seu nome completo"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email" className="text-primary-foreground">E-mail</Label>
               <div className="relative">
@@ -54,11 +101,10 @@ const AdminLogin = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@sinosimoveis.com.br"
+                  placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
-                  maxLength={100}
                 />
               </div>
             </div>
@@ -74,26 +120,38 @@ const AdminLogin = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10"
-                  maxLength={50}
                 />
               </div>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 text-destructive text-sm">
-                <AlertCircle className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-destructive bg-destructive/10 p-2 rounded-lg text-sm">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 {error}
               </div>
             )}
 
-            <Button type="submit" className="w-full bg-[hsl(48,100%,50%)] text-foreground hover:bg-[hsl(48,100%,45%)] font-bold" size="lg">
-              Entrar
+            <Button
+              type="submit"
+              className="w-full bg-[hsl(48,100%,50%)] text-foreground hover:bg-[hsl(48,100%,45%)] font-bold"
+              size="lg"
+              disabled={loading}
+            >
+              {loading ? "Aguarde..." : (
+                <>
+                  <LogIn className="w-4 h-4 mr-2" />
+                  {isRegister ? "Criar Conta" : "Entrar"}
+                </>
+              )}
             </Button>
           </form>
 
-          <p className="text-xs text-primary-foreground/60 text-center mt-6">
-            Protótipo — autenticação mock para desenvolvimento
-          </p>
+          <button
+            onClick={() => { setIsRegister(!isRegister); setError(""); }}
+            className="w-full text-center text-sm text-primary-foreground/70 hover:text-primary-foreground mt-4 transition-colors"
+          >
+            {isRegister ? "Já tem conta? Faça login" : "Não tem conta? Cadastre-se"}
+          </button>
         </div>
       </div>
     </div>

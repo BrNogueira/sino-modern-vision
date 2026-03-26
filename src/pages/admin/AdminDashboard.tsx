@@ -1,10 +1,12 @@
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
-import { Building2, Plus, TrendingUp, Eye, Star } from "lucide-react";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { Building2, Plus, TrendingUp, Eye, Star, Users, Calendar, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const { properties } = useAdminProperties();
+  const { profile, roles, canAccess } = useAdminAuth();
 
   const totalAtivos = properties.filter((p) => p.ativo).length;
   const totalVenda = properties.filter((p) => p.precoVenda !== null).length;
@@ -23,17 +25,22 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground text-sm">Visão geral dos imóveis cadastrados</p>
+          <h1 className="text-2xl font-semibold text-foreground">
+            Olá, {profile?.full_name || "Usuário"} 👋
+          </h1>
+          <p className="text-muted-foreground text-sm">Visão geral do sistema</p>
         </div>
-        <Button asChild>
-          <Link to="/admin/imoveis/novo">
-            <Plus className="w-4 h-4 mr-2" />
-            Novo Imóvel
-          </Link>
-        </Button>
+        {canAccess("imoveis") && (
+          <Button asChild>
+            <Link to="/admin/imoveis/novo">
+              <Plus className="w-4 h-4 mr-2" />
+              Novo Imóvel
+            </Link>
+          </Button>
+        )}
       </div>
 
+      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-card rounded-xl border border-border p-4 space-y-2">
@@ -46,6 +53,39 @@ const AdminDashboard = () => {
         ))}
       </div>
 
+      {/* Quick actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {canAccess("imoveis") && (
+          <Link to="/admin/imoveis" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow group">
+            <Building2 className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-semibold text-foreground">Gerenciar Imóveis</h3>
+            <p className="text-xs text-muted-foreground mt-1">Cadastrar, editar e publicar imóveis</p>
+          </Link>
+        )}
+        {canAccess("leads") && (
+          <Link to="/admin/leads" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow group">
+            <Users className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-semibold text-foreground">Leads & Contatos</h3>
+            <p className="text-xs text-muted-foreground mt-1">Gerenciar leads e contatos de clientes</p>
+          </Link>
+        )}
+        {canAccess("agenda") && (
+          <Link to="/admin/agenda" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow group">
+            <Calendar className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-semibold text-foreground">Agenda</h3>
+            <p className="text-xs text-muted-foreground mt-1">Visitas e compromissos agendados</p>
+          </Link>
+        )}
+        {canAccess("relatorios") && (
+          <Link to="/admin/relatorios" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow group">
+            <FileText className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-semibold text-foreground">Relatórios</h3>
+            <p className="text-xs text-muted-foreground mt-1">Métricas e relatórios gerais</p>
+          </Link>
+        )}
+      </div>
+
+      {/* Recent properties */}
       <div className="bg-card rounded-xl border border-border p-6">
         <h2 className="text-lg font-semibold text-foreground mb-4">Últimos imóveis cadastrados</h2>
         <div className="space-y-3">
