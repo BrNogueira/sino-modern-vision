@@ -26,6 +26,52 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('/fonts/MYRIADPRO-COND.OTF') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  font-stretch: condensed;
+}
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('/fonts/MYRIADPRO-CONDIT.OTF') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  font-stretch: condensed;
+}
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('/fonts/MYRIADPRO-SEMIBOLDIT.OTF') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('/fonts/MYRIADPRO-BOLDIT.OTF') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('/fonts/MYRIADPRO-BOLDCOND.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  font-stretch: condensed;
+}
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('/fonts/MYRIADPRO-BOLDCONDIT.OTF') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  font-stretch: condensed;
+}
 
 #lovable-badge {
   display: none !important;
@@ -90,12 +136,12 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Bree Serif', Georgia, serif;
+    font-family: 'Myriad Pro', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Bree Serif', Georgia, serif;
-    @apply font-normal tracking-tight;
+    font-family: 'Myriad Pro', sans-serif;
+    @apply font-semibold tracking-tight;
   }
 }
 
