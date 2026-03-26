@@ -345,6 +345,12 @@ export interface ZapImovel {
   // Ano construção
   anoConstrucao: number | null;
 
+  // Proprietário
+  proprietarioNome: string;
+  proprietarioTelefone: string;
+  proprietarioEmail: string;
+  proprietarioDocumento: string;
+
   // Controle interno
   ativo: boolean;
   destaque: boolean;
