@@ -620,6 +620,63 @@ const PropertyForm = () => {
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             👤 Proprietário
           </h2>
+
+          {/* Select de proprietários existentes */}
+          {(() => {
+            const uniqueOwners = properties
+              .filter((p) => p.proprietarioNome?.trim())
+              .reduce<{ nome: string; telefone: string; email: string; documento: string }[]>((acc, p) => {
+                if (!acc.find((o) => o.nome === p.proprietarioNome)) {
+                  acc.push({
+                    nome: p.proprietarioNome,
+                    telefone: p.proprietarioTelefone || "",
+                    email: p.proprietarioEmail || "",
+                    documento: p.proprietarioDocumento || "",
+                  });
+                }
+                return acc;
+              }, []);
+
+            return uniqueOwners.length > 0 ? (
+              <div className="space-y-1.5">
+                <Label className="text-foreground text-sm">Selecionar Proprietário Existente</Label>
+                <Select
+                  value={form.proprietarioNome || "__none__"}
+                  onValueChange={(v) => {
+                    if (v === "__none__") {
+                      set("proprietarioNome", "");
+                      set("proprietarioTelefone", "");
+                      set("proprietarioEmail", "");
+                      set("proprietarioDocumento", "");
+                    } else if (v === "__new__") {
+                      set("proprietarioNome", "");
+                      set("proprietarioTelefone", "");
+                      set("proprietarioEmail", "");
+                      set("proprietarioDocumento", "");
+                    } else {
+                      const owner = uniqueOwners.find((o) => o.nome === v);
+                      if (owner) {
+                        set("proprietarioNome", owner.nome);
+                        set("proprietarioTelefone", owner.telefone);
+                        set("proprietarioEmail", owner.email);
+                        set("proprietarioDocumento", owner.documento);
+                      }
+                    }
+                  }}
+                >
+                  <SelectTrigger><SelectValue placeholder="Selecione um proprietário" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__none__">— Nenhum —</SelectItem>
+                    <SelectItem value="__new__">➕ Cadastrar novo</SelectItem>
+                    {uniqueOwners.map((o) => (
+                      <SelectItem key={o.nome} value={o.nome}>{o.nome} {o.documento ? `(${o.documento})` : ""}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : null;
+          })()}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {textField("Nome do Proprietário", "proprietarioNome", "João da Silva", 200)}
             {textField("Telefone", "proprietarioTelefone", "(51) 99999-9999", 20)}
