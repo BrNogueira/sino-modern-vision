@@ -285,7 +285,7 @@ const PropertyForm = () => {
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
   const navigate = useNavigate();
-  const { addProperty, updateProperty, getProperty } = useAdminProperties();
+  const { addProperty, updateProperty, getProperty, properties } = useAdminProperties();
   const { toast } = useToast();
   const [form, setForm] = useState<FormData>(emptyForm);
 
