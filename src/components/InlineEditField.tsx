@@ -25,7 +25,9 @@ const InlineEditField = ({
   className = "",
   children,
 }: InlineEditFieldProps) => {
-  const { isAuthenticated, role, userName } = useAdminAuth();
+  const { isAuthenticated, roles, profile } = useAdminAuth();
+  const role = roles[0] || null;
+  const userName = profile?.full_name || null;
   const { addLog } = useChangeLog();
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(value);

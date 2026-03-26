@@ -19,7 +19,9 @@ const InlinePhotoEditor = ({
   onSave,
   children,
 }: InlinePhotoEditorProps) => {
-  const { isAuthenticated, role, userName } = useAdminAuth();
+  const { isAuthenticated, roles, profile } = useAdminAuth();
+  const role = roles[0] || null;
+  const userName = profile?.full_name || null;
   const { addLog } = useChangeLog();
   const [editing, setEditing] = useState(false);
   const [editPhotos, setEditPhotos] = useState<string[]>(photos);
