@@ -34,6 +34,7 @@ const navItems = [
   { label: "Cadastrar Proprietário", href: "/admin/corretor/proprietario", icon: UserPlus },
   { label: "Cadastrar Cliente", href: "/admin/corretor/cliente", icon: Users },
   { label: "Cadastrar Imóvel", href: "/admin/imoveis/novo", icon: Home },
+  { label: "Canal Pro", href: "/admin/canal-pro", icon: Radio },
 ];
 
 const AdminLayout = () => {
