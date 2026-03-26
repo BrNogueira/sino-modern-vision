@@ -62,6 +62,7 @@ const App = () => (
                   <Route path="corretor/agenda" element={<AgendaPage />} />
                   <Route path="corretor/proprietario" element={<CadastroProprietarioPage />} />
                   <Route path="corretor/cliente" element={<CadastroClientePage />} />
+                  <Route path="canal-pro" element={<CanalProPage />} />
                 </Route>
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
