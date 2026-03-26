@@ -136,12 +136,12 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Bree Serif', Georgia, serif;
+    font-family: 'Myriad Pro', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Bree Serif', Georgia, serif;
-    @apply font-normal tracking-tight;
+    font-family: 'Myriad Pro', sans-serif;
+    @apply font-semibold tracking-tight;
   }
 }
 
