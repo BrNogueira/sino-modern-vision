@@ -14,6 +14,147 @@ export type Database = {
   }
   public: {
     Tables: {
+      condominios: {
+        Row: {
+          administradora: string | null
+          ativo: boolean
+          bairro: string | null
+          cep: string | null
+          cidade: string | null
+          created_at: string
+          created_by: string | null
+          endereco: string | null
+          estado: string | null
+          id: string
+          nome: string
+          observacoes: string | null
+          qtd_blocos: number | null
+          qtd_unidades: number | null
+          sindico: string | null
+          telefone_sindico: string | null
+          tem_academia: boolean | null
+          tem_churrasqueira: boolean | null
+          tem_elevador: boolean | null
+          tem_piscina: boolean | null
+          tem_portaria: boolean | null
+          tem_salao_festas: boolean | null
+          updated_at: string
+          valor_condominio: number | null
+        }
+        Insert: {
+          administradora?: string | null
+          ativo?: boolean
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          created_at?: string
+          created_by?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          nome: string
+          observacoes?: string | null
+          qtd_blocos?: number | null
+          qtd_unidades?: number | null
+          sindico?: string | null
+          telefone_sindico?: string | null
+          tem_academia?: boolean | null
+          tem_churrasqueira?: boolean | null
+          tem_elevador?: boolean | null
+          tem_piscina?: boolean | null
+          tem_portaria?: boolean | null
+          tem_salao_festas?: boolean | null
+          updated_at?: string
+          valor_condominio?: number | null
+        }
+        Update: {
+          administradora?: string | null
+          ativo?: boolean
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          created_at?: string
+          created_by?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          qtd_blocos?: number | null
+          qtd_unidades?: number | null
+          sindico?: string | null
+          telefone_sindico?: string | null
+          tem_academia?: boolean | null
+          tem_churrasqueira?: boolean | null
+          tem_elevador?: boolean | null
+          tem_piscina?: boolean | null
+          tem_portaria?: boolean | null
+          tem_salao_festas?: boolean | null
+          updated_at?: string
+          valor_condominio?: number | null
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          bairros_interesse: string | null
+          corretor_id: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          faixa_preco_max: number | null
+          faixa_preco_min: number | null
+          id: string
+          imovel_interesse_id: string | null
+          interesse: string | null
+          nome: string
+          observacoes: string | null
+          origem: string | null
+          status: string
+          telefone: string | null
+          tipo_interesse: string | null
+          updated_at: string
+        }
+        Insert: {
+          bairros_interesse?: string | null
+          corretor_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          faixa_preco_max?: number | null
+          faixa_preco_min?: number | null
+          id?: string
+          imovel_interesse_id?: string | null
+          interesse?: string | null
+          nome: string
+          observacoes?: string | null
+          origem?: string | null
+          status?: string
+          telefone?: string | null
+          tipo_interesse?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bairros_interesse?: string | null
+          corretor_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          faixa_preco_max?: number | null
+          faixa_preco_min?: number | null
+          id?: string
+          imovel_interesse_id?: string | null
+          interesse?: string | null
+          nome?: string
+          observacoes?: string | null
+          origem?: string | null
+          status?: string
+          telefone?: string | null
+          tipo_interesse?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           active: boolean
