@@ -1,0 +1,294 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAdminAuth, AppRole } from "@/contexts/AdminAuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Shield, UserPlus, Pencil, Trash2, Loader2 } from "lucide-react";
+
+interface UserWithRoles {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  active: boolean;
+  roles: AppRole[];
+}
+
+const ALL_ROLES: AppRole[] = ["admin", "corretor", "financeiro", "gerente"];
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrador",
+  gerente: "Gerente",
+  corretor: "Corretor",
+  financeiro: "Financeiro",
+};
+
+const AdminUsuarios = () => {
+  const { hasRole } = useAdminAuth();
+  const { toast } = useToast();
+  const [users, setUsers] = useState<UserWithRoles[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editUser, setEditUser] = useState<UserWithRoles | null>(null);
+  const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // New user form
+  const [newEmail, setNewEmail] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newRoles, setNewRoles] = useState<AppRole[]>(["corretor"]);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    const { data: profiles } = await supabase.from("profiles").select("*").order("full_name");
+    const { data: allRoles } = await supabase.from("user_roles").select("*");
+
+    const usersWithRoles: UserWithRoles[] = (profiles || []).map((p: any) => ({
+      id: p.id,
+      full_name: p.full_name,
+      email: p.email,
+      phone: p.phone || "",
+      active: p.active,
+      roles: (allRoles || [])
+        .filter((r: any) => r.user_id === p.id)
+        .map((r: any) => r.role as AppRole),
+    }));
+    setUsers(usersWithRoles);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchUsers(); }, []);
+
+  const handleEditRoles = (user: UserWithRoles) => {
+    setEditUser(user);
+    setSelectedRoles([...user.roles]);
+    setDialogOpen(true);
+  };
+
+  const handleSaveRoles = async () => {
+    if (!editUser) return;
+
+    // Remove all current roles
+    await supabase.from("user_roles").delete().eq("user_id", editUser.id);
+
+    // Add selected roles
+    if (selectedRoles.length > 0) {
+      await supabase.from("user_roles").insert(
+        selectedRoles.map(role => ({ user_id: editUser.id, role }))
+      );
+    }
+
+    toast({ title: "Perfis atualizados", description: `Perfis de ${editUser.full_name} atualizados.` });
+    setDialogOpen(false);
+    fetchUsers();
+  };
+
+  const handleToggleActive = async (user: UserWithRoles) => {
+    await supabase.from("profiles").update({ active: !user.active }).eq("id", user.id);
+    toast({ title: user.active ? "Usuário desativado" : "Usuário ativado" });
+    fetchUsers();
+  };
+
+  const handleCreateUser = async () => {
+    if (!newEmail || !newName || !newPassword) {
+      toast({ title: "Erro", description: "Preencha todos os campos.", variant: "destructive" });
+      return;
+    }
+    setCreating(true);
+
+    // Register via edge function or direct signup
+    const { data, error } = await supabase.auth.signUp({
+      email: newEmail,
+      password: newPassword,
+      options: { data: { full_name: newName } },
+    });
+
+    if (error) {
+      toast({ title: "Erro ao criar usuário", description: error.message, variant: "destructive" });
+      setCreating(false);
+      return;
+    }
+
+    // Assign roles
+    if (data.user && newRoles.length > 0) {
+      await supabase.from("user_roles").insert(
+        newRoles.map(role => ({ user_id: data.user!.id, role }))
+      );
+    }
+
+    toast({ title: "Usuário criado", description: `${newName} criado com sucesso.` });
+    setCreateDialogOpen(false);
+    setNewEmail("");
+    setNewName("");
+    setNewPassword("");
+    setNewRoles(["corretor"]);
+    setCreating(false);
+    fetchUsers();
+  };
+
+  const toggleRole = (role: AppRole, list: AppRole[], setList: (v: AppRole[]) => void) => {
+    setList(list.includes(role) ? list.filter(r => r !== role) : [...list, role]);
+  };
+
+  if (!hasRole("admin")) {
+    return (
+      <div className="text-center py-12">
+        <Shield className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <h2 className="text-xl font-semibold text-foreground">Acesso restrito</h2>
+        <p className="text-muted-foreground text-sm mt-2">Apenas administradores podem gerenciar usuários.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Gestão de Usuários</h1>
+          <p className="text-sm text-muted-foreground">Gerencie usuários e seus perfis de acesso</p>
+        </div>
+        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+          <DialogTrigger asChild>
+            <Button><UserPlus className="w-4 h-4 mr-2" />Novo Usuário</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Criar Novo Usuário</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-2">
+              <div className="space-y-1.5">
+                <Label>Nome Completo</Label>
+                <Input value={newName} onChange={e => setNewName(e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>E-mail</Label>
+                <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Senha</Label>
+                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label>Perfis</Label>
+                <div className="flex gap-3 flex-wrap">
+                  {ALL_ROLES.map(role => (
+                    <label key={role} className="flex items-center gap-2 text-sm">
+                      <Checkbox
+                        checked={newRoles.includes(role)}
+                        onCheckedChange={() => toggleRole(role, newRoles, setNewRoles)}
+                      />
+                      {ROLE_LABELS[role]}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <Button onClick={handleCreateUser} disabled={creating} className="w-full">
+                {creating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
+                Criar Usuário
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>E-mail</TableHead>
+                <TableHead>Perfis</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {users.map(user => (
+                <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.full_name || "—"}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1 flex-wrap">
+                      {user.roles.length > 0 ? user.roles.map(r => (
+                        <Badge key={r} variant="secondary" className="text-xs">
+                          {ROLE_LABELS[r]}
+                        </Badge>
+                      )) : (
+                        <span className="text-xs text-muted-foreground">Sem perfil</span>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={user.active ? "default" : "outline"} className="text-xs">
+                      {user.active ? "Ativo" : "Inativo"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex gap-1 justify-end">
+                      <Button size="sm" variant="ghost" onClick={() => handleEditRoles(user)}>
+                        <Pencil className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => handleToggleActive(user)}>
+                        {user.active ? "Desativar" : "Ativar"}
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {users.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                    Nenhum usuário cadastrado.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      {/* Edit roles dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Perfis — {editUser?.full_name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-3">
+              {ALL_ROLES.map(role => (
+                <label key={role} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer">
+                  <Checkbox
+                    checked={selectedRoles.includes(role)}
+                    onCheckedChange={() => toggleRole(role, selectedRoles, setSelectedRoles)}
+                  />
+                  <div>
+                    <p className="text-sm font-medium">{ROLE_LABELS[role]}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+            <Button onClick={handleSaveRoles} className="w-full">Salvar Perfis</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default AdminUsuarios;
