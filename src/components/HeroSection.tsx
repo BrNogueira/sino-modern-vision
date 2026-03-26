@@ -55,7 +55,7 @@ const HeroSection = () => {
   return (
     <section className="relative">
       {/* Hero banner */}
-      <div className="relative h-[300px] md:h-[500px] overflow-hidden">
+      <div className="relative h-[300px] md:h-[600px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -73,10 +73,10 @@ const HeroSection = () => {
       <div style={{ backgroundColor: "#89A0B7" }}>
         <div className="relative -mt-14 pb-6 flex items-start justify-center px-4">
           {/* Single search container */}
-          <div
-            className="w-full max-w-[1300px] rounded-2xl shadow-lg px-4 md:px-6 py-4 flex flex-col gap-3"
-            style={{ backgroundColor: "#8B8B8B" }}
-          >
+            <div
+              className="w-full max-w-[1300px] rounded-2xl shadow-lg px-4 md:px-6 py-4 flex flex-col gap-3"
+              style={{ backgroundColor: "rgba(139, 139, 139, 0.5)" }}
+            >
             {/* Row 1: Search input + Aluguel/Venda on the right */}
             <div className="flex items-center gap-2">
               {/* Search input + Buscar */}

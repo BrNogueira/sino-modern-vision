@@ -29,10 +29,10 @@ const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between py-3">
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-          <img src={logoSinos} alt="Sinos Imóveis" className={`${isHome ? "h-20 md:h-60" : "h-12 md:h-16"} w-auto`} />
+          <img src={logoSinos} alt="Sinos Imóveis" className={`${isHome ? "h-20 md:h-60" : "h-12 md:h-16"} w-auto`} style={{ height: "20rem" }} />
           <span
             className="text-foreground font-normal -mt-1"
-            style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px" }}
+            style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}
           >
             <strong>15 anos</strong> realizando sonhos
           </span>
@@ -63,7 +63,10 @@ const Header = () => {
 
       {/* Menu Dropdown */}
       {isMenuOpen && (
-        <div className={`absolute top-full left-0 right-0 ${isHome ? "bg-foreground/50 backdrop-blur-sm" : "bg-primary"} border-b border-primary/80 shadow-lg`}>
+        <div
+          className={`absolute top-full left-0 right-0 ${isHome ? "bg-foreground/50 backdrop-blur-sm" : "bg-primary"} border-b border-primary/80 shadow-lg`}
+          style={{ marginTop: "-9rem" }}
+        >
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
             {navLinks.map((link) => (
               <Link
