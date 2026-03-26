@@ -17,6 +17,7 @@ import {
   Calendar,
   UserPlus,
   Users,
+  Radio,
 } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 import { useState } from "react";
