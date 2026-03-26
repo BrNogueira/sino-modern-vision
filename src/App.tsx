@@ -19,6 +19,8 @@ import AdminProperties from "./pages/admin/AdminProperties";
 import PropertyForm from "./pages/admin/PropertyForm";
 import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
 import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
+import AdminUsuarios from "./pages/admin/AdminUsuarios";
+import AdminPermissoes from "./pages/admin/AdminPermissoes";
 import AgenciamentosPage from "./pages/admin/corretor/AgenciamentosPage";
 import PreCadastrosPage from "./pages/admin/corretor/PreCadastrosPage";
 import MapaPage from "./pages/admin/corretor/MapaPage";
@@ -53,6 +55,8 @@ const App = () => (
                   <Route path="imoveis" element={<AdminProperties />} />
                   <Route path="imoveis/novo" element={<PropertyForm />} />
                   <Route path="imoveis/editar/:id" element={<PropertyForm />} />
+                  <Route path="usuarios" element={<AdminUsuarios />} />
+                  <Route path="permissoes" element={<AdminPermissoes />} />
                   <Route path="corretor" element={<AdminCorretorProfile />} />
                   <Route path="corretor/imoveis" element={<AdminCorretorImoveis />} />
                   <Route path="corretor/agenciamentos" element={<AgenciamentosPage />} />
@@ -63,9 +67,15 @@ const App = () => (
                   <Route path="corretor/proprietario" element={<CadastroProprietarioPage />} />
                   <Route path="corretor/cliente" element={<CadastroClientePage />} />
                   <Route path="canal-pro" element={<CanalProPage />} />
+                  {/* Placeholder routes */}
+                  <Route path="corretores" element={<div className="text-muted-foreground">Gestão de Corretores — em breve</div>} />
+                  <Route path="condominios" element={<div className="text-muted-foreground">Gestão de Condomínios — em breve</div>} />
+                  <Route path="leads" element={<div className="text-muted-foreground">Leads & Contatos — em breve</div>} />
+                  <Route path="agenda" element={<AgendaPage />} />
+                  <Route path="relatorios" element={<div className="text-muted-foreground">Relatórios — em breve</div>} />
+                  <Route path="configuracoes" element={<div className="text-muted-foreground">Configurações — em breve</div>} />
                 </Route>
 
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
