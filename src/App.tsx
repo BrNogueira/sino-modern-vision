@@ -26,6 +26,7 @@ import PesquisarPage from "./pages/admin/corretor/PesquisarPage";
 import AgendaPage from "./pages/admin/corretor/AgendaPage";
 import CadastroProprietarioPage from "./pages/admin/corretor/CadastroProprietarioPage";
 import CadastroClientePage from "./pages/admin/corretor/CadastroClientePage";
+import CanalProPage from "./pages/admin/CanalProPage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
                   <Route path="corretor/agenda" element={<AgendaPage />} />
                   <Route path="corretor/proprietario" element={<CadastroProprietarioPage />} />
                   <Route path="corretor/cliente" element={<CadastroClientePage />} />
+                  <Route path="canal-pro" element={<CanalProPage />} />
                 </Route>
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
