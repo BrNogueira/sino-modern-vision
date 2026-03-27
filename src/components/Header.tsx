@@ -29,7 +29,7 @@ const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between py-3">
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-          <img src={logoSinos} alt="Sinos Imóveis" className={`${isHome ? "h-20 md:h-60" : "h-12 md:h-16"} w-auto`} style={{ height: "20rem" }} />
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: isHome ? "20rem" : "12rem" }} />
           <span
             className="text-foreground font-normal -mt-1"
             style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}

@@ -207,8 +207,12 @@
     background: rgba(139, 139, 139, 0.5);
   }
 
-  .header__menu-button {
+  .header__menu-button--home {
     margin-top: -19rem;
+  }
+
+  .header__menu-button--inner {
+    margin-top: -10rem;
   }
 
   .search-bar__row {
