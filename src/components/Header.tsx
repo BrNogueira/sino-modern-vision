@@ -54,7 +54,7 @@ const Header = () => {
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-3">
           <button
-            className={`p-2 header__menu-button ${menuBtnClass}`}
+            className={`p-2 ${isHome ? 'header__menu-button--home' : 'header__menu-button--inner'} ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
