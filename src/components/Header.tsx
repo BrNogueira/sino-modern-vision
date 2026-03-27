@@ -67,7 +67,7 @@ const Header = () => {
       {isMenuOpen && (
         <div
           className={`absolute top-full left-0 right-0 ${isHome ? "bg-foreground/50 backdrop-blur-sm" : "bg-primary"} border-b border-primary/80 shadow-lg`}
-          style={{ marginTop: "-9rem" }}
+          style={{ marginTop: isHome ? "-9rem" : "-5rem" }}
         >
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
             {navLinks.map((link) => (
