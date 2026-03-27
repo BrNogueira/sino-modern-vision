@@ -170,9 +170,9 @@
 @layer components {
   .hero-banner {
     background-image: url("./assets/hero-banner.png");
-    background-position: center;
+    background-position: center 45%;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 120%;
   }
 
   .hero-banner__fade {
@@ -205,6 +205,10 @@
     flex-direction: column;
     gap: 0.75rem;
     background: rgba(139, 139, 139, 0.5);
+  }
+
+  .header__menu-button {
+    margin-top: -0.5rem;
   }
 
   .search-bar__row {

@@ -41,7 +41,7 @@ const Header = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
           <button
-            className={`p-2 ${menuBtnClass}`}
+            className={`p-2 header__menu-button ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -52,7 +52,7 @@ const Header = () => {
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-3">
           <button
-            className={`p-2 ${menuBtnClass}`}
+            className={`p-2 header__menu-button ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
