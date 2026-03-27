@@ -10,19 +10,34 @@ const HeroSection = () => {
   const [modalidade, setModalidade] = useState<string[]>([]);
   const [modalidadeOpen, setModalidadeOpen] = useState(false);
   const modalidadeRef = useRef<HTMLDivElement>(null);
+  const stateRef = useRef<HTMLDivElement>(null);
+  const cityRef = useRef<HTMLDivElement>(null);
+  const neighborhoodRef = useRef<HTMLDivElement>(null);
   const [filters, setFilters] = useState({
     code: "",
-    state: "",
-    city: "",
-    neighborhood: "",
+    state: [] as string[],
+    city: [] as string[],
+    neighborhood: [] as string[],
     type: "",
     priceRange: "",
   });
-
+  const [stateOpen, setStateOpen] = useState(false);
+  const [cityOpen, setCityOpen] = useState(false);
+  const [neighborhoodOpen, setNeighborhoodOpen] = useState(false);
+  
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (modalidadeRef.current && !modalidadeRef.current.contains(e.target as Node)) {
         setModalidadeOpen(false);
+      }
+      if (stateRef.current && !stateRef.current.contains(e.target as Node)) {
+        setStateOpen(false);
+      }
+      if (cityRef.current && !cityRef.current.contains(e.target as Node)) {
+        setCityOpen(false);
+      }
+      if (neighborhoodRef.current && !neighborhoodRef.current.contains(e.target as Node)) {
+        setNeighborhoodOpen(false);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -35,14 +50,30 @@ const HeroSection = () => {
     );
   };
 
+  const toggleMulti = (key: "state" | "city" | "neighborhood", val: string) => {
+    setFilters((prev) => {
+      const list = prev[key];
+      const next = list.includes(val)
+        ? list.filter((item) => item !== val)
+        : [...list, val];
+      return { ...prev, [key]: next };
+    });
+  };
+
+  const formatSelection = (label: string, values: string[]) => {
+    if (values.length === 0) return label;
+    if (values.length === 1) return values[0];
+    return `${values.length} selecionados`;
+  };
+
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (searchText) params.set("q", searchText);
     if (modalidade.length) params.set("modalidade", modalidade.join(","));
     if (filters.code) params.set("codigo", filters.code);
-    if (filters.state) params.set("estado", filters.state);
-    if (filters.city) params.set("cidade", filters.city);
-    if (filters.neighborhood) params.set("bairro", filters.neighborhood);
+    if (filters.state.length) params.set("estado", filters.state.join(","));
+    if (filters.city.length) params.set("cidade", filters.city.join(","));
+    if (filters.neighborhood.length) params.set("bairro", filters.neighborhood.join(","));
     if (filters.type) params.set("tipo", filters.type);
     if (filters.priceRange) params.set("valor", filters.priceRange);
     navigate(`/imoveis?${params.toString()}`);
@@ -63,7 +94,7 @@ const HeroSection = () => {
           {/* Single search container */}
             <div className="search-bar">
             {/* Row 1: Search input + Aluguel/Venda on the right */}
-            <div className="search-bar__row">
+            <div className="search-bar__row search-bar__row--top">
               {/* Search input + Buscar */}
               <div className="search-bar__input-group">
                 <Search className="search-bar__icon" />
@@ -84,7 +115,7 @@ const HeroSection = () => {
               </div>
 
               {/* Aluguel / Venda select - right side */}
-              <div className="relative shrink-0" ref={modalidadeRef}>
+              <div className="relative search-bar__select-container" ref={modalidadeRef}>
                 <button
                   type="button"
                   onClick={() => setModalidadeOpen(!modalidadeOpen)}
@@ -137,49 +168,119 @@ const HeroSection = () => {
               </div>
 
               {/* 2. Estado */}
-              <div className="relative search-bar__field">
-                <select
-                  value={filters.state}
-                  onChange={(e) =>
-                    setFilters({ ...filters, state: e.target.value, city: "", neighborhood: "" })
-                  }
-                  className="search-bar__select text-m"
+              <div className="relative search-bar__field" ref={stateRef}>
+                <button
+                  type="button"
+                  onClick={() => setStateOpen(!stateOpen)}
+                  className="search-bar__select-button text-m"
                 >
-                  <option value="">Estado</option>
-                  <option value="RS">RS</option>
-                </select>
+                  {formatSelection("Estado", filters.state)}
+                </button>
                 <ChevronDown className="search-bar__chevron" />
+                {stateOpen && (
+                  <div className="search-bar__dropdown search-bar__dropdown--left">
+                    {["RS", "SC", "PR"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleMulti("state", opt)}
+                        className="search-bar__dropdown-item text-m"
+                      >
+                        <span
+                          className={`search-bar__check ${
+                            filters.state.includes(opt)
+                              ? "search-bar__check--active"
+                              : ""
+                          }`}
+                        >
+                          {filters.state.includes(opt) && (
+                            <Check className="w-3 h-3 text-[#2F2F2F]" />
+                          )}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* 3. Cidade */}
-              <div className="relative search-bar__field">
-                <select
-                  value={filters.city}
-                  onChange={(e) => setFilters({ ...filters, city: e.target.value })}
-                  className="search-bar__select text-m"
+              <div className="relative search-bar__field" ref={cityRef}>
+                <button
+                  type="button"
+                  onClick={() => setCityOpen(!cityOpen)}
+                  className="search-bar__select-button text-m"
                 >
-                  <option value="">Cidade</option>
-                  <option value="Novo Hamburgo">Novo Hamburgo</option>
-                  <option value="São Leopoldo">São Leopoldo</option>
-                  <option value="Campo Bom">Campo Bom</option>
-                </select>
+                  {formatSelection("Cidade", filters.city)}
+                </button>
                 <ChevronDown className="search-bar__chevron" />
+                {cityOpen && (
+                  <div className="search-bar__dropdown search-bar__dropdown--left">
+                    {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleMulti("city", opt)}
+                        className="search-bar__dropdown-item text-m"
+                      >
+                        <span
+                          className={`search-bar__check ${
+                            filters.city.includes(opt)
+                              ? "search-bar__check--active"
+                              : ""
+                          }`}
+                        >
+                          {filters.city.includes(opt) && (
+                            <Check className="w-3 h-3 text-[#2F2F2F]" />
+                          )}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* 4. Bairro */}
-              <div className="relative search-bar__field">
-                <select
-                  value={filters.neighborhood}
-                  onChange={(e) => setFilters({ ...filters, neighborhood: e.target.value })}
-                  className="search-bar__select text-m"
+              <div className="relative search-bar__field" ref={neighborhoodRef}>
+                <button
+                  type="button"
+                  onClick={() => setNeighborhoodOpen(!neighborhoodOpen)}
+                  className="search-bar__select-button text-m"
                 >
-                  <option value="">Bairro</option>
-                  <option value="Centro">Centro</option>
-                  <option value="Lomba Grande">Lomba Grande</option>
-                  <option value="Colina do Sol">Colina do Sol</option>
-                  <option value="Rondônia">Rondônia</option>
-                </select>
+                  {formatSelection("Bairro", filters.neighborhood)}
+                </button>
                 <ChevronDown className="search-bar__chevron" />
+                {neighborhoodOpen && (
+                  <div className="search-bar__dropdown search-bar__dropdown--left">
+                    {[
+                      "Centro",
+                      "Lomba Grande",
+                      "Colina do Sol",
+                      "Rondônia",
+                    ].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleMulti("neighborhood", opt)}
+                        className="search-bar__dropdown-item text-m"
+                      >
+                        <span
+                          className={`search-bar__check ${
+                            filters.neighborhood.includes(opt)
+                              ? "search-bar__check--active"
+                              : ""
+                          }`}
+                        >
+                          {filters.neighborhood.includes(opt) && (
+                            <Check className="w-3 h-3 text-[#2F2F2F]" />
+                          )}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* 5. Tipo de Imóvel */}
