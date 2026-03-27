@@ -43,7 +43,7 @@ const Header = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
           <button
-            className={`p-2 header__menu-button ${menuBtnClass}`}
+            className={`p-2 ${isHome ? 'header__menu-button--home' : 'header__menu-button--inner'} ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
