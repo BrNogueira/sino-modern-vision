@@ -29,19 +29,21 @@ const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between py-3">
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-          <img src={logoSinos} alt="Sinos Imóveis" className={`${isHome ? "h-20 md:h-60" : "h-12 md:h-16"} w-auto`} style={{ height: "20rem" }} />
-          <span
-            className="text-foreground font-normal -mt-1"
-            style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}
-          >
-            <strong>15 anos</strong> realizando sonhos
-          </span>
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: isHome ? "20rem" : "12rem" }} />
+          {isHome && (
+            <span
+              className="text-foreground font-normal -mt-1"
+              style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}
+            >
+              <strong>15 anos</strong> realizando sonhos
+            </span>
+          )}
         </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
           <button
-            className={`p-2 header__menu-button ${menuBtnClass}`}
+            className={`p-2 ${isHome ? 'header__menu-button--home' : 'header__menu-button--inner'} ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -52,7 +54,7 @@ const Header = () => {
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-3">
           <button
-            className={`p-2 header__menu-button ${menuBtnClass}`}
+            className={`p-2 ${isHome ? 'header__menu-button--home' : 'header__menu-button--inner'} ${menuBtnClass}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -65,7 +67,7 @@ const Header = () => {
       {isMenuOpen && (
         <div
           className={`absolute top-full left-0 right-0 ${isHome ? "bg-foreground/50 backdrop-blur-sm" : "bg-primary"} border-b border-primary/80 shadow-lg`}
-          style={{ marginTop: "-9rem" }}
+          style={{ marginTop: isHome ? "-9rem" : "-5rem" }}
         >
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
             {navLinks.map((link) => (
