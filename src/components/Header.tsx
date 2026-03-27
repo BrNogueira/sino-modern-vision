@@ -30,12 +30,14 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: isHome ? "20rem" : "12rem" }} />
-          <span
-            className="text-foreground font-normal -mt-1"
-            style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}
-          >
-            <strong>15 anos</strong> realizando sonhos
-          </span>
+          {isHome && (
+            <span
+              className="text-foreground font-normal -mt-1"
+              style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}
+            >
+              <strong>15 anos</strong> realizando sonhos
+            </span>
+          )}
         </Link>
 
         {/* Desktop Nav */}
