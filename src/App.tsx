@@ -34,6 +34,7 @@ import AgendaPage from "./pages/admin/corretor/AgendaPage";
 import CadastroProprietarioPage from "./pages/admin/corretor/CadastroProprietarioPage";
 import CadastroClientePage from "./pages/admin/corretor/CadastroClientePage";
 import CanalProPage from "./pages/admin/CanalProPage";
+import Contato from "./pages/Contato";
 
 const queryClient = new QueryClient();
 
