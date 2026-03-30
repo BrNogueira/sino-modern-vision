@@ -33,7 +33,7 @@ const Header = () => {
           {isHome && (
             <span
               className="text-foreground font-normal -mt-1"
-              style={{ fontSize: "1.2rem", lineHeight: "1.5rem", marginLeft: "15px", marginTop: "-15px" }}
+              style={{ fontSize: "1.6rem", lineHeight: "1.5rem", marginLeft: "20px", marginTop: "-55px" }}
             >
               <strong>15 anos</strong> realizando sonhos
             </span>
