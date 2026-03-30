@@ -12,7 +12,7 @@ const Header = () => {
     { label: "Início", href: "/" },
     { label: "Imóveis", href: "/imoveis" },
     { label: "Categorias", href: "/#categorias" },
-    { label: "Contato", href: "/#contato" },
+    { label: "Contato", href: "/contato" },
   ];
 
   // ===== HOME HEADER =====
