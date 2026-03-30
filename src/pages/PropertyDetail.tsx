@@ -336,8 +336,8 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Map */}
-            {property.latitude && property.longitude && (
+            {/* Map - only for admin/corretor */}
+            {property.latitude && property.longitude && (hasRole("admin") || hasRole("corretor")) && (
               <div>
                 <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
                   <h3 className="text-sm font-bold uppercase tracking-wide">Localização no Mapa</h3>
