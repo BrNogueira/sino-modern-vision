@@ -151,7 +151,7 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const baseProperty = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
-  const { isAuthenticated } = useAdminAuth();
+  const { hasRole } = useAdminAuth();
 
   // Editable state for inline editing
   const [editableFields, setEditableFields] = useState<Record<string, string>>({});
