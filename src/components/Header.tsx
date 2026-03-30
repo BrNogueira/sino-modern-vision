@@ -15,66 +15,103 @@ const Header = () => {
     { label: "Contato", href: "/#contato" },
   ];
 
-  const textClass = "text-primary-foreground";
-  const menuBtnClass = "text-primary-foreground";
-
-  return (
-    <header
-      className={`${
-        isHome
-          ? "absolute top-0 left-0 right-0"
-          : "sticky top-0 bg-primary border-b border-primary/80 shadow-sm"
-      } z-50`}
-    >
-      <div className="container mx-auto px-4 flex items-center justify-between py-3">
-        {/* Logo */}
-        <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: isHome ? "20rem" : "12rem" }} />
-          {isHome && (
+  // ===== HOME HEADER =====
+  if (isHome) {
+    return (
+      <header className="absolute top-0 left-0 right-0 z-50">
+        <div className="container mx-auto px-4 flex items-center justify-between py-3">
+          <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
+            <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "20rem" }} />
             <span
               className="text-foreground font-normal -mt-1"
               style={{ fontSize: "1.6rem", lineHeight: "1.5rem", marginLeft: "20px", marginTop: "-55px" }}
             >
               <strong>15 anos</strong> realizando sonhos
             </span>
-          )}
+          </Link>
+
+          <div className="flex items-center gap-6">
+            <button
+              className="p-2 header__menu-button--home text-primary-foreground"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menu"
+            >
+              {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+            </button>
+          </div>
+        </div>
+
+        {isMenuOpen && (
+          <div
+            className="absolute top-full left-0 right-0 bg-foreground/50 backdrop-blur-sm border-b border-primary/80 shadow-lg"
+            style={{ marginTop: "-9rem" }}
+          >
+            <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="text-primary-foreground hover:text-primary-foreground/70 transition-colors py-2 text-lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        )}
+      </header>
+    );
+  }
+
+  // ===== INTERNAL PAGES HEADER =====
+  return (
+    <header className="sticky top-0 z-50 bg-primary border-b border-primary/80 shadow-sm">
+      <div className="container mx-auto px-4 flex items-center justify-between py-2">
+        <Link to="/" className="flex items-center" style={{ marginLeft: "25px" }}>
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "6rem" }} />
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6">
-          <button
-            className={`p-2 ${isHome ? 'header__menu-button--home' : 'header__menu-button--inner'} ${menuBtnClass}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Menu"
-          >
-            {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
-        </div>
+        {/* Desktop Nav - visible links */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.href || 
+              (link.href !== "/" && location.pathname.startsWith(link.href.split("#")[0]));
+            return (
+              <Link
+                key={link.label}
+                to={link.href}
+                className={`text-primary-foreground transition-colors text-base font-medium px-2 py-1 rounded-md ${
+                  isActive
+                    ? "bg-primary-foreground/20 underline underline-offset-4"
+                    : "hover:bg-primary-foreground/10 hover:underline underline-offset-4"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
 
-        {/* Mobile */}
-        <div className="flex md:hidden items-center gap-3">
-          <button
-            className={`p-2 ${isHome ? 'header__menu-button--home' : 'header__menu-button--inner'} ${menuBtnClass}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Menu"
-          >
-            {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
-        </div>
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden p-2 text-primary-foreground"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Menu"
+        >
+          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
-      {/* Menu Dropdown */}
+      {/* Mobile dropdown */}
       {isMenuOpen && (
-        <div
-          className={`absolute top-full left-0 right-0 ${isHome ? "bg-foreground/50 backdrop-blur-sm" : "bg-primary"} border-b border-primary/80 shadow-lg`}
-          style={{ marginTop: isHome ? "-9rem" : "-5rem" }}
-        >
-          <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
+        <div className="md:hidden bg-primary border-t border-primary-foreground/20 shadow-lg">
+          <nav className="container mx-auto px-4 py-3 flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.href}
-                className="text-primary-foreground hover:text-primary-foreground/70 transition-colors py-2 text-lg"
+                className="text-primary-foreground hover:bg-primary-foreground/10 transition-colors py-2 px-3 rounded-md text-base"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
