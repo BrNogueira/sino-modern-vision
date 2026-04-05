@@ -41,6 +41,7 @@ import {
   DollarSign,
   Facebook,
   Youtube,
+  MapPin,
   Info,
 } from "lucide-react";
 import Header from "@/components/Header";
@@ -240,6 +241,17 @@ const PropertyDetail = () => {
                 <span className="text-primary">{property.type}</span> — {property.title}
               </h1>
             </InlineEditField>
+            {property.city && property.neighborhood && (
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${property.neighborhood}, ${property.city} - ${property.state}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors mt-1"
+              >
+                <MapPin className="w-4 h-4 text-primary" />
+                {property.city} - {property.neighborhood}
+              </a>
+            )}
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <InlineEditField value={property.code} field="Código" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("code", v)}>
