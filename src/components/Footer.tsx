@@ -1,4 +1,4 @@
-import { Phone, MapPin, Mail, Instagram, Clock, Facebook } from "lucide-react";
+import { Phone, MapPin, Mail, Clock } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Footer = () => {
