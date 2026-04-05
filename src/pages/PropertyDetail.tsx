@@ -243,7 +243,7 @@ const PropertyDetail = () => {
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <InlineEditField value={property.code} field="Código" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("code", v)}>
-              <span className="px-4 py-1.5 rounded bg-primary text-primary-foreground text-sm font-bold">CÓD: {property.code}</span>
+              <span className="px-4 py-1.5 rounded bg-primary text-primary-foreground font-bold" style={{ fontSize: "1.4rem", lineHeight: "1.5rem" }}>CÓD: {property.code}</span>
             </InlineEditField>
             <button onClick={() => toggleFavorite(property.code)} className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
               <Heart className={`w-4 h-4 ${isFavorite(property.code) ? "fill-red-500 text-red-500" : "text-muted-foreground"}`} />
