@@ -49,6 +49,15 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col group relative" style={{ height: "375px" }}>
 
+      {/* Hover description overlay */}
+      {property.description && (
+        <div className="absolute inset-0 z-30 bg-foreground/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-6 pointer-events-none rounded-2xl">
+          <p className="text-primary-foreground text-center text-sm leading-relaxed font-medium">
+            {property.description}
+          </p>
+        </div>
+      )}
+
       {/* Image carousel + Price wrapper */}
       <div className="relative">
         <Link to={`/imovel/${slug}`} className="block h-52 overflow-hidden relative">

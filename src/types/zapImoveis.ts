@@ -331,6 +331,9 @@ export interface ZapImovel {
   // Descrição (obrigatório, 50-3000 chars)
   observacao: string;
 
+  // Descrição curta para hover nos cards
+  descricaoCurta: string;
+
   // Mídia
   fotos: ZapImovelPhoto[];
   videoUrl: string;
