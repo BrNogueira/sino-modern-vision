@@ -101,6 +101,7 @@ const initialProperties: ZapImovel[] = [
     qtdBanheiros: 1,
     qtdVagas: 1,
     observacao: "Apartamento funcional e bem localizado no centro de Novo Hamburgo. Próximo a comércios e transporte público.",
+    descricaoCurta: "Apartamento central em Novo Hamburgo – 2 dormitórios, 1 vaga",
     fotos: [],
     videoUrl: "",
     linkTourVirtual: "",
