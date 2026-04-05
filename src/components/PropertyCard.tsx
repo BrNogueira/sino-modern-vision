@@ -41,6 +41,21 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             loading="lazy"
           />
         </Link>
+
+        {/* Transaction type badges - top left, stacked */}
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+          {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
+            <span className="bg-primary text-primary-foreground text-[11px] font-bold uppercase px-3 py-1 rounded shadow-sm">
+              Venda
+            </span>
+          )}
+          {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
+            <span className="bg-white text-primary text-[11px] font-bold uppercase px-3 py-1 rounded shadow-sm">
+              Aluguel
+            </span>
+          )}
+        </div>
+
         {/* Price - centered, overlapping bottom edge */}
         <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
           <span className="bg-primary text-primary-foreground text-lg font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
