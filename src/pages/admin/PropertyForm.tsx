@@ -71,6 +71,7 @@ const emptyForm: FormData = {
   proprietarioTelefone: "",
   proprietarioEmail: "",
   proprietarioDocumento: "",
+  modalidade: [],
   ativo: true,
   destaque: false,
   exclusivo: false,
