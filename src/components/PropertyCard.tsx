@@ -49,10 +49,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col group relative" style={{ height: "375px" }}>
 
-      {/* Hover description overlay */}
+      {/* Hover popup below card */}
       {property.description && (
-        <div className="absolute inset-0 z-30 bg-foreground/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-6 pointer-events-none rounded-2xl">
-          <p className="text-primary-foreground text-center text-sm leading-relaxed font-medium">
+        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-40 w-[90%] bg-card border border-border rounded-lg shadow-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <p className="text-foreground text-center text-xs leading-relaxed">
             {property.description}
           </p>
         </div>
