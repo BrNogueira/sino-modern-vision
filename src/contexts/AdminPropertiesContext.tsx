@@ -77,6 +77,7 @@ const initialProperties: ZapImovel[] = [
     subTipoImovel: "Apartamento Padrão",
     categoriaImovel: "Padrão",
     tipoOferta: 1,
+    modalidade: ["aluguel", "venda"],
     estado: "Rio Grande do Sul",
     cidade: "Novo Hamburgo",
     zona: "",
