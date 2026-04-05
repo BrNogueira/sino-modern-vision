@@ -561,6 +561,22 @@ const PropertyDetail = () => {
               </Button>
             </div>
 
+            {/* Sugestão + Acompanhar */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase">
+                <a href={`https://wa.me/555198765432?text=${encodeURIComponent("Olá, tenho uma sugestão de melhoria para o imóvel " + property.code)}`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-4 h-4" />
+                  Sugestão de Melhoria
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted">
+                <a href={`mailto:${property.emailContato || "contato@sinosimoveis.com.br"}?subject=${encodeURIComponent("Acompanhar novidades - " + property.code)}`}>
+                  <Mail className="w-4 h-4" />
+                  Acompanhar Novidades
+                </a>
+              </Button>
+            </div>
+
             {/* Action buttons: share, favorite, print, financing */}
             <div className="rounded-xl border border-border bg-card p-4 space-y-3">
               <a
