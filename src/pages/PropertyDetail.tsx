@@ -195,17 +195,17 @@ const PropertyDetail = () => {
 
   const gallery = editableGallery || (property.gallery?.length ? property.gallery : [property.image]);
   const [currentImage, setCurrentImage] = useState(0);
-  const [lightbox, setLightbox] = useState<{ open: boolean; index: number }>({ open: false, index: 0 });
+  const [lightbox, setLightbox] = useState<{ open: boolean; index: number; images: string[] }>({ open: false, index: 0, images: [] });
   const [showTaxas, setShowTaxas] = useState(false);
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const nextImage = useCallback(() => setCurrentImage((i) => (i + 1) % gallery.length), [gallery.length]);
   const prevImage = useCallback(() => setCurrentImage((i) => (i - 1 + gallery.length) % gallery.length), [gallery.length]);
 
-  const openLightbox = (i: number) => setLightbox({ open: true, index: i });
-  const closeLightbox = () => setLightbox({ ...lightbox, open: false });
-  const lightboxPrev = () => setLightbox((s) => ({ ...s, index: (s.index - 1 + gallery.length) % gallery.length }));
-  const lightboxNext = () => setLightbox((s) => ({ ...s, index: (s.index + 1) % gallery.length }));
+  const openLightbox = (i: number, imgs?: string[]) => setLightbox({ open: true, index: i, images: imgs || gallery });
+  const closeLightbox = () => setLightbox((s) => ({ ...s, open: false }));
+  const lightboxPrev = () => setLightbox((s) => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }));
+  const lightboxNext = () => setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }));
 
   const characteristics = buildCharacteristics(property);
   const hasAcabamentos = property.acabamentos && property.acabamentos.length > 0;
@@ -223,7 +223,7 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {lightbox.open && <LightboxOverlay images={gallery} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox({ open: true, index: i })} />}
+      {lightbox.open && <LightboxOverlay images={lightbox.images} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox((s) => ({ ...s, index: i }))} />}
 
       {/* ── Title Bar ── */}
       <div className="bg-card border-b border-border">
@@ -308,35 +308,17 @@ const PropertyDetail = () => {
                 )}
               </div>
 
-              {/* Thumbnail gallery grid */}
+              {/* Thumbnail gallery — max 4 visible */}
               {gallery.length > 1 && (
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 mt-4">
-                  {gallery.map((img, i) => (
-                    <button key={i} onClick={() => setCurrentImage(i)} className={`aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${currentImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
+                <div className="flex gap-2 mt-4">
+                  {gallery.slice(0, 4).map((img, i) => (
+                    <button key={i} onClick={() => openLightbox(i, gallery)} className={`flex-1 aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${currentImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
                       <img src={img} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>
               )}
             </InlinePhotoEditor>
-
-            {/* Fotos de Área de Uso Comum — only for condos */}
-            {hasFotosAreaComum && (
-              <div>
-                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
-                  <h3 className="text-sm font-bold uppercase tracking-wide">Fotos de Área de Uso Comum</h3>
-                </div>
-                <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card">
-                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                    {property.fotosAreaComum!.map((img, i) => (
-                      <button key={i} onClick={() => openLightbox(gallery.indexOf(img) >= 0 ? gallery.indexOf(img) : 0)} className="aspect-[4/3] rounded-lg overflow-hidden hover:opacity-80 transition-opacity border border-border">
-                        <img src={img} alt={`Área comum ${i + 1}`} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Description */}
             {property.description && (
@@ -352,6 +334,24 @@ const PropertyDetail = () => {
                 <InlineEditField value={property.description || ""} field="Descrição" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("description", v)} type="textarea">
                   <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
                 </InlineEditField>
+              </div>
+            )}
+
+            {/* Fotos de Área de Uso Comum — max 4 thumbnails, own lightbox */}
+            {hasFotosAreaComum && (
+              <div>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
+                  <h3 className="text-sm font-bold uppercase tracking-wide">Fotos de Área de Uso Comum</h3>
+                </div>
+                <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card">
+                  <div className="flex gap-2">
+                    {property.fotosAreaComum!.slice(0, 4).map((img, i) => (
+                      <button key={i} onClick={() => openLightbox(i, property.fotosAreaComum!)} className="flex-1 aspect-[4/3] rounded-lg overflow-hidden hover:opacity-80 transition-opacity border border-border">
+                        <img src={img} alt={`Área comum ${i + 1}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
 
