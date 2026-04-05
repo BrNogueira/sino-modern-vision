@@ -76,27 +76,6 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Desktop Nav - visible links */}
-        <nav className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => {
-            const isActive = location.pathname === link.href || 
-              (link.href !== "/" && location.pathname.startsWith(link.href.split("#")[0]));
-            return (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`text-primary-foreground transition-colors text-base font-medium px-2 py-1 rounded-md ${
-                  isActive
-                    ? "bg-primary-foreground/20 underline underline-offset-4"
-                    : "hover:bg-primary-foreground/10 hover:underline underline-offset-4"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
         {/* Mobile hamburger */}
         <button
           className="md:hidden p-2 text-primary-foreground"
@@ -106,6 +85,27 @@ const Header = () => {
           {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
+
+      {/* Desktop Nav - centered links */}
+      <nav className="hidden md:flex items-center justify-center gap-8 py-2 border-t border-primary-foreground/20">
+        {navLinks.map((link) => {
+          const isActive = location.pathname === link.href || 
+            (link.href !== "/" && location.pathname.startsWith(link.href.split("#")[0]));
+          return (
+            <Link
+              key={link.label}
+              to={link.href}
+              className={`text-primary-foreground transition-colors text-base font-medium px-3 py-1 rounded-md ${
+                isActive
+                  ? "bg-primary-foreground/20 underline underline-offset-4"
+                  : "hover:bg-primary-foreground/10 hover:underline underline-offset-4"
+              }`}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Mobile dropdown */}
       {isMenuOpen && (
