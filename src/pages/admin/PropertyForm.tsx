@@ -61,6 +61,7 @@ const emptyForm: FormData = {
   qtdBanheiros: null,
   qtdVagas: null,
   observacao: "",
+  descricaoCurta: "",
   fotos: [],
   videoUrl: "",
   linkTourVirtual: "",
