@@ -124,6 +124,8 @@ const Header = () => {
         </div>
       )}
     </header>
+    <div style={{ height: "8rem" }} />
+    </>
   );
 };
 
