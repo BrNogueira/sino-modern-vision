@@ -47,6 +47,7 @@ const initialProperties: ZapImovel[] = [
     qtdBanheiros: 4,
     qtdVagas: 2,
     observacao: "Esta magnífica casa moderna representa o ápice do luxo e conforto. Com arquitetura contemporânea e acabamentos de alto padrão, oferece uma experiência de moradia incomparável.",
+    descricaoCurta: "Casa moderna alto padrão em Campo Bom – 4 suítes, piscina, churrasqueira",
     fotos: [],
     videoUrl: "",
     linkTourVirtual: "",
