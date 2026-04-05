@@ -24,6 +24,7 @@ const initialProperties: ZapImovel[] = [
     subTipoImovel: "Casa Padrão",
     categoriaImovel: "Térrea",
     tipoOferta: 2,
+    modalidade: ["venda"],
     estado: "Rio Grande do Sul",
     cidade: "Campo Bom",
     zona: "",
