@@ -351,6 +351,9 @@ export interface ZapImovel {
   proprietarioEmail: string;
   proprietarioDocumento: string;
 
+  // Modalidade (Aluguel / Venda)
+  modalidade: ("aluguel" | "venda")[];
+
   // Controle interno
   ativo: boolean;
   destaque: boolean;
