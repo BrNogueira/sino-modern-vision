@@ -41,6 +41,7 @@ import {
   DollarSign,
   Facebook,
   Youtube,
+  MapPin,
   Info,
 } from "lucide-react";
 import Header from "@/components/Header";
