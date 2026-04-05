@@ -39,7 +39,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   };
 
   return (
-    <div className="relative pt-4">
+    <div className="relative pt-4 group/card">
       {/* Code Badge - 50% outside card */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
         <div className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-lg shadow-sm">
@@ -49,14 +49,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col group relative" style={{ height: "375px" }}>
 
-      {/* Hover popup below card */}
-      {property.description && (
-        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-40 w-[90%] bg-card border border-border rounded-lg shadow-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <p className="text-foreground text-center text-xs leading-relaxed">
-            {property.description}
-          </p>
-        </div>
-      )}
 
       {/* Image carousel + Price wrapper */}
       <div className="relative">
@@ -210,6 +202,15 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         )}
       </div>
       </div>
+
+      {/* Hover popup below card - desktop only */}
+      {property.description && (
+        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full mt-1 z-40 w-[92%] bg-card border border-border rounded-lg shadow-lg p-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <p className="text-foreground text-center text-xs leading-relaxed">
+            {property.description}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
