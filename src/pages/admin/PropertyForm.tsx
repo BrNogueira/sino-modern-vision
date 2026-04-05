@@ -425,7 +425,7 @@ const PropertyForm = () => {
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             🏷️ Classificação
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-1.5">
               <Label className="text-foreground text-sm">Tipo do Imóvel <span className="text-destructive">*</span></Label>
               <Select value={form.tipoImovel} onValueChange={(v) => handleTipoChange(v as TipoImovel)}>
@@ -460,6 +460,39 @@ const PropertyForm = () => {
                   <SelectItem value="6">Destaque Superior</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-foreground text-sm">Modalidade <span className="text-destructive">*</span></Label>
+              <div className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 gap-4">
+                <label className="flex items-center gap-2 cursor-pointer text-sm">
+                  <Checkbox
+                    checked={form.modalidade.includes("venda")}
+                    onCheckedChange={(checked) => {
+                      const current = form.modalidade;
+                      if (checked) {
+                        set("modalidade", [...current, "venda"] as any);
+                      } else {
+                        set("modalidade", current.filter((m: string) => m !== "venda") as any);
+                      }
+                    }}
+                  />
+                  Venda
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer text-sm">
+                  <Checkbox
+                    checked={form.modalidade.includes("aluguel")}
+                    onCheckedChange={(checked) => {
+                      const current = form.modalidade;
+                      if (checked) {
+                        set("modalidade", [...current, "aluguel"] as any);
+                      } else {
+                        set("modalidade", current.filter((m: string) => m !== "aluguel") as any);
+                      }
+                    }}
+                  />
+                  Aluguel
+                </label>
+              </div>
             </div>
           </div>
         </section>
