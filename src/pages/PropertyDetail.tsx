@@ -373,30 +373,30 @@ const PropertyDetail = () => {
 
             {/* Metragem */}
             {(property.areaTerreno || property.areaConstruida || property.area) && (
-              <div className="rounded-2xl bg-primary p-6">
-                <h3 className="text-lg font-bold text-primary-foreground uppercase tracking-wide mb-4 pb-3 border-b border-primary-foreground/30">Metragem</h3>
-                <div className="space-y-3">
+              <div className="rounded-[20px] bg-primary px-7 py-6">
+                <h3 className="text-[1.1rem] font-extrabold text-primary-foreground uppercase tracking-wider mb-3 pb-2.5 border-b border-primary-foreground/25">Metragem</h3>
+                <div className="flex flex-col gap-4 mt-4">
                   {property.areaTerreno && (
                     <InlineEditField value={String(property.areaTerreno)} field="Área Terreno" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaTerreno", v)} type="number">
-                      <div className="flex items-center justify-between w-full">
-                        <span className="flex items-center gap-2 text-primary-foreground/90 text-sm"><LandPlot className="w-4 h-4 text-primary-foreground" /> terreno:</span>
-                        <span className="font-bold text-primary-foreground text-base ml-8">{property.areaTerreno} m<sup>2</sup></span>
+                      <div className="flex items-center w-full">
+                        <span className="flex items-center gap-2.5 text-primary-foreground/85 text-[0.95rem] min-w-[120px]"><LandPlot className="w-[18px] h-[18px] text-primary-foreground/90" /> terreno:</span>
+                        <span className="font-bold text-primary-foreground text-[1.15rem] ml-auto">{property.areaTerreno} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.areaConstruida && (
                     <InlineEditField value={String(property.areaConstruida)} field="Área Construída" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaConstruida", v)} type="number">
-                      <div className="flex items-center justify-between w-full">
-                        <span className="flex items-center gap-2 text-primary-foreground/90 text-sm"><Home className="w-4 h-4 text-primary-foreground" /> casa:</span>
-                        <span className="font-bold text-primary-foreground text-base ml-8">{property.areaConstruida} m<sup>2</sup></span>
+                      <div className="flex items-center w-full">
+                        <span className="flex items-center gap-2.5 text-primary-foreground/85 text-[0.95rem] min-w-[120px]"><Home className="w-[18px] h-[18px] text-primary-foreground/90" /> casa:</span>
+                        <span className="font-bold text-primary-foreground text-[1.15rem] ml-auto">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.area && !property.areaConstruida && !property.areaTerreno && (
                     <InlineEditField value={String(property.area)} field="Área" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("area", v)} type="number">
-                      <div className="flex items-center justify-between w-full">
-                        <span className="flex items-center gap-2 text-primary-foreground/90 text-sm"><Square className="w-4 h-4 text-primary-foreground" /> área:</span>
-                        <span className="font-bold text-primary-foreground text-base ml-8">{property.area} m<sup>2</sup></span>
+                      <div className="flex items-center w-full">
+                        <span className="flex items-center gap-2.5 text-primary-foreground/85 text-[0.95rem] min-w-[120px]"><Square className="w-[18px] h-[18px] text-primary-foreground/90" /> área:</span>
+                        <span className="font-bold text-primary-foreground text-[1.15rem] ml-auto">{property.area} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
