@@ -29,7 +29,14 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
       </div>
 
-      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col" style={{ height: "375px" }}>
+      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col group relative" style={{ height: "375px" }}>
+
+      {/* Hover description overlay */}
+      <div className="absolute inset-0 z-30 bg-foreground/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-6 pointer-events-none rounded-2xl">
+        <p className="text-primary-foreground text-center text-sm leading-relaxed font-medium">
+          {property.title}
+        </p>
+      </div>
 
       {/* Image + Price wrapper */}
       <div className="relative">
@@ -37,7 +44,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <img
             src={property.image}
             alt={property.title}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
         </Link>
