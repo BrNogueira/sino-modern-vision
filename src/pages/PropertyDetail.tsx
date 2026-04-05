@@ -501,60 +501,49 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Financiamento */}
-            {property.aceitaFinanciamento && (
-              <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-primary/30 bg-primary/5">
+            {/* Condições de Pagamento */}
+            <div className="space-y-2">
+              {property.aceitaFinanciamento && (
+                <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
+                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                  <span className="text-sm font-medium text-foreground">Apta a financiamento bancário</span>
+                </div>
+              )}
+              <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm font-medium text-foreground">Apta a financiamento bancário</span>
-              </div>
-            )}
-
-            {/* Price */}
-            <div className="rounded-xl border-2 border-foreground bg-card p-4 text-center">
-              <InlineEditField value={property.priceFormatted} field="Preço" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("priceFormatted", v)}>
-                <p className="text-2xl md:text-3xl font-bold text-foreground">{property.priceFormatted}</p>
-              </InlineEditField>
-            </div>
-
-            {/* Condições de pagamento / Taxas adicionais for aluguel */}
-            {isAluguel ? (
-              <div className="space-y-2">
-                {hasTaxas && (
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowTaxas(!showTaxas)}
-                      onMouseEnter={() => setShowTaxas(true)}
-                      onMouseLeave={() => setShowTaxas(false)}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-accent-foreground font-bold text-sm uppercase hover:bg-accent/80 transition-colors"
-                    >
-                      <Info className="w-4 h-4" />
-                      Taxas Adicionais
-                    </button>
-                    {showTaxas && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg p-3 z-20">
-                        {property.taxasAdicionais!.map((taxa, i) => (
-                          <div key={i} className="flex justify-between text-sm py-1">
-                            <span className="text-muted-foreground">{taxa.nome}:</span>
-                            <span className="font-semibold text-foreground">{taxa.valor}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {property.condicoesPagamento && (
-                  <InlineEditField value={property.condicoesPagamento} field="Documentação Locação" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
-                    <p className="text-xs text-muted-foreground italic px-1">Documentação para locação: {property.condicoesPagamento}</p>
-                  </InlineEditField>
-                )}
-              </div>
-            ) : (
-              <div className="px-1">
                 <InlineEditField value={property.condicoesPagamento || "consulte"} field="Condições Pagamento" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
-                  <p className="text-xs text-muted-foreground italic">condições de pagamento: {property.condicoesPagamento || "consulte"}</p>
+                  <span className="text-sm font-medium text-foreground">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
                 </InlineEditField>
               </div>
-            )}
+              {isAluguel && hasTaxas && (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowTaxas(!showTaxas)}
+                    onMouseEnter={() => setShowTaxas(true)}
+                    onMouseLeave={() => setShowTaxas(false)}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-accent-foreground font-bold text-sm uppercase hover:bg-accent/80 transition-colors"
+                  >
+                    <Info className="w-4 h-4" />
+                    Taxas Adicionais
+                  </button>
+                  {showTaxas && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg p-3 z-20">
+                      {property.taxasAdicionais!.map((taxa, i) => (
+                        <div key={i} className="flex justify-between text-sm py-1">
+                          <span className="text-muted-foreground">{taxa.nome}:</span>
+                          <span className="font-semibold text-foreground">{taxa.valor}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+              {isAluguel && property.condicoesPagamento && (
+                <InlineEditField value={property.condicoesPagamento} field="Documentação Locação" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
+                  <p className="text-xs text-muted-foreground italic px-1">Documentação para locação: {property.condicoesPagamento}</p>
+                </InlineEditField>
+              )}
+            </div>
 
             {/* CTAs — side by side */}
             <div className="grid grid-cols-2 gap-2">
