@@ -195,17 +195,17 @@ const PropertyDetail = () => {
 
   const gallery = editableGallery || (property.gallery?.length ? property.gallery : [property.image]);
   const [currentImage, setCurrentImage] = useState(0);
-  const [lightbox, setLightbox] = useState<{ open: boolean; index: number }>({ open: false, index: 0 });
+  const [lightbox, setLightbox] = useState<{ open: boolean; index: number; images: string[] }>({ open: false, index: 0, images: [] });
   const [showTaxas, setShowTaxas] = useState(false);
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const nextImage = useCallback(() => setCurrentImage((i) => (i + 1) % gallery.length), [gallery.length]);
   const prevImage = useCallback(() => setCurrentImage((i) => (i - 1 + gallery.length) % gallery.length), [gallery.length]);
 
-  const openLightbox = (i: number) => setLightbox({ open: true, index: i });
-  const closeLightbox = () => setLightbox({ ...lightbox, open: false });
-  const lightboxPrev = () => setLightbox((s) => ({ ...s, index: (s.index - 1 + gallery.length) % gallery.length }));
-  const lightboxNext = () => setLightbox((s) => ({ ...s, index: (s.index + 1) % gallery.length }));
+  const openLightbox = (i: number, imgs?: string[]) => setLightbox({ open: true, index: i, images: imgs || gallery });
+  const closeLightbox = () => setLightbox((s) => ({ ...s, open: false }));
+  const lightboxPrev = () => setLightbox((s) => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }));
+  const lightboxNext = () => setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }));
 
   const characteristics = buildCharacteristics(property);
   const hasAcabamentos = property.acabamentos && property.acabamentos.length > 0;
