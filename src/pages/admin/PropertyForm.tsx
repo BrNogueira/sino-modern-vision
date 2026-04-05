@@ -550,14 +550,28 @@ const PropertyForm = () => {
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             📝 Descrição <span className="text-destructive">*</span>
           </h2>
-          <Textarea
-            placeholder="Mínimo 50, máximo 3000 caracteres. Descreva o imóvel com detalhes..."
-            value={form.observacao}
-            onChange={(e) => set("observacao", e.target.value)}
-            className="min-h-[150px]"
-            maxLength={3000}
-          />
-          <p className="text-xs text-muted-foreground">{form.observacao.length}/3000 caracteres</p>
+          <div className="space-y-1.5">
+            <Label className="text-foreground text-sm">Descrição curta (hover no card)</Label>
+            <Textarea
+              placeholder="Ex: Casa de alto padrão à venda em Jurerê Internacional, Florianópolis/SC – 7 dormitórios - Pronto para morar"
+              value={form.descricaoCurta}
+              onChange={(e) => set("descricaoCurta", e.target.value)}
+              className="min-h-[80px]"
+              maxLength={200}
+            />
+            <p className="text-xs text-muted-foreground">{form.descricaoCurta.length}/200 caracteres</p>
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-foreground text-sm">Descrição completa <span className="text-destructive">*</span></Label>
+            <Textarea
+              placeholder="Mínimo 50, máximo 3000 caracteres. Descreva o imóvel com detalhes..."
+              value={form.observacao}
+              onChange={(e) => set("observacao", e.target.value)}
+              className="min-h-[150px]"
+              maxLength={3000}
+            />
+            <p className="text-xs text-muted-foreground">{form.observacao.length}/3000 caracteres</p>
+          </div>
         </section>
 
         {/* Fotos e Mídia */}
