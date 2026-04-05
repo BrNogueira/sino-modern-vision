@@ -1,4 +1,5 @@
-import { Bed, Bath, Car, Waves, GroupIcon, MapPin, Star } from "lucide-react";
+import { useState } from "react";
+import { Bed, Bath, Car, Waves, GroupIcon, MapPin, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
@@ -11,6 +12,7 @@ interface PropertyCardProps {
 const PropertyCard = ({ property }: PropertyCardProps) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorited = isFavorite(property.code);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const slug = property.title
     .toLowerCase()
@@ -19,6 +21,22 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     .replace(/\s+/g, "-");
 
   const hasFeatureIcons = property.suites || property.bedrooms || property.bathrooms || property.parking || property.hasPool;
+
+  // Build images array: main image + gallery
+  const images = [property.image, ...(property.gallery || [])];
+  const totalSlides = images.length;
+
+  const goNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  };
+
+  const goPrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
 
   return (
     <div className="relative pt-4">
@@ -31,23 +49,43 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col group relative" style={{ height: "375px" }}>
 
-      {/* Hover description overlay */}
-      <div className="absolute inset-0 z-30 bg-foreground/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-6 pointer-events-none rounded-2xl">
-        <p className="text-primary-foreground text-center text-sm leading-relaxed font-medium">
-          {property.title}
-        </p>
-      </div>
-
-      {/* Image + Price wrapper */}
+      {/* Image carousel + Price wrapper */}
       <div className="relative">
-        <Link to={`/imovel/${slug}`} className="block h-52 overflow-hidden">
-          <img
-            src={property.image}
-            alt={property.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
+        <Link to={`/imovel/${slug}`} className="block h-52 overflow-hidden relative">
+          {images.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={`${property.title} - ${idx + 1}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                idx === currentSlide ? "opacity-100" : "opacity-0"
+              }`}
+              loading="lazy"
+            />
+          ))}
         </Link>
+
+        {/* Carousel arrows */}
+        {totalSlides > 1 && (
+          <>
+            <button
+              onClick={goPrev}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4 text-foreground" />
+            </button>
+            <button
+              onClick={goNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-colors"
+            >
+              <ChevronRight className="w-4 h-4 text-foreground" />
+            </button>
+            {/* Slide counter */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 bg-foreground/60 text-primary-foreground text-xs px-2.5 py-0.5 rounded-full">
+              {currentSlide + 1} / {totalSlides}
+            </div>
+          </>
+        )}
 
         {/* Transaction type badges - top left, stacked */}
         <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
@@ -62,6 +100,18 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </span>
           )}
         </div>
+
+        {/* Favorite - top right */}
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(property.code); }}
+          className="absolute top-2 right-2 z-10 bg-background/70 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-sm transition-colors"
+        >
+          <Star
+            className={`w-4 h-4 transition-colors ${
+              favorited ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
+            }`}
+          />
+        </button>
 
         {/* Price - centered, overlapping bottom edge */}
         <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
@@ -84,7 +134,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <span className="uppercase text-sm font-bold">{property.location}</span>
         </div>
 
-        {/* Feature Icons (always show row for consistent height) */}
+        {/* Feature Icons */}
         <TooltipProvider delayDuration={200}>
           <div className="flex items-center justify-center gap-3 mb-3 min-h-[24px]">
             {property.suites !== undefined && property.suites > 0 && (
@@ -149,20 +199,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </span>
           </div>
         )}
-
-        {/* Favorite Button - icon only, right aligned */}
-        <div className="flex justify-end mt-auto">
-          <button
-            onClick={() => toggleFavorite(property.code)}
-            className="hover:opacity-80 transition-opacity"
-          >
-            <Star
-              className={`w-5 h-5 transition-colors ${
-                favorited ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
-              }`}
-            />
-          </button>
-        </div>
       </div>
       </div>
     </div>
