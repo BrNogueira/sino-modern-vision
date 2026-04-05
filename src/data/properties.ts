@@ -20,6 +20,8 @@ export interface Property {
   neighborhood: string;
   price: number;
   priceFormatted: string;
+  valorAluguel?: number;
+  valorAluguelFormatted?: string;
   bedrooms?: number;
   suites?: number;
   bathrooms?: number;
