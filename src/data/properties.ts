@@ -13,7 +13,7 @@ export interface Property {
   image: string;
   title: string;
   type: string;
-  transactionType: "venda" | "aluguel";
+  transactionType: "venda" | "aluguel" | "venda/aluguel";
   location: string;
   city: string;
   state: string;
