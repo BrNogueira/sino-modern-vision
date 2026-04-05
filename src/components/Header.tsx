@@ -66,6 +66,7 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
+    <>
     <header className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80 shadow-sm">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
         <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
