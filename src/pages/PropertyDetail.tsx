@@ -539,11 +539,16 @@ const PropertyDetail = () => {
                   )}
                 </div>
               )}
-              {isAluguel && property.condicoesPagamento && (
-                <InlineEditField value={property.condicoesPagamento} field="Documentação Locação" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
-                  <p className="text-xs text-muted-foreground italic px-1">Documentação para locação: {property.condicoesPagamento}</p>
-                </InlineEditField>
-              )}
+              {/* Documentação para Locação */}
+              <a
+                href="/documentos/documentacao-locacao.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-accent-foreground font-bold text-sm uppercase hover:bg-accent/80 transition-colors"
+              >
+                <Info className="w-4 h-4" />
+                Documentação para Locação
+              </a>
             </div>
 
             {/* CTAs — side by side */}
