@@ -79,9 +79,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </h3>
 
         {/* Location */}
-        <div className="flex items-center justify-center gap-1 text-muted-foreground text-sm mb-3">
-          <MapPin className="w-4 h-4 text-primary" />
-          <span className="uppercase text-xs font-medium">{property.location}</span>
+        <div className="flex items-center justify-center gap-1 text-foreground mb-3">
+          <MapPin className="w-5 h-5 text-primary" />
+          <span className="uppercase text-sm font-bold">{property.location}</span>
         </div>
 
         {/* Feature Icons (always show row for consistent height) */}
