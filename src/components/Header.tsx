@@ -66,11 +66,12 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
-    <header className="sticky top-0 z-50 bg-primary border-b border-primary/80 shadow-sm">
+    <>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80 shadow-sm">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
         <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "6rem" }} />
-          <span className="text-primary-foreground" style={{ fontSize: "16px", marginTop: "-8px", marginLeft: "5px" }}>
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "8rem" }} />
+          <span className="text-primary-foreground" style={{ fontSize: "15px", marginTop: "-20px", marginLeft: "5px" }}>
             <strong>15 anos</strong> realizando sonhos
           </span>
         </Link>
@@ -124,6 +125,8 @@ const Header = () => {
         </div>
       )}
     </header>
+    <div style={{ height: "8rem" }} />
+    </>
   );
 };
 
