@@ -247,6 +247,11 @@ const PropertyDetail = () => {
             <InlineEditField value={property.title} field="Título" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("title", v)}>
               <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
                 <span className="text-primary">{property.type}</span> — {property.title}
+                {property.transactionType && (
+                  <span className="ml-2 text-primary text-base font-bold uppercase">
+                    ({property.transactionType === "venda/aluguel" ? "Venda/Aluguel" : property.transactionType === "venda" ? "Venda" : "Aluguel"})
+                  </span>
+                )}
               </h1>
             </InlineEditField>
             {property.city && property.neighborhood && (
