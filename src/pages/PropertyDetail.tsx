@@ -247,6 +247,11 @@ const PropertyDetail = () => {
             <InlineEditField value={property.title} field="Título" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("title", v)}>
               <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
                 <span className="text-primary">{property.type}</span> — {property.title}
+                {property.transactionType && (
+                  <span className="ml-2 text-primary text-base font-bold uppercase">
+                    ({property.transactionType === "venda/aluguel" ? "Venda/Aluguel" : property.transactionType === "venda" ? "Venda" : "Aluguel"})
+                  </span>
+                )}
               </h1>
             </InlineEditField>
             {property.city && property.neighborhood && (
@@ -363,22 +368,6 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Map - only for admin/corretor */}
-            {property.latitude && property.longitude && (hasRole("admin") || hasRole("corretor")) && (
-              <div>
-                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
-                  <h3 className="text-sm font-bold uppercase tracking-wide">Localização no Mapa</h3>
-                </div>
-                <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
-                  <PropertyMap properties={properties} highlightCode={property.code} className="h-[400px] w-full" />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* ══ RIGHT SIDEBAR ══ */}
-          <div className="lg:col-span-1 space-y-4">
-
             {/* Valor de Venda */}
             {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5">
@@ -405,6 +394,23 @@ const PropertyDetail = () => {
                 ))}
               </div>
             )}
+
+            {/* Map - only for admin/corretor */}
+            {property.latitude && property.longitude && (hasRole("admin") || hasRole("corretor")) && (
+              <div>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
+                  <h3 className="text-sm font-bold uppercase tracking-wide">Localização no Mapa</h3>
+                </div>
+                <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
+                  <PropertyMap properties={properties} highlightCode={property.code} className="h-[400px] w-full" />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ══ RIGHT SIDEBAR ══ */}
+          <div className="lg:col-span-1 space-y-4">
+
             {/* Metragem */}
             {(property.areaTerreno || property.areaConstruida || property.area) && (
               <div className="rounded-[20px] bg-primary px-7 py-6">
