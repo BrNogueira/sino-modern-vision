@@ -246,7 +246,9 @@ const PropertyDetail = () => {
             </nav>
             <InlineEditField value={property.title} field="Título" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("title", v)}>
               <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
-                <span className="text-primary">{property.transactionType === "venda/aluguel" ? "Venda / Aluguel" : property.transactionType}</span> — {property.title}
+                <span className={property.transactionType === "venda" ? "text-primary" : "text-orange-600"}>
+                  {property.transactionType === "venda/aluguel" ? "VENDA / ALUGUEL" : property.transactionType?.toUpperCase()}
+                </span> — {property.title}
               </h1>
             </InlineEditField>
             {property.city && property.neighborhood && (
