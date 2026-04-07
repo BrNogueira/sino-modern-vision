@@ -237,7 +237,7 @@ const PropertyDetail = () => {
       {/* Breadcrumb centered */}
       <div className="bg-muted border-b border-border">
         <div className="container mx-auto px-4 py-2">
-          <nav className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+          <nav className="flex items-center justify-center gap-2 text-muted-foreground text-lg">
             <Link to="/" className="hover:text-primary transition-colors">Início</Link>
             <span>/</span>
             <Link to="/imoveis" className="hover:text-primary transition-colors">Imóveis</Link>
