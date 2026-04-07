@@ -86,8 +86,8 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Desktop Nav - centered links */}
-      <nav className="hidden md:flex items-center justify-center gap-8 py-2 border-t border-primary-foreground/20">
+      {/* Desktop Nav - inline with logo */}
+      <nav className="hidden md:flex items-center gap-6">
         {navLinks.map((link) => {
           const isActive = location.pathname === link.href || 
             (link.href !== "/" && location.pathname.startsWith(link.href.split("#")[0]));
