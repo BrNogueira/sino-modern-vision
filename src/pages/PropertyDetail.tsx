@@ -392,7 +392,7 @@ const PropertyDetail = () => {
                   {property.areaTerreno && (
                     <InlineEditField value={String(property.areaTerreno)} field="Área Terreno" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaTerreno", v)} type="number">
                       <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 text-primary-foreground/85 text-[0.95rem] min-w-[120px]"><LandPlot className="w-[18px] h-[18px] text-primary-foreground/90" /> terreno:</span>
+                        <span className="flex items-center gap-2.5 text-primary-foreground/85 min-w-[120px] text-lg"><LandPlot className="w-[18px] h-[18px] text-primary-foreground/90" /> terreno:</span>
                         <span className="font-bold text-primary-foreground text-[1.15rem] ml-auto">{property.areaTerreno} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
@@ -400,7 +400,7 @@ const PropertyDetail = () => {
                   {property.areaConstruida && (
                     <InlineEditField value={String(property.areaConstruida)} field="Área Construída" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaConstruida", v)} type="number">
                       <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 text-primary-foreground/85 text-[0.95rem] min-w-[120px]"><Home className="w-[18px] h-[18px] text-primary-foreground/90" /> casa:</span>
+                        <span className="flex items-center gap-2.5 text-primary-foreground/85 min-w-[120px] text-lg"><Home className="w-[18px] h-[18px] text-primary-foreground/90" /> casa:</span>
                         <span className="font-bold text-primary-foreground text-[1.15rem] ml-auto">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
