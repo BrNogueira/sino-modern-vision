@@ -76,6 +76,27 @@ const Header = () => {
           </span>
         </Link>
 
+        {/* Desktop Nav - inline with logo */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.href || 
+              (link.href !== "/" && location.pathname.startsWith(link.href.split("#")[0]));
+            return (
+              <Link
+                key={link.label}
+                to={link.href}
+                className={`text-primary-foreground transition-colors text-base font-medium px-3 py-1 rounded-md ${
+                  isActive
+                    ? "bg-primary-foreground/20 underline underline-offset-4"
+                    : "hover:bg-primary-foreground/10 hover:underline underline-offset-4"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+
         {/* Mobile hamburger */}
         <button
           className="md:hidden p-2 text-primary-foreground"
