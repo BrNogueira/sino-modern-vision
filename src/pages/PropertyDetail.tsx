@@ -234,16 +234,23 @@ const PropertyDetail = () => {
       {lightbox.open && <LightboxOverlay images={lightbox.images} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox((s) => ({ ...s, index: i }))} />}
 
       {/* ── Title Bar ── */}
+      {/* Breadcrumb centered */}
+      <div className="bg-muted border-b border-border">
+        <div className="container mx-auto px-4 py-2">
+          <nav className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <Link to="/" className="hover:text-primary transition-colors">Início</Link>
+            <span>/</span>
+            <Link to="/imoveis" className="hover:text-primary transition-colors">Imóveis</Link>
+            <span>/</span>
+            <span className="text-foreground">{property.title}</span>
+          </nav>
+        </div>
+      </div>
+
+      {/* ── Title Bar ── */}
       <div className="bg-card border-b border-border">
         <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
-              <Link to="/" className="hover:text-primary transition-colors">Início</Link>
-              <span>/</span>
-              <Link to="/imoveis" className="hover:text-primary transition-colors">Imóveis</Link>
-              <span>/</span>
-              <span className="text-foreground">{property.title}</span>
-            </nav>
             <InlineEditField value={property.title} field="Título" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("title", v)}>
               <h1 className="text-xl md:text-2xl font-bold text-foreground uppercase tracking-wide">
                 <span className={property.transactionType === "venda" ? "text-primary" : "text-orange-600"}>
