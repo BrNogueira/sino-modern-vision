@@ -235,17 +235,24 @@ const PropertyDetail = () => {
 
       {lightbox.open && <LightboxOverlay images={lightbox.images} index={lightbox.index} onClose={closeLightbox} onPrev={lightboxPrev} onNext={lightboxNext} onGoTo={(i) => setLightbox((s) => ({ ...s, index: i }))} />}
 
-      {/* ── Title Bar ── */}
-      {/* Breadcrumb centered */}
-      <div className="bg-muted border-b border-border">
-        <div className="container mx-auto px-4 py-2">
-          <nav className="flex items-center justify-center gap-2 text-muted-foreground text-lg">
-            <Link to="/" className="hover:text-primary transition-colors">Início</Link>
-            <span>/</span>
-            <Link to="/imoveis" className="hover:text-primary transition-colors">Imóveis</Link>
-            <span>/</span>
-            <span className="text-foreground">{property.title}</span>
-          </nav>
+      {/* Search bar below header */}
+      <div className="bg-primary py-4">
+        <div className="container mx-auto px-4 flex justify-center">
+          <SearchBar />
+        </div>
+      </div>
+
+      {/* Navigation buttons */}
+      <div className="bg-background border-b border-border">
+        <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-3">
+          <Link to="/" className="flex items-center gap-2 text-primary font-bold text-sm uppercase hover:opacity-80 transition-opacity">
+            <Home className="w-4 h-4" />
+            Início
+          </Link>
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-primary font-bold text-sm uppercase hover:opacity-80 transition-opacity">
+            <ChevronLeft className="w-4 h-4" />
+            Voltar
+          </button>
         </div>
       </div>
 
