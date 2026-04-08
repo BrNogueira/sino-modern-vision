@@ -225,7 +225,7 @@ const PropertyDetail = () => {
   // Similar properties (same type or city, excluding current)
   const similarProperties = properties
     .filter((p) => p.code !== property.code && (p.type === property.type || p.city === property.city))
-    .slice(0, 3);
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background">
@@ -696,7 +696,7 @@ const PropertyDetail = () => {
             <h2 className="text-xl md:text-2xl font-bold text-foreground text-center mb-8 uppercase tracking-wide">
               Imóveis Semelhantes
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {similarProperties.map((p) => (
                 <PropertyCard key={p.code} property={p} />
               ))}
