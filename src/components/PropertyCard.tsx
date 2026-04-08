@@ -168,6 +168,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           {property.hasPool && (
             <div className="flex flex-col items-center gap-0.5">
               <Waves className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm font-semibold text-foreground">✓</span>
               <span className="text-[10px] text-muted-foreground">Piscina</span>
             </div>
           )}
