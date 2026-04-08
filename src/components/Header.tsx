@@ -21,10 +21,10 @@ const Header = () => {
       <header className="absolute top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
           <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-            <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[12rem] md:h-[27rem]" />
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "23rem" }} />
             <span
               className="text-foreground font-normal -mt-1"
-              style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-25px" }}
+              style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-65px" }}
             >
               <span className="text-sm md:text-[2rem]"><strong>15 anos</strong> realizando sonhos</span>
             </span>
