@@ -104,7 +104,7 @@ const HeroSection = () => {
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="search-bar__input text-m"
+                  className="search-bar__input text-m text-xl"
                 />
                 <button
                   onClick={handleSearch}
