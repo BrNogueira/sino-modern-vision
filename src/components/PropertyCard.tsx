@@ -193,7 +193,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         {/* Area (for terrenos) */}
         {property.area && !hasFeatureIcons && (
-          <div className="flex items-center justify-center gap-1 mb-3">
+          <div className="flex items-center justify-center gap-1">
             <span className="flex items-center gap-1 text-sm bg-muted px-3 py-1.5 rounded-md">
               <GroupIcon className="w-4 h-4 text-primary" />
               {property.area}m² {property.areaDimensions && `(${property.areaDimensions})`}
