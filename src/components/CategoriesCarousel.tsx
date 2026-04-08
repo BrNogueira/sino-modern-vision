@@ -42,7 +42,7 @@ const CategoriesSection = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-green-800/80 via-green-700/40 to-transparent" style={{ top: '50%' }} />
               <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
-                <span className="text-primary-foreground text-sm md:text-base font-normal">
+                <span className="text-primary-foreground md:text-base font-normal text-2xl">
                   {cat.title}
                 </span>
               </div>
