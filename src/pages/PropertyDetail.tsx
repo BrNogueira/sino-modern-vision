@@ -160,6 +160,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 /* ─── Main Page ─── */
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const baseProperty = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
   const { hasRole } = useAdminAuth();
 
