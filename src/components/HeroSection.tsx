@@ -119,7 +119,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setModalidadeOpen(!modalidadeOpen)}
-                  className="search-bar__button text-m"
+                  className="search-bar__button text-m text-xl"
                 >
                   {modalidade.length === 0
                     ? "Aluguel / Venda"
