@@ -553,9 +553,13 @@ const PropertyDetail = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <InlineEditField value={property.condicoesPagamento || "consulte"} field="Condições Pagamento" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
-                  <span className="text-sm font-medium text-foreground">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
-                </InlineEditField>
+                {isAluguel ? (
+                  <span className="text-sm font-medium text-muted-foreground italic">Valores sujeito a alterações</span>
+                ) : (
+                  <InlineEditField value={property.condicoesPagamento || "consulte"} field="Condições Pagamento" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
+                    <span className="text-sm font-medium text-foreground">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
+                  </InlineEditField>
+                )}
               </div>
               {isAluguel && hasTaxas && (
                 <div className="relative">
