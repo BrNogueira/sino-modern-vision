@@ -209,7 +209,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setCityOpen(!cityOpen)}
-                  className="search-bar__select-button text-m"
+                  className="search-bar__select-button text-m text-xl"
                 >
                   {formatSelection("Cidade", filters.city)}
                 </button>
