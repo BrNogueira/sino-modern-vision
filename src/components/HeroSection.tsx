@@ -288,7 +288,7 @@ const HeroSection = () => {
                 <select
                   value={filters.type}
                   onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                  className="search-bar__select text-m"
+                  className="search-bar__select text-m text-xl"
                 >
                   <option value="">Tipo de Imóvel</option>
                   <option value="Casa">Casa</option>
