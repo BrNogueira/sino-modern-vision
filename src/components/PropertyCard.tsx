@@ -135,61 +135,43 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <span className="uppercase text-sm font-bold">{property.location}</span>
         </div>
 
-        {/* Feature Icons */}
-        <TooltipProvider delayDuration={200}>
-          <div className="flex items-center justify-center gap-3 mb-3 min-h-[24px]">
-            {property.suites !== undefined && property.suites > 0 && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                    {property.suites}<Bed className="w-4 h-4" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>{property.suites} suítes</TooltipContent>
-              </Tooltip>
-            )}
-            {property.bedrooms !== undefined && property.bedrooms > 0 && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                    {property.bedrooms}<Bed className="w-4 h-4" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>{property.bedrooms} quartos</TooltipContent>
-              </Tooltip>
-            )}
-            {property.bathrooms !== undefined && property.bathrooms > 0 && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                    {property.bathrooms}<Bath className="w-4 h-4" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>{property.bathrooms} banheiros</TooltipContent>
-              </Tooltip>
-            )}
-            {property.parking !== undefined && property.parking > 0 && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                    {property.parking}<Car className="w-4 h-4" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>{property.parking} vagas</TooltipContent>
-              </Tooltip>
-            )}
-            {property.hasPool && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex items-center gap-1 text-sm text-foreground cursor-default">
-                    <Waves className="w-4 h-4" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>Piscina</TooltipContent>
-              </Tooltip>
-            )}
-          </div>
-        </TooltipProvider>
+        {/* Feature Icons with labels */}
+        <div className="flex items-center justify-center gap-4 mb-3 min-h-[24px]">
+          {property.bedrooms !== undefined && property.bedrooms > 0 && (
+            <div className="flex flex-col items-center gap-0.5">
+              <Bed className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm font-semibold text-foreground">{property.bedrooms}</span>
+              <span className="text-[10px] text-muted-foreground">Quartos</span>
+            </div>
+          )}
+          {property.bathrooms !== undefined && property.bathrooms > 0 && (
+            <div className="flex flex-col items-center gap-0.5">
+              <Bath className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm font-semibold text-foreground">{property.bathrooms}</span>
+              <span className="text-[10px] text-muted-foreground">Banheiros</span>
+            </div>
+          )}
+          {property.suites !== undefined && property.suites > 0 && (
+            <div className="flex flex-col items-center gap-0.5">
+              <Star className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm font-semibold text-foreground">{property.suites}</span>
+              <span className="text-[10px] text-muted-foreground">Suítes</span>
+            </div>
+          )}
+          {property.parking !== undefined && property.parking > 0 && (
+            <div className="flex flex-col items-center gap-0.5">
+              <Car className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm font-semibold text-foreground">{property.parking}</span>
+              <span className="text-[10px] text-muted-foreground">Vagas</span>
+            </div>
+          )}
+          {property.hasPool && (
+            <div className="flex flex-col items-center gap-0.5">
+              <Waves className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[10px] text-muted-foreground">Piscina</span>
+            </div>
+          )}
+        </div>
 
         {/* Area (for terrenos) */}
         {property.area && !hasFeatureIcons && (
