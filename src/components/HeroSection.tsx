@@ -172,7 +172,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setStateOpen(!stateOpen)}
-                  className="search-bar__select-button text-m"
+                  className="search-bar__select-button text-m text-xl"
                 >
                   {formatSelection("Estado", filters.state)}
                 </button>
