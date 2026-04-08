@@ -403,6 +403,8 @@ export const properties: Property[] = [
     taxasAdicionais: [
       { nome: "Condomínio", valor: "R$ 380,00" },
       { nome: "IPTU", valor: "R$ 80,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 30,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 2 meses",
     description: "Apartamento mobiliado e pronto para morar. Localização central com fácil acesso a transporte e comércio.",
