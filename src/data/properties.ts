@@ -239,6 +239,7 @@ export const properties: Property[] = [
       { nome: "Condomínio", valor: "R$ 450,00" },
       { nome: "IPTU", valor: "R$ 120,00/mês" },
       { nome: "Seguro incêndio", valor: "R$ 35,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses",
     description: "Apartamento funcional e bem localizado no centro de Novo Hamburgo.",
@@ -268,6 +269,8 @@ export const properties: Property[] = [
     taxasAdicionais: [
       { nome: "Condomínio", valor: "R$ 300,00" },
       { nome: "IPTU", valor: "R$ 85,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 30,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses",
     linkWhatsapp: "https://wa.me/555198765432",
@@ -331,6 +334,8 @@ export const properties: Property[] = [
     gallery: [propertyComercial, propertyDetail1],
     taxasAdicionais: [
       { nome: "IPTU", valor: "R$ 150,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 40,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses ou fiador",
     description: "Loja térrea em ponto comercial movimentado no centro de Campo Bom. Ideal para comércio varejista.",
@@ -363,6 +368,8 @@ export const properties: Property[] = [
     acabamentos: ["Piso cerâmico", "Forro PVC"],
     taxasAdicionais: [
       { nome: "IPTU", valor: "R$ 95,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 25,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses",
     description: "Casa espaçosa com 3 dormitórios e pátio amplo. Ótima localização no bairro Jardim Mauá.",
@@ -396,6 +403,8 @@ export const properties: Property[] = [
     taxasAdicionais: [
       { nome: "Condomínio", valor: "R$ 380,00" },
       { nome: "IPTU", valor: "R$ 80,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 30,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 2 meses",
     description: "Apartamento mobiliado e pronto para morar. Localização central com fácil acesso a transporte e comércio.",
