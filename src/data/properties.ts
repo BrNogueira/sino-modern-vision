@@ -334,6 +334,8 @@ export const properties: Property[] = [
     gallery: [propertyComercial, propertyDetail1],
     taxasAdicionais: [
       { nome: "IPTU", valor: "R$ 150,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 40,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses ou fiador",
     description: "Loja térrea em ponto comercial movimentado no centro de Campo Bom. Ideal para comércio varejista.",
