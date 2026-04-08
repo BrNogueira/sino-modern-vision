@@ -82,7 +82,7 @@ const HeroSection = () => {
   return (
     <section className="relative">
       {/* Hero banner */}
-      <div className="relative h-[300px] md:h-[600px] overflow-hidden">
+      <div className="relative h-[300px] md:h-[680px] overflow-hidden">
         <div className="absolute inset-0 hero-banner" style={{}} />
         {/* Bottom fade into water color */}
         <div className="absolute bottom-0 left-0 right-0 h-[100px] hero-banner__fade" />
