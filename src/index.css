@@ -263,7 +263,7 @@
   .search-bar__submit {
     background: #F2C21A;
     color: #2F2F2F;
-    border-radius: 9999px;
+    border-radius: 10px;
     height: 36px;
     padding: 0 1.25rem;
     font-weight: 700;
