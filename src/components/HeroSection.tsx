@@ -309,7 +309,7 @@ const HeroSection = () => {
                 <select
                   value={filters.priceRange}
                   onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                  className="search-bar__select text-m"
+                  className="search-bar__select text-m text-xl"
                 >
                   <option value="">Valor</option>
                   <option value="0-200000">Até R$ 200mil</option>
