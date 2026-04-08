@@ -239,6 +239,7 @@ export const properties: Property[] = [
       { nome: "Condomínio", valor: "R$ 450,00" },
       { nome: "IPTU", valor: "R$ 120,00/mês" },
       { nome: "Seguro incêndio", valor: "R$ 35,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses",
     description: "Apartamento funcional e bem localizado no centro de Novo Hamburgo.",
