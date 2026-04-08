@@ -368,6 +368,8 @@ export const properties: Property[] = [
     acabamentos: ["Piso cerâmico", "Forro PVC"],
     taxasAdicionais: [
       { nome: "IPTU", valor: "R$ 95,00/mês" },
+      { nome: "Seguro incêndio", valor: "R$ 25,00/mês" },
+      { nome: "Seguro fiança", valor: "Consulte" },
     ],
     condicoesPagamento: "Aluguel + caução de 3 meses",
     description: "Casa espaçosa com 3 dormitórios e pátio amplo. Ótima localização no bairro Jardim Mauá.",
