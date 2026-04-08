@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-import { LayoutGrid, List, ArrowUpDown } from "lucide-react";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { LayoutGrid, List, ArrowUpDown, Home, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SearchBar from "@/components/SearchBar";
 import { properties } from "@/data/properties";
 
 const ITEMS_PER_PAGE = 9;
