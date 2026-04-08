@@ -163,7 +163,7 @@ const HeroSection = () => {
                   placeholder="Código"
                   value={filters.code}
                   onChange={(e) => setFilters({ ...filters, code: e.target.value })}
-                  className="search-bar__field-input text-m"
+                  className="search-bar__field-input text-m text-xl"
                 />
               </div>
 
