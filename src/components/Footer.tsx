@@ -6,7 +6,7 @@ const Footer = () => {
     <footer id="contato" className="text-white">
 
       {/* Main footer */}
-      <div style={{ backgroundColor: "#0a6936" }}>
+      <div style={{ backgroundColor: "#0a6936", borderTop: "4px solid #f5c518", borderBottom: "4px solid #f5c518" }}>
         <div className="container mx-auto px-4 py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
 
