@@ -170,9 +170,9 @@
 @layer components {
   .hero-banner {
     background-image: url("./assets/hero-banner.png");
-    background-position: center 45%;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: 120%;
+    background-size: cover;
   }
 
   .hero-banner__fade {
