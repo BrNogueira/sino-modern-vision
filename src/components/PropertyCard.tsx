@@ -116,9 +116,15 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         {/* Price - centered, overlapping bottom edge */}
         <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-primary-foreground text-lg font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
-            {property.priceFormatted}
-          </span>
+          {property.transactionType === "aluguel" ? (
+            <span className="bg-[#ea580c] text-white text-lg font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
+              {property.valorAluguelFormatted || property.priceFormatted}
+            </span>
+          ) : (
+            <span className="bg-primary text-primary-foreground text-lg font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
+              {property.priceFormatted}
+            </span>
+          )}
         </div>
       </div>
 
