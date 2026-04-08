@@ -48,6 +48,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SearchBar from "@/components/SearchBar";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyMap from "@/components/PropertyMap";
 import { Button } from "@/components/ui/button";
