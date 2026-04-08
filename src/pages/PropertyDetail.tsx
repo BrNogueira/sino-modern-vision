@@ -561,29 +561,6 @@ const PropertyDetail = () => {
                   </InlineEditField>
                 )}
               </div>
-              {isAluguel && hasTaxas && (
-                <div className="relative">
-                  <button
-                    onClick={() => setShowTaxas(!showTaxas)}
-                    onMouseEnter={() => setShowTaxas(true)}
-                    onMouseLeave={() => setShowTaxas(false)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-accent-foreground font-bold text-sm uppercase hover:bg-accent/80 transition-colors"
-                  >
-                    <Info className="w-4 h-4" />
-                    Taxas Adicionais
-                  </button>
-                  {showTaxas && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg p-3 z-20">
-                      {property.taxasAdicionais!.map((taxa, i) => (
-                        <div key={i} className="flex justify-between text-sm py-1">
-                          <span className="text-muted-foreground">{taxa.nome}:</span>
-                          <span className="font-semibold text-foreground">{taxa.valor}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Documentação para Locação — só exibir se for locação */}
