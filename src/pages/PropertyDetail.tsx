@@ -595,15 +595,15 @@ const PropertyDetail = () => {
               </a>
             )}
 
-            {/* CTAs — side by side */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase">
+            {/* CTAs — stack on mobile, side by side on sm+ */}
+            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase w-full">
                 <a href={property.linkWhatsapp || "https://wa.me/555198765432"} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted">
+              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted w-full">
                 <a href={`mailto:${property.emailContato || "contato@sinosimoveis.com.br"}`}>
                   <Mail className="w-4 h-4" />
                   E-mail
@@ -612,14 +612,14 @@ const PropertyDetail = () => {
             </div>
 
             {/* Sugestão + Acompanhar */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase">
+            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase w-full">
                 <a href={`https://wa.me/555198765432?text=${encodeURIComponent("Olá, tenho uma sugestão de melhoria para o imóvel " + property.code)}`} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4" />
                   Sugestão de Melhoria
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted">
+              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted w-full">
                 <a href={`mailto:${property.emailContato || "contato@sinosimoveis.com.br"}?subject=${encodeURIComponent("Acompanhar novidades - " + property.code)}`}>
                   <Mail className="w-4 h-4" />
                   Acompanhar Novidades
