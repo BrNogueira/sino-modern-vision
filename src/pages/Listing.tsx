@@ -78,6 +78,33 @@ const Listing = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
+      {/* Search bar below header */}
+      <div className="bg-primary py-4">
+        <div className="container mx-auto px-4 flex justify-center">
+          <SearchBar />
+        </div>
+      </div>
+
+      {/* Navigation buttons */}
+      <div className="bg-background border-b border-border">
+        <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-3">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-primary font-bold text-sm uppercase hover:opacity-80 transition-opacity"
+          >
+            <Home className="w-4 h-4" />
+            Início
+          </Link>
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-primary font-bold text-sm uppercase hover:opacity-80 transition-opacity"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Voltar
+          </button>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 pt-8 pb-16">
         {/* Results Bar */}
         <div className="flex items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3">
