@@ -92,7 +92,7 @@ const HeroSection = () => {
       <div className="hero-section__water">
         <div className="relative -mt-14 pb-6 flex items-start justify-center px-4">
           {/* Single search container */}
-            <div className="search-bar">
+            <div className="search-bar px-[15px] py-[15px]">
             {/* Row 1: Search input + Aluguel/Venda on the right */}
             <div className="search-bar__row search-bar__row--top">
               {/* Search input + Buscar */}
@@ -104,7 +104,7 @@ const HeroSection = () => {
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="search-bar__input text-m text-xl"
+                  className="search-bar__input text-m text-2xl"
                 />
                 <button
                   onClick={handleSearch}
@@ -119,7 +119,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setModalidadeOpen(!modalidadeOpen)}
-                  className="search-bar__button text-m text-xl"
+                  className="search-bar__button text-m text-2xl"
                 >
                   {modalidade.length === 0
                     ? "Aluguel / Venda"
@@ -163,7 +163,7 @@ const HeroSection = () => {
                   placeholder="Código"
                   value={filters.code}
                   onChange={(e) => setFilters({ ...filters, code: e.target.value })}
-                  className="search-bar__field-input text-m text-xl"
+                  className="search-bar__field-input text-m text-2xl"
                 />
               </div>
 
@@ -172,7 +172,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setStateOpen(!stateOpen)}
-                  className="search-bar__select-button text-m text-xl"
+                  className="search-bar__select-button text-m text-2xl"
                 >
                   {formatSelection("Estado", filters.state)}
                 </button>
@@ -209,7 +209,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setCityOpen(!cityOpen)}
-                  className="search-bar__select-button text-m text-xl"
+                  className="search-bar__select-button text-m text-2xl"
                 >
                   {formatSelection("Cidade", filters.city)}
                 </button>
@@ -246,7 +246,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setNeighborhoodOpen(!neighborhoodOpen)}
-                  className="search-bar__select-button text-m text-xl"
+                  className="search-bar__select-button text-m text-2xl"
                 >
                   {formatSelection("Bairro", filters.neighborhood)}
                 </button>
@@ -288,7 +288,7 @@ const HeroSection = () => {
                 <select
                   value={filters.type}
                   onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                  className="search-bar__select text-m text-xl"
+                  className="search-bar__select text-m font-normal text-2xl"
                 >
                   <option value="">Tipo de Imóvel</option>
                   <option value="Casa">Casa</option>
@@ -309,7 +309,7 @@ const HeroSection = () => {
                 <select
                   value={filters.priceRange}
                   onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                  className="search-bar__select text-m text-xl"
+                  className="search-bar__select text-m text-2xl"
                 >
                   <option value="">Valor</option>
                   <option value="0-200000">Até R$ 200mil</option>
