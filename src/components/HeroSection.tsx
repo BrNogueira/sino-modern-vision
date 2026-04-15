@@ -288,7 +288,7 @@ const HeroSection = () => {
                 <select
                   value={filters.type}
                   onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                  className="search-bar__select text-m font-normal text-2xl"
+                  className="search-bar__select text-m font-normal"
                 >
                   <option value="">Tipo de Imóvel</option>
                   <option value="Casa">Casa</option>
@@ -309,7 +309,7 @@ const HeroSection = () => {
                 <select
                   value={filters.priceRange}
                   onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                  className="search-bar__select text-m text-2xl"
+                  className="search-bar__select text-m"
                 >
                   <option value="">Valor</option>
                   <option value="0-200000">Até R$ 200mil</option>
