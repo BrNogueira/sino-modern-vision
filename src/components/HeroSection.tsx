@@ -104,7 +104,7 @@ const HeroSection = () => {
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="search-bar__input text-m text-2xl"
+                  className="search-bar__input text-m"
                 />
                 <button
                   onClick={handleSearch}
@@ -119,7 +119,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setModalidadeOpen(!modalidadeOpen)}
-                  className="search-bar__button text-m text-2xl"
+                  className="search-bar__button text-m"
                 >
                   {modalidade.length === 0
                     ? "Aluguel / Venda"
@@ -163,7 +163,7 @@ const HeroSection = () => {
                   placeholder="Código"
                   value={filters.code}
                   onChange={(e) => setFilters({ ...filters, code: e.target.value })}
-                  className="search-bar__field-input text-m text-2xl"
+                  className="search-bar__field-input text-m"
                 />
               </div>
 
@@ -172,7 +172,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setStateOpen(!stateOpen)}
-                  className="search-bar__select-button text-m text-2xl"
+                  className="search-bar__select-button text-m"
                 >
                   {formatSelection("Estado", filters.state)}
                 </button>
@@ -209,7 +209,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setCityOpen(!cityOpen)}
-                  className="search-bar__select-button text-m text-2xl"
+                  className="search-bar__select-button text-m"
                 >
                   {formatSelection("Cidade", filters.city)}
                 </button>
@@ -246,7 +246,7 @@ const HeroSection = () => {
                 <button
                   type="button"
                   onClick={() => setNeighborhoodOpen(!neighborhoodOpen)}
-                  className="search-bar__select-button text-m text-2xl"
+                  className="search-bar__select-button text-m"
                 >
                   {formatSelection("Bairro", filters.neighborhood)}
                 </button>
@@ -288,7 +288,7 @@ const HeroSection = () => {
                 <select
                   value={filters.type}
                   onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                  className="search-bar__select text-m font-normal text-2xl"
+                  className="search-bar__select text-m font-normal"
                 >
                   <option value="">Tipo de Imóvel</option>
                   <option value="Casa">Casa</option>
@@ -309,7 +309,7 @@ const HeroSection = () => {
                 <select
                   value={filters.priceRange}
                   onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                  className="search-bar__select text-m text-2xl"
+                  className="search-bar__select text-m"
                 >
                   <option value="">Valor</option>
                   <option value="0-200000">Até R$ 200mil</option>
