@@ -42,7 +42,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <div className="relative pt-4 group/card">
       {/* Code Badge - 50% outside card */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
-        <div className="bg-primary text-primary-foreground text-sm font-semibold px-4 py-1.5 rounded-lg shadow-sm">
+        <div className="bg-primary text-primary-foreground font-semibold px-4 py-1.5 rounded-lg shadow-sm text-lg">
           CÓD: {property.code}
         </div>
       </div>
@@ -91,7 +91,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {/* Transaction type badges - top left, stacked */}
         <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
           {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
-            <span className="bg-primary text-primary-foreground text-[11px] font-bold uppercase px-3 py-1 rounded shadow-sm">
+            <span className="bg-primary text-primary-foreground font-bold uppercase px-3 py-1 rounded shadow-sm text-lg">
               Venda
             </span>
           )}
@@ -116,7 +116,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         {/* Price - centered, overlapping bottom edge */}
         <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-primary-foreground text-lg font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm">
+          <span className="bg-primary text-primary-foreground font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm text-2xl">
             {property.transactionType === "aluguel" ? (property.valorAluguelFormatted || property.priceFormatted) : property.priceFormatted}
           </span>
         </div>
@@ -125,14 +125,14 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       {/* Content */}
       <div className="p-4 pt-6 text-center flex flex-col flex-1">
         {/* Type */}
-        <h3 className="text-xl font-bold text-foreground uppercase tracking-wide mb-1">
+        <h3 className="font-bold text-foreground uppercase tracking-wide mb-1 text-2xl">
           {property.title}
         </h3>
 
         {/* Location */}
         <div className="flex items-center justify-center gap-1 text-foreground mb-3">
           <MapPin className="w-5 h-5 text-primary" />
-          <span className="uppercase text-sm font-bold">{property.location}</span>
+          <span className="uppercase font-bold text-lg">{property.location}</span>
         </div>
 
         {/* Feature Icons with labels - only show if has icons */}
