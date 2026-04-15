@@ -79,9 +79,9 @@ const SearchBar = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="search-bar__input text-m text-xl"
+            className="search-bar__input text-m text-3xl"
           />
-          <button onClick={handleSearch} className="search-bar__submit text-m">
+          <button onClick={handleSearch} className="search-bar__submit text-m text-3xl">
             Buscar
           </button>
         </div>
@@ -89,7 +89,7 @@ const SearchBar = () => {
           <button
             type="button"
             onClick={() => setModalidadeOpen(!modalidadeOpen)}
-            className="search-bar__button text-m text-xl"
+            className="search-bar__button text-m text-3xl"
           >
             {modalidade.length === 0 ? "Aluguel / Venda" : modalidade.join(", ")}
           </button>
@@ -112,10 +112,10 @@ const SearchBar = () => {
       {/* Row 2 */}
       <div className="search-bar__row search-bar__row--filters">
         <div className="relative search-bar__field">
-          <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m text-xl" />
+          <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m text-3xl" />
         </div>
         <div className="relative search-bar__field" ref={stateRef}>
-          <button type="button" onClick={() => setStateOpen(!stateOpen)} className="search-bar__select-button text-m text-xl">{formatSelection("Estado", filters.state)}</button>
+          <button type="button" onClick={() => setStateOpen(!stateOpen)} className="search-bar__select-button text-m text-3xl">{formatSelection("Estado", filters.state)}</button>
           <ChevronDown className="search-bar__chevron" />
           {stateOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
@@ -129,7 +129,7 @@ const SearchBar = () => {
           )}
         </div>
         <div className="relative search-bar__field" ref={cityRef}>
-          <button type="button" onClick={() => setCityOpen(!cityOpen)} className="search-bar__select-button text-m text-xl">{formatSelection("Cidade", filters.city)}</button>
+          <button type="button" onClick={() => setCityOpen(!cityOpen)} className="search-bar__select-button text-m text-3xl">{formatSelection("Cidade", filters.city)}</button>
           <ChevronDown className="search-bar__chevron" />
           {cityOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
@@ -143,7 +143,7 @@ const SearchBar = () => {
           )}
         </div>
         <div className="relative search-bar__field" ref={neighborhoodRef}>
-          <button type="button" onClick={() => setNeighborhoodOpen(!neighborhoodOpen)} className="search-bar__select-button text-m text-xl">{formatSelection("Bairro", filters.neighborhood)}</button>
+          <button type="button" onClick={() => setNeighborhoodOpen(!neighborhoodOpen)} className="search-bar__select-button text-m text-3xl">{formatSelection("Bairro", filters.neighborhood)}</button>
           <ChevronDown className="search-bar__chevron" />
           {neighborhoodOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
@@ -157,7 +157,7 @@ const SearchBar = () => {
           )}
         </div>
         <div className="relative search-bar__field">
-          <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })} className="search-bar__select text-m text-xl">
+          <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })} className="search-bar__select text-m text-3xl">
             <option value="">Tipo de Imóvel</option>
             <option value="Casa">Casa</option>
             <option value="Terreno">Terreno</option>
@@ -172,7 +172,7 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
         </div>
         <div className="relative search-bar__field">
-          <select value={filters.priceRange} onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })} className="search-bar__select text-m text-xl">
+          <select value={filters.priceRange} onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })} className="search-bar__select text-m text-3xl">
             <option value="">Valor</option>
             <option value="0-200000">Até R$ 200mil</option>
             <option value="200000-500000">R$ 200mil - 500mil</option>
