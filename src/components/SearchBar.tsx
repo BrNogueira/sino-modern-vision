@@ -97,7 +97,7 @@ const SearchBar = () => {
           {modalidadeOpen && (
             <div className="search-bar__dropdown">
               {["Venda", "Aluguel"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleModalidade(opt)} className="search-bar__dropdown-item text-m text-2xl">
+                <button key={opt} type="button" onClick={() => toggleModalidade(opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${modalidade.includes(opt) ? "search-bar__check--active" : ""}`}>
                     {modalidade.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}
                   </span>
@@ -112,15 +112,15 @@ const SearchBar = () => {
       {/* Row 2 */}
       <div className="search-bar__row search-bar__row--filters">
         <div className="relative search-bar__field">
-          <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m text-3xl" />
+          <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m" />
         </div>
         <div className="relative search-bar__field" ref={stateRef}>
-          <button type="button" onClick={() => setStateOpen(!stateOpen)} className="search-bar__select-button text-m text-3xl">{formatSelection("Estado", filters.state)}</button>
+          <button type="button" onClick={() => setStateOpen(!stateOpen)} className="search-bar__select-button text-m">{formatSelection("Estado", filters.state)}</button>
           <ChevronDown className="search-bar__chevron" />
           {stateOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               {["RS", "SC", "PR"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("state", opt)} className="search-bar__dropdown-item text-m text-2xl">
+                <button key={opt} type="button" onClick={() => toggleMulti("state", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.state.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.state.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
                   {opt}
                 </button>
@@ -129,12 +129,12 @@ const SearchBar = () => {
           )}
         </div>
         <div className="relative search-bar__field" ref={cityRef}>
-          <button type="button" onClick={() => setCityOpen(!cityOpen)} className="search-bar__select-button text-m text-3xl">{formatSelection("Cidade", filters.city)}</button>
+          <button type="button" onClick={() => setCityOpen(!cityOpen)} className="search-bar__select-button text-m">{formatSelection("Cidade", filters.city)}</button>
           <ChevronDown className="search-bar__chevron" />
           {cityOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m text-2xl">
+                <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.city.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.city.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
                   {opt}
                 </button>
@@ -143,12 +143,12 @@ const SearchBar = () => {
           )}
         </div>
         <div className="relative search-bar__field" ref={neighborhoodRef}>
-          <button type="button" onClick={() => setNeighborhoodOpen(!neighborhoodOpen)} className="search-bar__select-button text-m text-3xl">{formatSelection("Bairro", filters.neighborhood)}</button>
+          <button type="button" onClick={() => setNeighborhoodOpen(!neighborhoodOpen)} className="search-bar__select-button text-m">{formatSelection("Bairro", filters.neighborhood)}</button>
           <ChevronDown className="search-bar__chevron" />
           {neighborhoodOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               {["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m text-2xl">
+                <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.neighborhood.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.neighborhood.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
                   {opt}
                 </button>
@@ -157,7 +157,7 @@ const SearchBar = () => {
           )}
         </div>
         <div className="relative search-bar__field">
-          <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })} className="search-bar__select text-m text-3xl">
+          <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })} className="search-bar__select text-m">
             <option value="">Tipo de Imóvel</option>
             <option value="Casa">Casa</option>
             <option value="Terreno">Terreno</option>
@@ -172,7 +172,7 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
         </div>
         <div className="relative search-bar__field">
-          <select value={filters.priceRange} onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })} className="search-bar__select text-m text-3xl">
+          <select value={filters.priceRange} onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })} className="search-bar__select text-m">
             <option value="">Valor</option>
             <option value="0-200000">Até R$ 200mil</option>
             <option value="200000-500000">R$ 200mil - 500mil</option>
