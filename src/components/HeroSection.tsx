@@ -350,7 +350,7 @@ const HeroSection = () => {
       </div>
 
       {/* Gradient transition from water color to page background */}
-      <div className="hero-section__transition h-24 md:h-32" />
+      <div className="hero-section__transition h-24" />
     </section>
   );
 };
