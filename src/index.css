@@ -277,7 +277,7 @@
     min-width: 0;
     background: transparent;
     outline: none;
-    color: #2F2F2F;
+    color: #000;
   }
 
   .search-bar__input::placeholder {
@@ -311,7 +311,7 @@
   .search-bar__select-button {
     appearance: none;
     background: #ffffff;
-    color: #6b6b6b;
+    color: #000;
     border-radius: 10px;
     height: 64px;
     padding: 0 1rem;
@@ -357,7 +357,7 @@
     gap: 0.5rem;
     width: 100%;
     padding: 0.5rem 0.75rem;
-    color: #2F2F2F;
+    color: #000;
     transition: background-color 0.2s ease;
   }
 
@@ -390,7 +390,7 @@
   .search-bar__select {
     appearance: none;
     background: #ffffff;
-    color: #6b6b6b;
+    color: #000;
     border-radius: 10px;
     padding: 0 1rem;
     height: 54px;
