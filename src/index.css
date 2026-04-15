@@ -204,6 +204,7 @@
     flex-direction: column;
     gap: 0.75rem;
     background: #7b818780;
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
 
   .header__menu-button--home {
@@ -400,15 +401,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 9999px;
     background: #1FA855;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .search-bar__whatsapp svg {
+    width: 24px;
+    height: 24px;
   }
 
   .search-bar__whatsapp:hover {
     opacity: 0.9;
+    transform: scale(1.1);
   }
 
   .search-bar__logo {
