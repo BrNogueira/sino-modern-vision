@@ -79,9 +79,9 @@ const SearchBar = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="search-bar__input text-m text-3xl"
+            className="search-bar__input text-m"
           />
-          <button onClick={handleSearch} className="search-bar__submit text-m text-3xl">
+          <button onClick={handleSearch} className="search-bar__submit text-m">
             Buscar
           </button>
         </div>
@@ -89,7 +89,7 @@ const SearchBar = () => {
           <button
             type="button"
             onClick={() => setModalidadeOpen(!modalidadeOpen)}
-            className="search-bar__button text-m text-3xl"
+            className="search-bar__button text-m"
           >
             {modalidade.length === 0 ? "Aluguel / Venda" : modalidade.join(", ")}
           </button>
