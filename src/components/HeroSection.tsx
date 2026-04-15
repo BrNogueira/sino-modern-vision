@@ -345,12 +345,12 @@ const HeroSection = () => {
           className="flex items-center gap-1.5 text-foreground hover:opacity-70 transition-colors"
         >
           <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-          <span className="text-sm font-semibold">{count > 0 ? `${count} ` : ""}Meus Favoritos</span>
+          <span className="font-semibold text-[1.2rem]">{count > 0 ? `${count} ` : ""}dos meus favoritos</span>
         </Link>
       </div>
 
       {/* Gradient transition from water color to page background */}
-      <div className="hero-section__transition h-24" />
+      <div className="hero-section__transition h-24 md:h-32" />
     </section>
   );
 };
