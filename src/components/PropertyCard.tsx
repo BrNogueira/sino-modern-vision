@@ -81,10 +81,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             >
               <ChevronRight className="w-4 h-4 text-foreground" />
             </button>
-            {/* Slide counter */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 bg-foreground/60 text-primary-foreground text-xs px-2.5 py-0.5 rounded-full">
-              {currentSlide + 1} / {totalSlides}
-            </div>
           </>
         )}
 
@@ -124,10 +120,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
       {/* Content */}
       <div className="p-4 pt-6 text-center flex flex-col flex-1">
-        {/* Type */}
-        <h3 className="font-bold text-foreground uppercase tracking-wide mb-1 text-2xl">
-          {property.title}
-        </h3>
 
         {/* Location */}
         <div className="flex items-center justify-center gap-1 text-foreground mb-3">
