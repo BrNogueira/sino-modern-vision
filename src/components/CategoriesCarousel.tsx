@@ -22,7 +22,7 @@ const categories = [
 
 const CategoriesSection = () => {
   return (
-    <section id="categorias" className="py-16 bg-background">
+    <section id="categorias" className="pt-0 pb-16 bg-background">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl md:text-3xl text-center text-foreground mb-10">
           Escolha sua categoria:
