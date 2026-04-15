@@ -97,7 +97,7 @@ const SearchBar = () => {
           {modalidadeOpen && (
             <div className="search-bar__dropdown">
               {["Venda", "Aluguel"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleModalidade(opt)} className="search-bar__dropdown-item text-m">
+                <button key={opt} type="button" onClick={() => toggleModalidade(opt)} className="search-bar__dropdown-item text-m text-2xl">
                   <span className={`search-bar__check ${modalidade.includes(opt) ? "search-bar__check--active" : ""}`}>
                     {modalidade.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}
                   </span>
@@ -120,7 +120,7 @@ const SearchBar = () => {
           {stateOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               {["RS", "SC", "PR"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("state", opt)} className="search-bar__dropdown-item text-m">
+                <button key={opt} type="button" onClick={() => toggleMulti("state", opt)} className="search-bar__dropdown-item text-m text-2xl">
                   <span className={`search-bar__check ${filters.state.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.state.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
                   {opt}
                 </button>
@@ -134,7 +134,7 @@ const SearchBar = () => {
           {cityOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m">
+                <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m text-2xl">
                   <span className={`search-bar__check ${filters.city.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.city.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
                   {opt}
                 </button>
@@ -148,7 +148,7 @@ const SearchBar = () => {
           {neighborhoodOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               {["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m">
+                <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m text-2xl">
                   <span className={`search-bar__check ${filters.neighborhood.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.neighborhood.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
                   {opt}
                 </button>
