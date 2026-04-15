@@ -35,6 +35,7 @@ const Header = () => {
               className="p-2 header__menu-button--home text-primary-foreground"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Menu"
+              style={{ marginTop: "-100px" }}
             >
               {isMenuOpen ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
             </button>

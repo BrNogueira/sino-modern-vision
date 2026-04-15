@@ -172,6 +172,20 @@
     background-image: url("./assets/hero-banner.png");
     background-repeat: no-repeat;
     background-size: cover;
+    top: -200px; /* Adjusted top as requested */
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Specific overrides for logo height and hero banner requested by user */
+  @media (min-width: 768px) {
+    .md\:h-\[23rem\] {
+      height: 16rem !important;
+    }
+    
+    .md\:h-\[680px\] {
+      height: 500px !important;
+    }
   }
 
   .hero-banner__fade {
@@ -209,9 +223,8 @@
     font-size: 1.2rem;
   }
 
-
   .header__menu-button--home {
-    margin-top: -4rem;
+    margin-top: -100px; /* Updated from -4rem as requested */
   }
 
   .header__menu-button--inner {
@@ -220,9 +233,10 @@
 
   @media (min-width: 768px) {
     .header__menu-button--home {
-      margin-top: -19rem;
+      margin-top: -100px; /* Ensuring consistency on desktop too if that's what's meant */
     }
   }
+
 
   .search-bar__row {
     display: flex;
