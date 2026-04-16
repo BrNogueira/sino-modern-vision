@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown, Check, Star } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { useFavorites } from "@/contexts/FavoritesContext";
+
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const { count } = useFavorites();
+  
   const [searchText, setSearchText] = useState("");
   const [modalidade, setModalidade] = useState<string[]>([]);
   const [modalidadeOpen, setModalidadeOpen] = useState(false);
@@ -345,7 +345,7 @@ const HeroSection = () => {
           className="flex items-center gap-1.5 text-foreground hover:opacity-70 transition-colors"
         >
           <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-          <span className="font-semibold text-[1.2rem]">{count > 0 ? `${count} ` : ""}dos meus favoritos</span>
+          <span className="font-semibold text-[1.2rem]">Meus Favoritos</span>
         </Link>
       </div>
 
