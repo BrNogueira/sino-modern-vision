@@ -172,9 +172,9 @@
     background-image: url("./assets/hero-banner.png");
     background-repeat: no-repeat;
     background-size: cover;
-    top: -200px; /* Adjusted top as requested */
     position: absolute;
     inset: 0;
+    top: -200px !important;
   }
 
   /* Specific overrides for logo height and hero banner requested by user */
