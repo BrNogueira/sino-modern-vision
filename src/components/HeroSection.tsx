@@ -345,7 +345,7 @@ const HeroSection = () => {
           className="flex items-center gap-1.5 text-foreground hover:opacity-70 transition-colors"
         >
           <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-          <span className="font-semibold text-[1.2rem]">{count > 0 ? `${count} ` : ""}dos meus favoritos</span>
+          <span className="font-semibold text-[1.2rem]">Meus Favoritos</span>
         </Link>
       </div>
 
