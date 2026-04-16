@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown, Check, Star } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { useFavorites } from "@/contexts/FavoritesContext";
+
 
 const HeroSection = () => {
   const navigate = useNavigate();
