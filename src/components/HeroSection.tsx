@@ -90,9 +90,9 @@ const HeroSection = () => {
 
       {/* Water-color continuation with search bar overlapping */}
       <div className="hero-section__water">
-        <div className="relative -mt-14 pb-6 flex items-start justify-center px-4">
+        <div className="relative pb-6 flex items-start justify-center px-4">
           {/* Single search container */}
-            <div className="search-bar px-[15px] py-[15px]">
+            <div className="search-bar px-[15px] py-[15px]" style={{ top: "-120px" }}>
             {/* Row 1: Search input + Aluguel/Venda on the right */}
             <div className="search-bar__row search-bar__row--top">
               {/* Search input + Buscar */}
