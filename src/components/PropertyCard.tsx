@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Bed, Bath, Car, Waves, GroupIcon, MapPin, Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { MapPin, Star, ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
@@ -20,9 +19,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, "-");
 
-  const hasFeatureIcons = property.suites || property.bedrooms || property.bathrooms || property.parking || property.hasPool;
-
-  // Build images array: main image + gallery
   const images = [property.image, ...(property.gallery || [])];
   const totalSlides = images.length;
 
@@ -38,146 +34,110 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
+  const priceLabel =
+    property.transactionType === "aluguel"
+      ? property.valorAluguelFormatted || property.priceFormatted
+      : property.priceFormatted;
+
   return (
-    <div className="relative pt-4 group/card">
-      {/* Code Badge - 50% outside card */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
-        <div className="bg-primary text-primary-foreground font-semibold px-4 py-1.5 rounded-lg shadow-sm text-lg">
-          CÓD: {property.code}
-        </div>
-      </div>
+    <div className="group/card relative">
+      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
+        {/* Image area with inner padding to mimic reference */}
+        <div className="p-3 pb-0 relative">
+          <Link to={`/imovel/${slug}`} className="block relative rounded-xl overflow-hidden h-64">
+            {images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${property.title} - ${idx + 1}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                  idx === currentSlide ? "opacity-100" : "opacity-0"
+                }`}
+                loading="lazy"
+              />
+            ))}
 
-      <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-lg transition-shadow flex flex-col group relative" style={{ height: "375px" }}>
+            {/* Carousel arrows */}
+            {totalSlides > 1 && (
+              <>
+                <button
+                  onClick={goPrev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4 text-foreground" />
+                </button>
+                <button
+                  onClick={goNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4 text-foreground" />
+                </button>
+              </>
+            )}
 
-
-      {/* Image carousel + Price wrapper */}
-      <div className="relative">
-        <Link to={`/imovel/${slug}`} className="block h-52 overflow-hidden relative">
-          {images.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`${property.title} - ${idx + 1}`}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                idx === currentSlide ? "opacity-100" : "opacity-0"
-              }`}
-              loading="lazy"
-            />
-          ))}
-        </Link>
-
-        {/* Carousel arrows */}
-        {totalSlides > 1 && (
-          <>
+            {/* Favorite - top right */}
             <button
-              onClick={goPrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(property.code);
+              }}
+              className="absolute top-3 right-3 z-10 bg-background/90 hover:bg-background rounded-full w-9 h-9 flex items-center justify-center shadow-sm transition-colors"
             >
-              <ChevronLeft className="w-4 h-4 text-foreground" />
+              <Star
+                className={`w-4 h-4 transition-colors ${
+                  favorited ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
+                }`}
+              />
             </button>
-            <button
-              onClick={goNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-colors"
+          </Link>
+
+          {/* Code badge - overlapping bottom of image */}
+          <div className="absolute -bottom-3 left-6 z-10">
+            <div className="bg-background border border-border shadow-md rounded-full pl-2 pr-4 py-1.5 flex items-center gap-2">
+              <Tag className="w-4 h-4 text-primary -rotate-90" />
+              <span className="text-sm font-semibold text-foreground">COD: {property.code}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
+          {/* Title */}
+          <h3 className="text-lg font-bold text-foreground leading-snug mb-3 line-clamp-2">
+            {property.title}
+          </h3>
+
+          {/* Location */}
+          <div className="flex items-center gap-2 text-muted-foreground mb-5">
+            <span className="bg-primary/10 rounded-full p-1.5 flex items-center justify-center">
+              <MapPin className="w-3.5 h-3.5 text-primary" />
+            </span>
+            <span className="text-sm">{property.location}</span>
+          </div>
+
+          {/* Spacer */}
+          <div className="flex-1" />
+
+          {/* Divider */}
+          <div className="border-t border-border mb-4" />
+
+          {/* Price + CTA */}
+          <div className="flex items-end justify-between gap-3">
+            <div className="flex flex-col">
+              <span className="text-xs text-muted-foreground">Valor do imóvel</span>
+              <span className="text-xl font-bold text-foreground whitespace-nowrap">
+                {priceLabel}
+              </span>
+            </div>
+            <Link
+              to={`/imovel/${slug}`}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-md transition-colors whitespace-nowrap"
             >
-              <ChevronRight className="w-4 h-4 text-foreground" />
-            </button>
-          </>
-        )}
-
-        {/* Transaction type badges - top left, stacked */}
-        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
-          {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
-            <span className="bg-primary text-primary-foreground font-bold uppercase px-3 py-1 rounded shadow-sm text-lg">
-              Venda
-            </span>
-          )}
-          {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
-            <span className="bg-white text-primary text-[11px] font-bold uppercase px-3 py-1 rounded shadow-sm">
-              Aluguel
-            </span>
-          )}
-        </div>
-
-        {/* Favorite - top right */}
-        <button
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(property.code); }}
-          className="absolute top-2 right-2 z-10 bg-background/70 hover:bg-background rounded-full w-8 h-8 flex items-center justify-center shadow-sm transition-colors"
-        >
-          <Star
-            className={`w-4 h-4 transition-colors ${
-              favorited ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
-            }`}
-          />
-        </button>
-
-        {/* Price - centered, overlapping bottom edge */}
-        <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-primary-foreground font-semibold px-4 py-1.5 rounded-md whitespace-nowrap shadow-sm text-2xl">
-            {property.transactionType === "aluguel" ? (property.valorAluguelFormatted || property.priceFormatted) : property.priceFormatted}
-          </span>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-4 pt-6 text-center flex flex-col flex-1">
-
-        {/* Location */}
-        <div className="flex items-center justify-center gap-1 text-foreground mb-3">
-          <MapPin className="w-5 h-5 text-primary" />
-          <span className="uppercase font-bold text-lg">{property.location}</span>
-        </div>
-
-        {/* Feature Icons with labels - only show if has icons */}
-        {hasFeatureIcons && (
-          <div className="flex items-center justify-center gap-4 mb-3 min-h-[24px]">
-            {property.bedrooms !== undefined && property.bedrooms > 0 && (
-              <div className="flex flex-col items-center gap-0.5">
-                <Bed className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">{property.bedrooms}</span>
-                <span className="text-[10px] text-muted-foreground">Quartos</span>
-              </div>
-            )}
-            {property.bathrooms !== undefined && property.bathrooms > 0 && (
-              <div className="flex flex-col items-center gap-0.5">
-                <Bath className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">{property.bathrooms}</span>
-                <span className="text-[10px] text-muted-foreground">Banheiros</span>
-              </div>
-            )}
-            {property.suites !== undefined && property.suites > 0 && (
-              <div className="flex flex-col items-center gap-0.5">
-                <Star className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">{property.suites}</span>
-                <span className="text-[10px] text-muted-foreground">Suítes</span>
-              </div>
-            )}
-            {property.parking !== undefined && property.parking > 0 && (
-              <div className="flex flex-col items-center gap-0.5">
-                <Car className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">{property.parking}</span>
-                <span className="text-[10px] text-muted-foreground">Vagas</span>
-              </div>
-            )}
-            {property.hasPool && (
-              <div className="flex flex-col items-center gap-0.5">
-                <Waves className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">✓</span>
-                <span className="text-[10px] text-muted-foreground">Piscina</span>
-              </div>
-            )}
+              Ver Detalhes
+            </Link>
           </div>
-        )}
-
-        {/* Area (for terrenos) */}
-        {property.area && !hasFeatureIcons && (
-          <div className="flex items-center justify-center gap-1">
-            <span className="flex items-center gap-1 text-sm bg-muted px-3 py-1.5 rounded-md">
-              <GroupIcon className="w-4 h-4 text-primary" />
-              {property.area}m² {property.areaDimensions && `(${property.areaDimensions})`}
-            </span>
-          </div>
-        )}
-      </div>
+        </div>
       </div>
 
       {/* Hover popup below card - desktop only */}
