@@ -339,7 +339,7 @@ const HeroSection = () => {
       </div>
 
       {/* Favoritos link below search bar */}
-      <div className="hero-favorites z-10 flex justify-center w-full absolute left-0 right-0" style={{ top: "620px" }}>
+      <div className="hero-favorites z-10 flex justify-center w-full absolute" style={{ top: "620px" }}>
         <Link
           to="/favoritos"
           className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"
