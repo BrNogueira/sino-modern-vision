@@ -95,6 +95,153 @@ export type Database = {
         }
         Relationships: []
       }
+      imoveis: {
+        Row: {
+          ano_construcao: number | null
+          area_total: number | null
+          area_util: number | null
+          ativo: boolean
+          bairro: string | null
+          categoria_imovel: string
+          cep: string
+          cidade: string
+          codigo_imovel: string
+          complemento: string | null
+          created_at: string
+          created_by: string | null
+          descricao_curta: string | null
+          destaque: boolean
+          endereco: string | null
+          estado: string
+          exclusivo: boolean
+          features: Json
+          fotos: Json
+          garantias: Json
+          id: string
+          iptu: number | null
+          latitude: string | null
+          link_tour_virtual: string | null
+          longitude: string | null
+          modalidade: string[]
+          numero: string | null
+          observacao: string | null
+          preco_aluguel: number | null
+          preco_venda: number | null
+          proprietario_documento: string | null
+          proprietario_email: string | null
+          proprietario_nome: string | null
+          proprietario_telefone: string | null
+          qtd_banheiros: number | null
+          qtd_dormitorios: number | null
+          qtd_suites: number | null
+          qtd_vagas: number | null
+          sub_tipo_imovel: string
+          tipo_imovel: string
+          tipo_oferta: number
+          titulo_imovel: string
+          updated_at: string
+          valor_condominio: number | null
+          video_url: string | null
+          zona: string | null
+        }
+        Insert: {
+          ano_construcao?: number | null
+          area_total?: number | null
+          area_util?: number | null
+          ativo?: boolean
+          bairro?: string | null
+          categoria_imovel?: string
+          cep?: string
+          cidade?: string
+          codigo_imovel: string
+          complemento?: string | null
+          created_at?: string
+          created_by?: string | null
+          descricao_curta?: string | null
+          destaque?: boolean
+          endereco?: string | null
+          estado?: string
+          exclusivo?: boolean
+          features?: Json
+          fotos?: Json
+          garantias?: Json
+          id?: string
+          iptu?: number | null
+          latitude?: string | null
+          link_tour_virtual?: string | null
+          longitude?: string | null
+          modalidade?: string[]
+          numero?: string | null
+          observacao?: string | null
+          preco_aluguel?: number | null
+          preco_venda?: number | null
+          proprietario_documento?: string | null
+          proprietario_email?: string | null
+          proprietario_nome?: string | null
+          proprietario_telefone?: string | null
+          qtd_banheiros?: number | null
+          qtd_dormitorios?: number | null
+          qtd_suites?: number | null
+          qtd_vagas?: number | null
+          sub_tipo_imovel: string
+          tipo_imovel: string
+          tipo_oferta?: number
+          titulo_imovel: string
+          updated_at?: string
+          valor_condominio?: number | null
+          video_url?: string | null
+          zona?: string | null
+        }
+        Update: {
+          ano_construcao?: number | null
+          area_total?: number | null
+          area_util?: number | null
+          ativo?: boolean
+          bairro?: string | null
+          categoria_imovel?: string
+          cep?: string
+          cidade?: string
+          codigo_imovel?: string
+          complemento?: string | null
+          created_at?: string
+          created_by?: string | null
+          descricao_curta?: string | null
+          destaque?: boolean
+          endereco?: string | null
+          estado?: string
+          exclusivo?: boolean
+          features?: Json
+          fotos?: Json
+          garantias?: Json
+          id?: string
+          iptu?: number | null
+          latitude?: string | null
+          link_tour_virtual?: string | null
+          longitude?: string | null
+          modalidade?: string[]
+          numero?: string | null
+          observacao?: string | null
+          preco_aluguel?: number | null
+          preco_venda?: number | null
+          proprietario_documento?: string | null
+          proprietario_email?: string | null
+          proprietario_nome?: string | null
+          proprietario_telefone?: string | null
+          qtd_banheiros?: number | null
+          qtd_dormitorios?: number | null
+          qtd_suites?: number | null
+          qtd_vagas?: number | null
+          sub_tipo_imovel?: string
+          tipo_imovel?: string
+          tipo_oferta?: number
+          titulo_imovel?: string
+          updated_at?: string
+          valor_condominio?: number | null
+          video_url?: string | null
+          zona?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           bairros_interesse: string | null

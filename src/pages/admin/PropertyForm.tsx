@@ -325,8 +325,40 @@ const PropertyForm = () => {
     set("categoriaImovel", "Padrão");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [cepLoading, setCepLoading] = useState(false);
+
+  const handleCepLookup = async (cepValue: string) => {
+    const cleaned = cepValue.replace(/\D/g, "");
+    if (cleaned.length !== 8) return;
+    setCepLoading(true);
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cleaned}/json/`);
+      const data = await res.json();
+      if (data.erro) {
+        toast({ title: "CEP não encontrado", variant: "destructive" });
+        return;
+      }
+      setForm((prev) => ({
+        ...prev,
+        cep: cleaned,
+        endereco: data.logradouro || prev.endereco,
+        bairro: data.bairro || prev.bairro,
+        cidade: data.localidade || prev.cidade,
+        estado: data.uf === "RS" ? "Rio Grande do Sul" : (data.estado || data.uf || prev.estado),
+        complemento: data.complemento || prev.complemento,
+      }));
+      toast({ title: "Endereço preenchido pelo CEP" });
+    } catch {
+      toast({ title: "Erro ao buscar CEP", variant: "destructive" });
+    } finally {
+      setCepLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
 
     if (!form.codigoImovel.trim()) {
       toast({ title: "Erro", description: "Código do imóvel é obrigatório.", variant: "destructive" });
@@ -340,8 +372,8 @@ const PropertyForm = () => {
       toast({ title: "Erro", description: "CEP é obrigatório.", variant: "destructive" });
       return;
     }
-    if (form.observacao.trim().length < 50) {
-      toast({ title: "Erro", description: "Descrição deve ter pelo menos 50 caracteres.", variant: "destructive" });
+    if (!form.observacao.trim()) {
+      toast({ title: "Erro", description: "Descrição é obrigatória.", variant: "destructive" });
       return;
     }
     if (!form.precoVenda && !form.precoAluguel) {
@@ -353,14 +385,25 @@ const PropertyForm = () => {
       return;
     }
 
-    if (isEditing && id) {
-      updateProperty(id, form);
-      toast({ title: "Imóvel atualizado com sucesso!" });
-    } else {
-      addProperty(form);
-      toast({ title: "Imóvel cadastrado com sucesso!" });
+    setSubmitting(true);
+    try {
+      if (isEditing && id) {
+        await updateProperty(id, form);
+        toast({ title: "Imóvel atualizado com sucesso!" });
+      } else {
+        await addProperty(form);
+        toast({ title: "Imóvel cadastrado com sucesso!" });
+      }
+      navigate("/admin/imoveis");
+    } catch (err: any) {
+      toast({
+        title: "Erro ao salvar imóvel",
+        description: err?.message || "Verifique os dados e tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
     }
-    navigate("/admin/imoveis");
   };
 
   const numericField = (label: string, key: keyof FormData, placeholder = "", required = false) => (
@@ -504,7 +547,23 @@ const PropertyForm = () => {
             📍 Endereço
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {textField("CEP", "cep", "93700000", 8, true)}
+            <div className="space-y-1.5">
+              <Label className="text-foreground text-sm">
+                CEP <span className="text-destructive">*</span>
+                {cepLoading && <span className="text-xs text-muted-foreground ml-2">buscando...</span>}
+              </Label>
+              <Input
+                placeholder="93700000"
+                value={form.cep}
+                maxLength={9}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/\D/g, "").slice(0, 8);
+                  set("cep", v);
+                  if (v.length === 8) handleCepLookup(v);
+                }}
+                onBlur={(e) => handleCepLookup(e.target.value)}
+              />
+            </div>
             {textField("Estado", "estado", "Rio Grande do Sul")}
             {textField("Cidade", "cidade", "Novo Hamburgo")}
             {textField("Bairro", "bairro", "Centro")}
@@ -551,20 +610,9 @@ const PropertyForm = () => {
             📝 Descrição <span className="text-destructive">*</span>
           </h2>
           <div className="space-y-1.5">
-            <Label className="text-foreground text-sm">Descrição curta (hover no card)</Label>
-            <Textarea
-              placeholder="Ex: Casa de alto padrão à venda em Jurerê Internacional, Florianópolis/SC – 7 dormitórios - Pronto para morar"
-              value={form.descricaoCurta}
-              onChange={(e) => set("descricaoCurta", e.target.value)}
-              className="min-h-[80px]"
-              maxLength={200}
-            />
-            <p className="text-xs text-muted-foreground">{form.descricaoCurta.length}/200 caracteres</p>
-          </div>
-          <div className="space-y-1.5">
             <Label className="text-foreground text-sm">Descrição completa <span className="text-destructive">*</span></Label>
             <Textarea
-              placeholder="Mínimo 50, máximo 3000 caracteres. Descreva o imóvel com detalhes..."
+              placeholder="Descreva o imóvel com detalhes (até 3000 caracteres)..."
               value={form.observacao}
               onChange={(e) => set("observacao", e.target.value)}
               className="min-h-[150px]"
@@ -760,9 +808,9 @@ const PropertyForm = () => {
           <Button variant="outline" type="button" onClick={() => navigate("/admin/imoveis")}>
             Cancelar
           </Button>
-          <Button type="submit" size="lg">
+          <Button type="submit" size="lg" disabled={submitting}>
             <Save className="w-4 h-4 mr-2" />
-            {isEditing ? "Salvar Alterações" : "Cadastrar Imóvel"}
+            {submitting ? "Salvando..." : isEditing ? "Salvar Alterações" : "Cadastrar Imóvel"}
           </Button>
         </div>
       </form>
