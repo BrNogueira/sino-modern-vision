@@ -20,8 +20,8 @@ const Header = () => {
     return (
       <header className="absolute top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
-          <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[23rem]" />
+          <Link to="/" className="flex flex-col items-start">
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
             <span
               className="text-foreground font-normal -mt-1"
               style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
@@ -70,7 +70,7 @@ const Header = () => {
     <>
     <header className="relative z-50 bg-primary border-b border-primary/80 shadow-sm">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
-        <Link to="/" className="flex flex-col items-start" style={{ marginLeft: "25px" }}>
+        <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "8rem" }} />
           <span className="text-primary-foreground" style={{ fontSize: "15px", marginTop: "-20px", marginLeft: "5px" }}>
             <strong>15 anos</strong> realizando sonhos

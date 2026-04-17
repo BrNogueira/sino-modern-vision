@@ -93,9 +93,8 @@ const HeroSection = () => {
         <div className="relative pb-6 flex items-start justify-center px-4">
           {/* Single search container */}
             <div className="search-bar px-[15px] py-[15px]" style={{ top: "-120px" }}>
-            {/* Row 1: Search input + Aluguel/Venda on the right */}
+            {/* Row 1: Search input with Aluguel/Venda inline before Buscar */}
             <div className="search-bar__row search-bar__row--top">
-              {/* Search input + Buscar */}
               <div className="search-bar__input-group">
                 <Search className="search-bar__icon" />
                 <input
@@ -106,51 +105,52 @@ const HeroSection = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="search-bar__input text-m"
                 />
+
+                {/* Aluguel / Venda select - between input and Buscar button */}
+                <div className="relative search-bar__select-container" ref={modalidadeRef}>
+                  <button
+                    type="button"
+                    onClick={() => setModalidadeOpen(!modalidadeOpen)}
+                    className="search-bar__button text-m"
+                  >
+                    {modalidade.length === 0
+                      ? "Aluguel / Venda"
+                      : modalidade.join(", ")}
+                  </button>
+                  <ChevronDown className="search-bar__chevron" />
+                  {modalidadeOpen && (
+                    <div className="search-bar__dropdown">
+                      {["Venda", "Aluguel"].map((opt) => (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => toggleModalidade(opt)}
+                          className="search-bar__dropdown-item text-m"
+                        >
+                          <span
+                            className={`search-bar__check ${
+                              modalidade.includes(opt)
+                                ? "search-bar__check--active"
+                                : ""
+                            }`}
+                          >
+                            {modalidade.includes(opt) && (
+                              <Check className="w-3 h-3 text-[#2F2F2F]" />
+                            )}
+                          </span>
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <button
                   onClick={handleSearch}
                   className="search-bar__submit text-m"
                 >
                   Buscar
                 </button>
-              </div>
-
-              {/* Aluguel / Venda select - right side */}
-              <div className="relative search-bar__select-container" ref={modalidadeRef}>
-                <button
-                  type="button"
-                  onClick={() => setModalidadeOpen(!modalidadeOpen)}
-                  className="search-bar__button text-m"
-                >
-                  {modalidade.length === 0
-                    ? "Aluguel / Venda"
-                    : modalidade.join(", ")}
-                </button>
-                <ChevronDown className="search-bar__chevron" />
-                {modalidadeOpen && (
-                  <div className="search-bar__dropdown">
-                    {["Venda", "Aluguel"].map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => toggleModalidade(opt)}
-                        className="search-bar__dropdown-item text-m"
-                      >
-                        <span
-                          className={`search-bar__check ${
-                            modalidade.includes(opt)
-                              ? "search-bar__check--active"
-                              : ""
-                          }`}
-                        >
-                          {modalidade.includes(opt) && (
-                            <Check className="w-3 h-3 text-[#2F2F2F]" />
-                          )}
-                        </span>
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
 
