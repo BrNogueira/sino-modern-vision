@@ -104,16 +104,16 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {/* Content */}
         <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
           {/* Location */}
-          <div className="flex items-center gap-2 text-foreground mb-4">
+          <div className="flex items-center justify-center gap-2 text-foreground mb-4">
             <span className="bg-primary/10 rounded-full p-1.5 flex items-center justify-center">
-              <MapPin className="w-3.5 h-3.5 text-primary" />
+              <MapPin className="w-4 h-4 text-primary" />
             </span>
-            <span className="text-sm font-bold">{property.location}</span>
+            <span className="text-base font-bold">{property.location}</span>
           </div>
 
           {/* Feature Icons */}
           {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || property.area) && (
-            <div className="flex items-center gap-4 mb-4 flex-wrap">
+            <div className="flex items-center justify-center gap-4 mb-4 flex-wrap">
               {property.bedrooms !== undefined && property.bedrooms > 0 && (
                 <div className="flex flex-col items-center gap-0.5">
                   <Bed className="w-5 h-5 text-muted-foreground" />
