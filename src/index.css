@@ -1,3 +1,8 @@
+#lovable-badge {
+  display: none !important;
+  z-index: -1000 !important;
+}
+
 @font-face {
   font-family: 'Myriad Pro';
   src: url('/fonts/MyriadPro-Light.otf') format('opentype');
