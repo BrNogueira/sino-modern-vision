@@ -113,47 +113,59 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
           {/* Feature Icons */}
           {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || property.area) && (
-            <div className="flex items-center justify-center gap-4 mb-4 flex-wrap">
+            <div className="flex items-start justify-center gap-3 mb-4 flex-wrap">
               {property.bedrooms !== undefined && property.bedrooms > 0 && (
-                <div className="flex flex-col items-center gap-0.5">
-                  <Bed className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">{property.bedrooms}</span>
-                  <span className="text-[10px] text-muted-foreground">Quartos</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-muted rounded-full px-4 py-2 flex items-center justify-center">
+                    <Bed className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{property.bedrooms}</span>
+                  <span className="text-xs text-muted-foreground">Quartos</span>
                 </div>
               )}
               {property.bathrooms !== undefined && property.bathrooms > 0 && (
-                <div className="flex flex-col items-center gap-0.5">
-                  <Bath className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">{property.bathrooms}</span>
-                  <span className="text-[10px] text-muted-foreground">Banheiros</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-muted rounded-full px-4 py-2 flex items-center justify-center">
+                    <Bath className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{property.bathrooms}</span>
+                  <span className="text-xs text-muted-foreground">Banheiros</span>
                 </div>
               )}
               {property.suites !== undefined && property.suites > 0 && (
-                <div className="flex flex-col items-center gap-0.5">
-                  <Star className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">{property.suites}</span>
-                  <span className="text-[10px] text-muted-foreground">Suítes</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-muted rounded-full px-4 py-2 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{property.suites}</span>
+                  <span className="text-xs text-muted-foreground">Suítes</span>
                 </div>
               )}
               {property.parking !== undefined && property.parking > 0 && (
-                <div className="flex flex-col items-center gap-0.5">
-                  <Car className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">{property.parking}</span>
-                  <span className="text-[10px] text-muted-foreground">Vagas</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-muted rounded-full px-4 py-2 flex items-center justify-center">
+                    <Car className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{property.parking}</span>
+                  <span className="text-xs text-muted-foreground">Vagas</span>
                 </div>
               )}
               {property.hasPool && (
-                <div className="flex flex-col items-center gap-0.5">
-                  <Waves className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">✓</span>
-                  <span className="text-[10px] text-muted-foreground">Piscina</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-muted rounded-full px-4 py-2 flex items-center justify-center">
+                    <Waves className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">✓</span>
+                  <span className="text-xs text-muted-foreground">Piscina</span>
                 </div>
               )}
               {property.area && !property.bedrooms && (
-                <div className="flex flex-col items-center gap-0.5">
-                  <GroupIcon className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">{property.area}m²</span>
-                  <span className="text-[10px] text-muted-foreground">Área</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-muted rounded-full px-4 py-2 flex items-center justify-center">
+                    <GroupIcon className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{property.area}m²</span>
+                  <span className="text-xs text-muted-foreground">Área</span>
                 </div>
               )}
             </div>
