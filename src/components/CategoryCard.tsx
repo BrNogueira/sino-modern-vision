@@ -22,7 +22,7 @@ const CategoryCard = ({ image, title, count }: CategoryCardProps) => {
       
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 p-6 text-primary-foreground text-center">
-        <h3 className="text-2xl font-bold mb-1 transform transition-transform duration-300 group-hover:translate-x-2">
+        <h3 className="font-bold mb-1 transform transition-transform duration-300 group-hover:translate-x-2" style={{ fontSize: '2rem' }}>
           {title}
         </h3>
         <p className="text-primary-foreground/80 text-sm transform transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
