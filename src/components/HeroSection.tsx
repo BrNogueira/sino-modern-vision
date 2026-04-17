@@ -105,53 +105,53 @@ const HeroSection = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="search-bar__input text-m"
                 />
-
-                {/* Aluguel / Venda select - between input and Buscar button */}
-                <div className="relative search-bar__select-container" ref={modalidadeRef}>
-                  <button
-                    type="button"
-                    onClick={() => setModalidadeOpen(!modalidadeOpen)}
-                    className="search-bar__button text-m"
-                  >
-                    {modalidade.length === 0
-                      ? "Aluguel / Venda"
-                      : modalidade.join(", ")}
-                  </button>
-                  <ChevronDown className="search-bar__chevron" />
-                  {modalidadeOpen && (
-                    <div className="search-bar__dropdown">
-                      {["Venda", "Aluguel"].map((opt) => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => toggleModalidade(opt)}
-                          className="search-bar__dropdown-item text-m"
-                        >
-                          <span
-                            className={`search-bar__check ${
-                              modalidade.includes(opt)
-                                ? "search-bar__check--active"
-                                : ""
-                            }`}
-                          >
-                            {modalidade.includes(opt) && (
-                              <Check className="w-3 h-3 text-[#2F2F2F]" />
-                            )}
-                          </span>
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <button
-                  onClick={handleSearch}
-                  className="search-bar__submit text-m"
-                >
-                  Buscar
-                </button>
               </div>
+
+              {/* Aluguel / Venda como bloco separado */}
+              <div className="relative search-bar__select-container" ref={modalidadeRef}>
+                <button
+                  type="button"
+                  onClick={() => setModalidadeOpen(!modalidadeOpen)}
+                  className="search-bar__button text-m"
+                >
+                  {modalidade.length === 0
+                    ? "Aluguel / Venda"
+                    : modalidade.join(", ")}
+                </button>
+                <ChevronDown className="search-bar__chevron" />
+                {modalidadeOpen && (
+                  <div className="search-bar__dropdown search-bar__dropdown--left">
+                    {["Venda", "Aluguel"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleModalidade(opt)}
+                        className="search-bar__dropdown-item text-m"
+                      >
+                        <span
+                          className={`search-bar__check ${
+                            modalidade.includes(opt)
+                              ? "search-bar__check--active"
+                              : ""
+                          }`}
+                        >
+                          {modalidade.includes(opt) && (
+                            <Check className="w-3 h-3 text-[#2F2F2F]" />
+                          )}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={handleSearch}
+                className="search-bar__submit text-m"
+              >
+                Buscar
+              </button>
             </div>
 
             {/* Row 2: Filters + WhatsApp */}
