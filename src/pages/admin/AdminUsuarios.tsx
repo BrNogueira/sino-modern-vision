@@ -105,26 +105,27 @@ const AdminUsuarios = () => {
       toast({ title: "Erro", description: "Preencha todos os campos.", variant: "destructive" });
       return;
     }
-    setCreating(true);
-
-    // Register via edge function or direct signup
-    const { data, error } = await supabase.auth.signUp({
-      email: newEmail,
-      password: newPassword,
-      options: { data: { full_name: newName } },
-    });
-
-    if (error) {
-      toast({ title: "Erro ao criar usuário", description: error.message, variant: "destructive" });
-      setCreating(false);
+    if (newPassword.length < 6) {
+      toast({ title: "Erro", description: "Senha deve ter ao menos 6 caracteres.", variant: "destructive" });
       return;
     }
+    setCreating(true);
 
-    // Assign roles
-    if (data.user && newRoles.length > 0) {
-      await supabase.from("user_roles").insert(
-        newRoles.map(role => ({ user_id: data.user!.id, role }))
-      );
+    // Use admin edge function to create user without affecting current session
+    const { data, error } = await supabase.functions.invoke("create-user", {
+      body: {
+        email: newEmail.trim(),
+        password: newPassword,
+        full_name: newName.trim(),
+        roles: newRoles,
+      },
+    });
+
+    if (error || (data && (data as any).error)) {
+      const msg = (data as any)?.error || error?.message || "Erro ao criar usuário";
+      toast({ title: "Erro ao criar usuário", description: msg, variant: "destructive" });
+      setCreating(false);
+      return;
     }
 
     toast({ title: "Usuário criado", description: `${newName} criado com sucesso.` });
