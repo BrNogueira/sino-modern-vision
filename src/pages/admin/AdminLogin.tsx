@@ -10,11 +10,9 @@ import { Lock, Mail, AlertCircle, UserPlus, LogIn } from "lucide-react";
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
-  const [isRegister, setIsRegister] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login, register, isAuthenticated } = useAdminAuth();
+  const { login, isAuthenticated } = useAdminAuth();
   const navigate = useNavigate();
 
   if (isAuthenticated) {
@@ -33,27 +31,12 @@ const AdminLogin = () => {
       return;
     }
 
-    if (isRegister && !fullName.trim()) {
-      setError("Preencha o nome completo.");
-      setLoading(false);
-      return;
-    }
-
     try {
-      if (isRegister) {
-        const result = await register(email.trim(), password.trim(), fullName.trim());
-        if (!result.success) {
-          setError(result.error || "Erro ao criar conta.");
-        } else {
-          navigate("/admin");
-        }
+      const result = await login(email.trim(), password.trim());
+      if (!result.success) {
+        setError(result.error || "E-mail ou senha incorretos.");
       } else {
-        const result = await login(email.trim(), password.trim());
-        if (!result.success) {
-          setError(result.error || "E-mail ou senha incorretos.");
-        } else {
-          navigate("/admin");
-        }
+        navigate("/admin");
       }
     } catch {
       setError("Erro inesperado. Tente novamente.");
