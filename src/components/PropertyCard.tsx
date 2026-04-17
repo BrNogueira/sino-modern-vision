@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Star, ChevronLeft, ChevronRight, Tag } from "lucide-react";
+import { MapPin, Star, ChevronLeft, ChevronRight, Tag, Bed, Bath, Car, Waves, GroupIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
@@ -103,18 +103,61 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         {/* Content */}
         <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
-          {/* Title */}
-          <h3 className="text-lg font-bold text-foreground leading-snug mb-3 line-clamp-2">
-            {property.title}
-          </h3>
-
           {/* Location */}
-          <div className="flex items-center gap-2 text-muted-foreground mb-5">
+          <div className="flex items-center gap-2 text-foreground mb-4">
             <span className="bg-primary/10 rounded-full p-1.5 flex items-center justify-center">
               <MapPin className="w-3.5 h-3.5 text-primary" />
             </span>
-            <span className="text-sm">{property.location}</span>
+            <span className="text-sm font-bold">{property.location}</span>
           </div>
+
+          {/* Feature Icons */}
+          {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || property.area) && (
+            <div className="flex items-center gap-4 mb-4 flex-wrap">
+              {property.bedrooms !== undefined && property.bedrooms > 0 && (
+                <div className="flex flex-col items-center gap-0.5">
+                  <Bed className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{property.bedrooms}</span>
+                  <span className="text-[10px] text-muted-foreground">Quartos</span>
+                </div>
+              )}
+              {property.bathrooms !== undefined && property.bathrooms > 0 && (
+                <div className="flex flex-col items-center gap-0.5">
+                  <Bath className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{property.bathrooms}</span>
+                  <span className="text-[10px] text-muted-foreground">Banheiros</span>
+                </div>
+              )}
+              {property.suites !== undefined && property.suites > 0 && (
+                <div className="flex flex-col items-center gap-0.5">
+                  <Star className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{property.suites}</span>
+                  <span className="text-[10px] text-muted-foreground">Suítes</span>
+                </div>
+              )}
+              {property.parking !== undefined && property.parking > 0 && (
+                <div className="flex flex-col items-center gap-0.5">
+                  <Car className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{property.parking}</span>
+                  <span className="text-[10px] text-muted-foreground">Vagas</span>
+                </div>
+              )}
+              {property.hasPool && (
+                <div className="flex flex-col items-center gap-0.5">
+                  <Waves className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">✓</span>
+                  <span className="text-[10px] text-muted-foreground">Piscina</span>
+                </div>
+              )}
+              {property.area && !property.bedrooms && (
+                <div className="flex flex-col items-center gap-0.5">
+                  <GroupIcon className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{property.area}m²</span>
+                  <span className="text-[10px] text-muted-foreground">Área</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Spacer */}
           <div className="flex-1" />
