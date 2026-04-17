@@ -90,7 +90,7 @@ const HeroSection = () => {
 
       {/* Water-color continuation with search bar overlapping */}
       <div className="hero-section__water">
-        <div className="relative pb-6 flex items-start justify-center px-4">
+        <div className="relative flex items-start justify-center px-4">
           {/* Single search container */}
             <div className="search-bar px-[15px] py-[15px]" style={{ top: "-120px" }}>
             {/* Row 1: Search input with Aluguel/Venda inline before Buscar */}
@@ -339,7 +339,7 @@ const HeroSection = () => {
       </div>
 
       {/* Favoritos link below search bar */}
-      <div className="hero-favorites z-10 flex justify-center mt-3 w-full">
+      <div className="hero-favorites z-10 flex justify-center w-full absolute left-0" style={{ top: "620px" }}>
         <Link
           to="/favoritos"
           className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"
