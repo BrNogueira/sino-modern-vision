@@ -342,10 +342,10 @@ const HeroSection = () => {
       <div className="hero-favorites z-10 flex justify-center mt-3 w-full">
         <Link
           to="/favoritos"
-          className="flex items-center gap-1.5 text-foreground hover:opacity-70 transition-colors"
+          className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"
         >
-          <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-          <span className="font-semibold text-[1.2rem]">Meus Favoritos</span>
+          <Star className="w-7 h-7 fill-yellow-400 text-yellow-400" />
+          <span className="font-bold" style={{ fontSize: "1.5rem" }}>Favoritos</span>
         </Link>
       </div>
 
