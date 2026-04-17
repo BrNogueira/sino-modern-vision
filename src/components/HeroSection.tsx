@@ -94,7 +94,7 @@ const HeroSection = () => {
           {/* Single search container */}
             <div className="search-bar px-[15px] py-[15px]" style={{ top: "-120px" }}>
             {/* Row 1: Search input with Aluguel/Venda inline before Buscar */}
-            <div className="search-bar__row search-bar__row--top">
+            <div className="search-bar__row search-bar__row--top" style={{ marginBottom: "5px" }}>
               <div className="search-bar__input-group">
                 <Search className="search-bar__icon" />
                 <input
@@ -174,7 +174,7 @@ const HeroSection = () => {
                   onClick={() => setStateOpen(!stateOpen)}
                   className="search-bar__select-button text-m"
                 >
-                  {formatSelection("Estado", filters.state)}
+                  {formatSelection("Estado/RS", filters.state)}
                 </button>
                 <ChevronDown className="search-bar__chevron" />
                 {stateOpen && (
