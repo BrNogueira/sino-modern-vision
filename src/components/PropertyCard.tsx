@@ -75,6 +75,20 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               </>
             )}
 
+            {/* Transaction type badges - top left */}
+            <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+              {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
+                <span className="bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm">
+                  Venda
+                </span>
+              )}
+              {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
+                <span className="bg-background text-primary text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm">
+                  Aluguel
+                </span>
+              )}
+            </div>
+
             {/* Favorite - top right */}
             <button
               onClick={(e) => {
