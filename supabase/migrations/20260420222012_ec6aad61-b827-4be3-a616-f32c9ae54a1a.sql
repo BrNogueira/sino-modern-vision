@@ -1,0 +1,1 @@
+ALTER TABLE public.imoveis ADD COLUMN area_dimensions TEXT;
