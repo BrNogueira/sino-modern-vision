@@ -56,6 +56,7 @@ const emptyForm: FormData = {
   valorCondominio: null,
   areaTotal: null,
   areaUtil: null,
+  areaDimensions: "",
   qtdDormitorios: null,
   qtdSuites: null,
   qtdBanheiros: null,
