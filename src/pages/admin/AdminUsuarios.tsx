@@ -161,10 +161,10 @@ const AdminUsuarios = () => {
           <h1 className="text-2xl font-semibold text-foreground">Gestão de Usuários</h1>
           <p className="text-sm text-muted-foreground">Gerencie usuários e seus perfis de acesso</p>
         </div>
-        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button><UserPlus className="w-4 h-4 mr-2" />Novo Usuário</Button>
-          </DialogTrigger>
+        <Button onClick={() => navigate("/admin/usuarios/novo")}>
+          <UserPlus className="w-4 h-4 mr-2" />
+          Novo Usuário
+        </Button>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Criar Novo Usuário</DialogTitle>
