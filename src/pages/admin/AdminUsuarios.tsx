@@ -35,6 +35,7 @@ const ROLE_LABELS: Record<string, string> = {
 
 const AdminUsuarios = () => {
   const { hasRole } = useAdminAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [users, setUsers] = useState<UserWithRoles[]>([]);
   const [loading, setLoading] = useState(true);
