@@ -40,7 +40,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       : property.priceFormatted;
 
   const displayArea = property.area || (property as any).areaTotal || (property as any).areaUtil || property.areaTerreno || property.areaConstruida;
-  const displayDimensions = property.areaDimensions || (property as any).areaDimensions;
+  const displayDimensions = property.areaDimensions || (property as any).area_dimensions;
 
   return (
     <div className="group/card relative">
