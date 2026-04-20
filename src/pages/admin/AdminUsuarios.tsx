@@ -43,13 +43,6 @@ const AdminUsuarios = () => {
   const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // New user form
-  const [newEmail, setNewEmail] = useState("");
-  const [newName, setNewName] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newRoles, setNewRoles] = useState<AppRole[]>(["corretor"]);
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [creating, setCreating] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
