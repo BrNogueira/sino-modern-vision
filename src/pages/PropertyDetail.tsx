@@ -541,15 +541,15 @@ const PropertyDetail = () => {
             {/* Bloco de Locação */}
             {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5 space-y-3">
-                <p className="text-xs text-muted-foreground uppercase font-semibold">Valores de Locação</p>
+                <p className="text-3xl text-muted-foreground uppercase font-semibold">Valores de Locação</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Aluguel:</span>
-                  <span className="text-xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
+                  <span className="text-3xl text-muted-foreground">Aluguel:</span>
+                  <span className="text-3xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
                 </div>
                 {hasTaxas && property.taxasAdicionais!.map((taxa, i) => (
                   <div key={i} className="flex justify-between items-center border-t border-border pt-2">
-                    <span className="text-sm text-muted-foreground">{taxa.nome}:</span>
-                    <span className="text-sm font-semibold text-foreground">{taxa.valor}</span>
+                    <span className="text-3xl text-muted-foreground">{taxa.nome}:</span>
+                    <span className="text-3xl font-semibold text-foreground">{taxa.valor}</span>
                   </div>
                 ))}
               </div>
