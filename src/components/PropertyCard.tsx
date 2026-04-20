@@ -116,12 +116,17 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         {/* Content */}
         <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
-          {/* Location */}
-          <div className="flex items-center justify-center gap-2 text-foreground mb-4">
-            <span className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-primary" />
+          {/* Category and Location */}
+          <div className="flex flex-col items-center gap-1 mb-4">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              {property.type}
             </span>
-            <span className="text-lg font-bold">{property.location}</span>
+            <div className="flex items-center justify-center gap-2 text-foreground">
+              <span className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-primary" />
+              </span>
+              <span className="text-lg font-bold">{property.location}</span>
+            </div>
           </div>
 
           {/* Feature Icons */}
