@@ -138,7 +138,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
 
           {/* Feature Icons */}
-          {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || property.area) && (
+          {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || displayArea) && (
             <div className="flex items-start justify-center gap-3 mb-4 flex-wrap">
               {property.bedrooms !== undefined && property.bedrooms > 0 && (
                 <div className="flex flex-col items-center gap-1">
