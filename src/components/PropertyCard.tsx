@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Star, ChevronLeft, ChevronRight, Tag, Bed, Bath, Car, Waves, GroupIcon } from "lucide-react";
+import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, GroupIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
