@@ -165,44 +165,6 @@ const AdminUsuarios = () => {
           <UserPlus className="w-4 h-4 mr-2" />
           Novo Usuário
         </Button>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Criar Novo Usuário</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div className="space-y-1.5">
-                <Label>Nome Completo</Label>
-                <Input value={newName} onChange={e => setNewName(e.target.value)} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>E-mail</Label>
-                <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Senha</Label>
-                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Perfis</Label>
-                <div className="flex gap-3 flex-wrap">
-                  {ALL_ROLES.map(role => (
-                    <label key={role} className="flex items-center gap-2 text-sm">
-                      <Checkbox
-                        checked={newRoles.includes(role)}
-                        onCheckedChange={() => toggleRole(role, newRoles, setNewRoles)}
-                      />
-                      {ROLE_LABELS[role]}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <Button onClick={handleCreateUser} disabled={creating} className="w-full">
-                {creating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
-                Criar Usuário
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
 
       {loading ? (
