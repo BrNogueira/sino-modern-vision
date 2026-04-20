@@ -80,6 +80,20 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Update profile with additional info
+    const { error: profileErr } = await adminClient
+      .from("profiles")
+      .update({
+        phone: body.phone,
+        creci: body.creci,
+        full_name: body.full_name,
+      })
+      .eq("id", created.user.id);
+
+    if (profileErr) {
+      console.error("Profile update failed:", profileErr);
+    }
+
     // Assign roles
     if (body.roles && body.roles.length > 0) {
       const { error: roleErr } = await adminClient.from("user_roles").insert(
