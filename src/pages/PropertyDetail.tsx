@@ -238,11 +238,11 @@ const PropertyDetail = () => {
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
         <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-3">
-          <Link to="/" className="flex items-center gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-xl">
+          <Link to="/" className="flex items-center gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-2xl">
             <Home className="w-4 h-4" />
             Início
           </Link>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-xl">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-2xl">
             <ChevronLeft className="w-4 h-4" />
             Voltar
           </button>
