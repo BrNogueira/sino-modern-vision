@@ -390,7 +390,7 @@ const PropertyDetail = () => {
             {(property.areaTerreno || property.areaConstruida || property.area) && (
               <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Metragem</h3>
-                <div className="flex flex-col gap-4 bg-background">
+                <div className="flex flex-col gap-4 bg-background p-[15px]">
                   {property.areaTerreno && (
                     <InlineEditField value={String(property.areaTerreno)} field="Área Terreno" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaTerreno", v)} type="number">
                       <div className="w-full flex items-center justify-start text-3xl">
