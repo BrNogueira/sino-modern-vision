@@ -488,10 +488,10 @@ const PropertyDetail = () => {
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Acabamentos</h3>
                 <div className="bg-background p-[15px]">
                   <InlineEditField value={(property.acabamentos || []).join(", ")} field="Acabamentos" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("acabamentos", v)} type="textarea">
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    <div className="flex flex-col gap-1.5">
                       {property.acabamentos!.map((item, i) => (
-                        <div key={i} className="flex items-start gap-2 text-sm">
-                          <span className="text-primary mt-0.5 font-bold">—</span>
+                        <div key={i} className="flex items-start gap-2">
+                          <span className="text-primary mt-0.5 font-bold text-3xl">—</span>
                           <span className="text-foreground text-3xl">{item}</span>
                         </div>
                       ))}
