@@ -44,6 +44,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
         {/* Image area with inner padding to mimic reference */}
         <div className="p-3 pb-0 relative">
+          {/* Property Code Above Image - Centered and Green */}
+          <div className="text-center mb-2">
+            <span className="text-emerald-600 font-bold text-sm">
+              CÓDIGO: {property.code}
+            </span>
+          </div>
+
           <Link to={`/imovel/${slug}`} className="block relative rounded-xl overflow-hidden h-64">
             {images.map((img, idx) => (
               <img
@@ -105,14 +112,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               />
             </button>
           </Link>
-
-          {/* Code badge - overlapping bottom of image */}
-          <div className="absolute -bottom-3 left-6 z-10">
-            <div className="bg-background border border-border shadow-md rounded-full pl-2 pr-4 py-1.5 flex items-center gap-2">
-              <Tag className="w-4 h-4 text-primary -rotate-90" />
-              <span className="text-sm font-semibold text-foreground">COD: {property.code}</span>
-            </div>
-          </div>
         </div>
 
         {/* Content */}
