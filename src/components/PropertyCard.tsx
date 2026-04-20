@@ -46,11 +46,11 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <div className="group/card relative">
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
         {/* Image area with inner padding to mimic reference */}
-        <div className="p-3 pb-0 relative">
-          {/* Property Code Above Image - Centered and Green */}
-          <div className="text-center mb-2">
-            <span className="text-emerald-600 font-bold text-sm">
-              CÓDIGO: {property.code}
+        <div className="p-3 pb-0 relative pt-6">
+          {/* Property Code Badge - Green pill overlapping the image top */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-1 z-20">
+            <span className="bg-emerald-600 text-white font-bold text-sm px-5 py-1.5 rounded-full shadow-md whitespace-nowrap">
+              Cód: {property.code}
             </span>
           </div>
 
