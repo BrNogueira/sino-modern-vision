@@ -10,6 +10,8 @@ interface CreateUserPayload {
   password: string;
   full_name: string;
   roles: ("admin" | "corretor" | "financeiro" | "gerente")[];
+  phone?: string;
+  creci?: string;
 }
 
 Deno.serve(async (req) => {
