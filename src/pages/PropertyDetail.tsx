@@ -342,11 +342,11 @@ const PropertyDetail = () => {
             {/* Description */}
             {property.description && (
               <div className="rounded-xl border border-border bg-card p-5">
-                <h3 className="text-base font-bold text-foreground mb-2">
+                <h3 className="font-bold text-foreground mb-2 text-3xl">
                   Descrição do Imóvel
                 </h3>
                 <InlineEditField value={property.description || ""} field="Descrição" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("description", v)} type="textarea">
-                  <p className="text-sm text-muted-foreground leading-relaxed">{property.description}</p>
+                  <p className="text-muted-foreground leading-relaxed text-3xl">{property.description}</p>
                 </InlineEditField>
               </div>
             )}
@@ -354,8 +354,8 @@ const PropertyDetail = () => {
             {/* Fotos de Área de Uso Comum — max 4 thumbnails, own lightbox */}
             {hasFotosAreaComum && (
               <div>
-                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
-                  <h3 className="text-sm font-bold uppercase tracking-wide">Fotos de Área de Uso Comum</h3>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg text-3xl">
+                  <h3 className="font-bold uppercase tracking-wide text-3xl">Fotos de Área de Uso Comum</h3>
                 </div>
                 <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card">
                   <div className="flex gap-2">
@@ -374,7 +374,7 @@ const PropertyDetail = () => {
             {property.latitude && property.longitude && (hasRole("admin") || hasRole("corretor")) && (
               <div>
                 <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
-                  <h3 className="text-sm font-bold uppercase tracking-wide">Localização no Mapa</h3>
+                  <h3 className="font-bold uppercase tracking-wide text-3xl">Localização no Mapa</h3>
                 </div>
                 <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
                   <PropertyMap properties={properties} highlightCode={property.code} className="h-[400px] w-full" />
