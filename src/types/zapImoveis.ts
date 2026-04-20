@@ -321,6 +321,7 @@ export interface ZapImovel {
   // Área (ao menos um obrigatório)
   areaTotal: number | null;
   areaUtil: number | null;
+  areaDimensions: string | null;
 
   // Quantidades
   qtdDormitorios: number | null;
