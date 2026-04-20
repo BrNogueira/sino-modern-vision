@@ -10,6 +10,8 @@ interface CreateUserPayload {
   password: string;
   full_name: string;
   roles: ("admin" | "corretor" | "financeiro" | "gerente")[];
+  phone?: string;
+  creci?: string;
 }
 
 Deno.serve(async (req) => {
@@ -76,6 +78,20 @@ Deno.serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Update profile with additional info
+    const { error: profileErr } = await adminClient
+      .from("profiles")
+      .update({
+        phone: body.phone,
+        creci: body.creci,
+        full_name: body.full_name,
+      })
+      .eq("id", created.user.id);
+
+    if (profileErr) {
+      console.error("Profile update failed:", profileErr);
     }
 
     // Assign roles

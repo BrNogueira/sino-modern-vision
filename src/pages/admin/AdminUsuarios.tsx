@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth, AppRole } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ const ROLE_LABELS: Record<string, string> = {
 
 const AdminUsuarios = () => {
   const { hasRole } = useAdminAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [users, setUsers] = useState<UserWithRoles[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,13 +43,6 @@ const AdminUsuarios = () => {
   const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // New user form
-  const [newEmail, setNewEmail] = useState("");
-  const [newName, setNewName] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newRoles, setNewRoles] = useState<AppRole[]>(["corretor"]);
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [creating, setCreating] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -100,43 +95,6 @@ const AdminUsuarios = () => {
     fetchUsers();
   };
 
-  const handleCreateUser = async () => {
-    if (!newEmail || !newName || !newPassword) {
-      toast({ title: "Erro", description: "Preencha todos os campos.", variant: "destructive" });
-      return;
-    }
-    if (newPassword.length < 6) {
-      toast({ title: "Erro", description: "Senha deve ter ao menos 6 caracteres.", variant: "destructive" });
-      return;
-    }
-    setCreating(true);
-
-    // Use admin edge function to create user without affecting current session
-    const { data, error } = await supabase.functions.invoke("create-user", {
-      body: {
-        email: newEmail.trim(),
-        password: newPassword,
-        full_name: newName.trim(),
-        roles: newRoles,
-      },
-    });
-
-    if (error || (data && (data as any).error)) {
-      const msg = (data as any)?.error || error?.message || "Erro ao criar usuário";
-      toast({ title: "Erro ao criar usuário", description: msg, variant: "destructive" });
-      setCreating(false);
-      return;
-    }
-
-    toast({ title: "Usuário criado", description: `${newName} criado com sucesso.` });
-    setCreateDialogOpen(false);
-    setNewEmail("");
-    setNewName("");
-    setNewPassword("");
-    setNewRoles(["corretor"]);
-    setCreating(false);
-    fetchUsers();
-  };
 
   const toggleRole = (role: AppRole, list: AppRole[], setList: (v: AppRole[]) => void) => {
     setList(list.includes(role) ? list.filter(r => r !== role) : [...list, role]);
@@ -159,48 +117,10 @@ const AdminUsuarios = () => {
           <h1 className="text-2xl font-semibold text-foreground">Gestão de Usuários</h1>
           <p className="text-sm text-muted-foreground">Gerencie usuários e seus perfis de acesso</p>
         </div>
-        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button><UserPlus className="w-4 h-4 mr-2" />Novo Usuário</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Criar Novo Usuário</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div className="space-y-1.5">
-                <Label>Nome Completo</Label>
-                <Input value={newName} onChange={e => setNewName(e.target.value)} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>E-mail</Label>
-                <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Senha</Label>
-                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Perfis</Label>
-                <div className="flex gap-3 flex-wrap">
-                  {ALL_ROLES.map(role => (
-                    <label key={role} className="flex items-center gap-2 text-sm">
-                      <Checkbox
-                        checked={newRoles.includes(role)}
-                        onCheckedChange={() => toggleRole(role, newRoles, setNewRoles)}
-                      />
-                      {ROLE_LABELS[role]}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <Button onClick={handleCreateUser} disabled={creating} className="w-full">
-                {creating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
-                Criar Usuário
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => navigate("/admin/usuarios/novo")}>
+          <UserPlus className="w-4 h-4 mr-2" />
+          Novo Usuário
+        </Button>
       </div>
 
       {loading ? (

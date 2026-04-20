@@ -20,6 +20,7 @@ import PropertyForm from "./pages/admin/PropertyForm";
 import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
 import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
+import AdminUserCreate from "./pages/admin/AdminUserCreate";
 import AdminPermissoes from "./pages/admin/AdminPermissoes";
 import AdminCondominios from "./pages/admin/AdminCondominios";
 import AdminLeads from "./pages/admin/AdminLeads";
@@ -63,6 +64,7 @@ const App = () => (
                   <Route path="imoveis/novo" element={<PropertyForm />} />
                   <Route path="imoveis/editar/:id" element={<PropertyForm />} />
                   <Route path="usuarios" element={<AdminUsuarios />} />
+                  <Route path="usuarios/novo" element={<AdminUserCreate />} />
                   <Route path="permissoes" element={<AdminPermissoes />} />
                   <Route path="condominios" element={<AdminCondominios />} />
                   <Route path="leads" element={<AdminLeads />} />
