@@ -227,7 +227,7 @@ const PropertyDetail = () => {
   // Similar properties (same type or city, excluding current)
   const similarProperties = properties
     .filter((p) => p.code !== property.code && (p.type === property.type || p.city === property.city))
-    .slice(0, 4);
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
