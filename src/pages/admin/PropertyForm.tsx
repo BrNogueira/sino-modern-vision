@@ -56,6 +56,7 @@ const emptyForm: FormData = {
   valorCondominio: null,
   areaTotal: null,
   areaUtil: null,
+  areaDimensions: "",
   qtdDormitorios: null,
   qtdSuites: null,
   qtdBanheiros: null,
@@ -596,6 +597,7 @@ const PropertyForm = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {numericField("Área Total (m²)", "areaTotal", "", true)}
             {numericField("Área Útil (m²)", "areaUtil", "", true)}
+            {textField("Dimensões (Ex: 15x35)", "areaDimensions", "15x35")}
             {numericField("Dormitórios", "qtdDormitorios")}
             {numericField("Suítes", "qtdSuites")}
             {numericField("Banheiros", "qtdBanheiros")}

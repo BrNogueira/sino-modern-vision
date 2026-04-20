@@ -39,6 +39,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       ? property.valorAluguelFormatted || property.priceFormatted
       : property.priceFormatted;
 
+  const displayArea = property.area || (property as any).areaTotal || (property as any).areaUtil || property.areaTerreno || property.areaConstruida;
+  const displayDimensions = property.areaDimensions || (property as any).area_dimensions;
+
   return (
     <div className="group/card relative">
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
@@ -135,7 +138,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
 
           {/* Feature Icons */}
-          {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || property.area) && (
+          {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || displayArea) && (
             <div className="flex items-start justify-center gap-3 mb-4 flex-wrap">
               {property.bedrooms !== undefined && property.bedrooms > 0 && (
                 <div className="flex flex-col items-center gap-1">
@@ -182,13 +185,15 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                   <span className="text-sm text-muted-foreground">Piscina</span>
                 </div>
               )}
-              {property.area && !property.bedrooms && (
+              {displayArea && (
                 <div className="flex flex-col items-center gap-1">
                   <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
                     <GroupIcon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">{property.area}m²</span>
-                  <span className="text-sm text-muted-foreground">Área</span>
+                  <span className="text-2xl font-bold text-foreground">
+                    {displayArea}m² {displayDimensions && `(${displayDimensions})`}
+                  </span>
+                  <span className="text-base text-muted-foreground font-medium">Área</span>
                 </div>
               )}
             </div>

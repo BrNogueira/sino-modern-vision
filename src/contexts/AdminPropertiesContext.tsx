@@ -45,6 +45,7 @@ const fromRow = (row: any): ZapImovel => ({
   valorCondominio: row.valor_condominio,
   areaTotal: row.area_total,
   areaUtil: row.area_util,
+  areaDimensions: row.area_dimensions,
   qtdDormitorios: row.qtd_dormitorios,
   qtdSuites: row.qtd_suites,
   qtdBanheiros: row.qtd_banheiros,
@@ -93,6 +94,7 @@ const toRow = (p: Partial<ZapImovel>): any => {
   if (p.valorCondominio !== undefined) row.valor_condominio = p.valorCondominio;
   if (p.areaTotal !== undefined) row.area_total = p.areaTotal;
   if (p.areaUtil !== undefined) row.area_util = p.areaUtil;
+  if (p.areaDimensions !== undefined) row.area_dimensions = p.areaDimensions;
   if (p.qtdDormitorios !== undefined) row.qtd_dormitorios = p.qtdDormitorios;
   if (p.qtdSuites !== undefined) row.qtd_suites = p.qtdSuites;
   if (p.qtdBanheiros !== undefined) row.qtd_banheiros = p.qtdBanheiros;

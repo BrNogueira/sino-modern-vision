@@ -98,6 +98,7 @@ export type Database = {
       imoveis: {
         Row: {
           ano_construcao: number | null
+          area_dimensions: string | null
           area_total: number | null
           area_util: number | null
           ativo: boolean
@@ -146,6 +147,7 @@ export type Database = {
         }
         Insert: {
           ano_construcao?: number | null
+          area_dimensions?: string | null
           area_total?: number | null
           area_util?: number | null
           ativo?: boolean
@@ -194,6 +196,7 @@ export type Database = {
         }
         Update: {
           ano_construcao?: number | null
+          area_dimensions?: string | null
           area_total?: number | null
           area_util?: number | null
           ativo?: boolean
