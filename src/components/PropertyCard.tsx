@@ -97,11 +97,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                   Aluguel
                 </span>
               )}
-              {property.exclusive && (
-                <span className="bg-emerald-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm text-center">
-                  Exclusivo
-                </span>
-              )}
             </div>
 
             {/* Favorite - top right */}
