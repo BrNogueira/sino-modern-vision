@@ -123,7 +123,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
           {/* Category and Location */}
           <div className="flex flex-col items-center gap-1 mb-4">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <span className="text-lg font-bold text-foreground uppercase tracking-wider">
               {property.type}
             </span>
             <div className="flex items-center justify-center gap-2 text-foreground">
