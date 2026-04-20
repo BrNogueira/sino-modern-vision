@@ -45,6 +45,7 @@ const fromRow = (row: any): ZapImovel => ({
   valorCondominio: row.valor_condominio,
   areaTotal: row.area_total,
   areaUtil: row.area_util,
+  areaDimensions: row.area_dimensions,
   qtdDormitorios: row.qtd_dormitorios,
   qtdSuites: row.qtd_suites,
   qtdBanheiros: row.qtd_banheiros,
