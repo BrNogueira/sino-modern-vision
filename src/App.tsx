@@ -64,6 +64,7 @@ const App = () => (
                   <Route path="imoveis/novo" element={<PropertyForm />} />
                   <Route path="imoveis/editar/:id" element={<PropertyForm />} />
                   <Route path="usuarios" element={<AdminUsuarios />} />
+                  <Route path="usuarios/novo" element={<AdminUserCreate />} />
                   <Route path="permissoes" element={<AdminPermissoes />} />
                   <Route path="condominios" element={<AdminCondominios />} />
                   <Route path="leads" element={<AdminLeads />} />
