@@ -95,43 +95,6 @@ const AdminUsuarios = () => {
     fetchUsers();
   };
 
-  const handleCreateUser = async () => {
-    if (!newEmail || !newName || !newPassword) {
-      toast({ title: "Erro", description: "Preencha todos os campos.", variant: "destructive" });
-      return;
-    }
-    if (newPassword.length < 6) {
-      toast({ title: "Erro", description: "Senha deve ter ao menos 6 caracteres.", variant: "destructive" });
-      return;
-    }
-    setCreating(true);
-
-    // Use admin edge function to create user without affecting current session
-    const { data, error } = await supabase.functions.invoke("create-user", {
-      body: {
-        email: newEmail.trim(),
-        password: newPassword,
-        full_name: newName.trim(),
-        roles: newRoles,
-      },
-    });
-
-    if (error || (data && (data as any).error)) {
-      const msg = (data as any)?.error || error?.message || "Erro ao criar usuário";
-      toast({ title: "Erro ao criar usuário", description: msg, variant: "destructive" });
-      setCreating(false);
-      return;
-    }
-
-    toast({ title: "Usuário criado", description: `${newName} criado com sucesso.` });
-    setCreateDialogOpen(false);
-    setNewEmail("");
-    setNewName("");
-    setNewPassword("");
-    setNewRoles(["corretor"]);
-    setCreating(false);
-    fetchUsers();
-  };
 
   const toggleRole = (role: AppRole, list: AppRole[], setList: (v: AppRole[]) => void) => {
     setList(list.includes(role) ? list.filter(r => r !== role) : [...list, role]);
