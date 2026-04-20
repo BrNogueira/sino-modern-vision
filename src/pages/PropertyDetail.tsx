@@ -488,10 +488,10 @@ const PropertyDetail = () => {
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Acabamentos</h3>
                 <div className="bg-background p-[15px]">
                   <InlineEditField value={(property.acabamentos || []).join(", ")} field="Acabamentos" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("acabamentos", v)} type="textarea">
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    <div className="flex flex-col gap-1.5">
                       {property.acabamentos!.map((item, i) => (
-                        <div key={i} className="flex items-start gap-2 text-sm">
-                          <span className="text-primary mt-0.5 font-bold">—</span>
+                        <div key={i} className="flex items-start gap-2">
+                          <span className="text-primary mt-0.5 font-bold text-3xl">—</span>
                           <span className="text-foreground text-3xl">{item}</span>
                         </div>
                       ))}
@@ -531,7 +531,7 @@ const PropertyDetail = () => {
             {/* Valor de Venda */}
             {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5">
-                <p className="text-muted-foreground uppercase font-semibold mb-1 text-lg">Valor de Venda</p>
+                <p className="text-muted-foreground uppercase font-semibold mb-1 text-3xl">Valor de Venda</p>
                 <InlineEditField value={property.priceFormatted} field="Preço Venda" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("priceFormatted", v)}>
                   <span className="font-bold text-primary text-3xl">{property.priceFormatted}</span>
                 </InlineEditField>
@@ -541,15 +541,15 @@ const PropertyDetail = () => {
             {/* Bloco de Locação */}
             {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5 space-y-3">
-                <p className="text-xs text-muted-foreground uppercase font-semibold">Valores de Locação</p>
+                <p className="text-3xl text-muted-foreground uppercase font-semibold">Valores de Locação</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Aluguel:</span>
-                  <span className="text-xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
+                  <span className="text-3xl text-muted-foreground">Aluguel:</span>
+                  <span className="text-3xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
                 </div>
                 {hasTaxas && property.taxasAdicionais!.map((taxa, i) => (
                   <div key={i} className="flex justify-between items-center border-t border-border pt-2">
-                    <span className="text-sm text-muted-foreground">{taxa.nome}:</span>
-                    <span className="text-sm font-semibold text-foreground">{taxa.valor}</span>
+                    <span className="text-3xl text-muted-foreground">{taxa.nome}:</span>
+                    <span className="text-3xl font-semibold text-foreground">{taxa.valor}</span>
                   </div>
                 ))}
               </div>
@@ -560,10 +560,10 @@ const PropertyDetail = () => {
               <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
                 {isAluguel ? (
-                  <span className="text-sm font-medium text-muted-foreground italic">Valores sujeito a alterações</span>
+                  <span className="text-3xl font-medium text-muted-foreground italic">Valores sujeito a alterações</span>
                 ) : (
                   <InlineEditField value={property.condicoesPagamento || "consulte"} field="Condições Pagamento" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
-                    <span className="font-medium text-foreground text-xl">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
+                    <span className="font-medium text-foreground text-3xl">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
                   </InlineEditField>
                 )}
               </div>
