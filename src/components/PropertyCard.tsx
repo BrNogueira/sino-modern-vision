@@ -43,18 +43,18 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const displayDimensions = property.areaDimensions || (property as any).area_dimensions;
 
   return (
-    <div className="group/card relative">
+    <div className="group/card relative pt-4">
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
-        {/* Image area with inner padding to mimic reference */}
-        <div className="p-3 pb-0 relative pt-6">
-          {/* Property Code Badge - Green pill overlapping the image top */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-1 z-20">
+        {/* Image area - no padding, flush with card edges */}
+        <div className="relative">
+          {/* Property Code Badge - Green pill floating above the card */}
+          <div className="absolute left-1/2 -translate-x-1/2 -top-4 z-20">
             <span className="bg-emerald-600 text-white font-bold text-sm px-5 py-1.5 rounded-full shadow-md whitespace-nowrap">
               Cód: {property.code}
             </span>
           </div>
 
-          <Link to={`/imovel/${slug}`} className="block relative rounded-xl overflow-hidden h-64">
+          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-64 rounded-t-2xl">
             {images.map((img, idx) => (
               <img
                 key={idx}
