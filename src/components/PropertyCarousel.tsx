@@ -2,7 +2,7 @@ import PropertyCard from "./PropertyCard";
 import { properties } from "@/data/properties";
 
 const PropertyCarousel = () => {
-  const featured = properties.filter((p) => p.featured);
+  const featured = properties.filter((p) => p.featured || p.exclusive);
 
   return (
     <section id="imoveis" className="py-16 bg-background">

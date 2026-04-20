@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Star, ChevronLeft, ChevronRight, Tag, Bed, Bath, Car, Waves, GroupIcon } from "lucide-react";
+import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, GroupIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
@@ -44,6 +44,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
         {/* Image area with inner padding to mimic reference */}
         <div className="p-3 pb-0 relative">
+          {/* Property Code Above Image - Centered and Green */}
+          <div className="text-center mb-2">
+            <span className="text-emerald-600 font-bold text-sm">
+              CÓDIGO: {property.code}
+            </span>
+          </div>
+
           <Link to={`/imovel/${slug}`} className="block relative rounded-xl overflow-hidden h-64">
             {images.map((img, idx) => (
               <img
@@ -78,13 +85,18 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             {/* Transaction type badges - top left */}
             <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
               {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
-                <span className="bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm">
+                <span className="bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm text-center">
                   Venda
                 </span>
               )}
               {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
-                <span className="bg-background text-primary text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm">
+                <span className="bg-background text-primary text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm text-center">
                   Aluguel
+                </span>
+              )}
+              {property.exclusive && (
+                <span className="bg-emerald-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm text-center">
+                  Exclusivo
                 </span>
               )}
             </div>
@@ -105,24 +117,21 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               />
             </button>
           </Link>
-
-          {/* Code badge - overlapping bottom of image */}
-          <div className="absolute -bottom-3 left-6 z-10">
-            <div className="bg-background border border-border shadow-md rounded-full pl-2 pr-4 py-1.5 flex items-center gap-2">
-              <Tag className="w-4 h-4 text-primary -rotate-90" />
-              <span className="text-sm font-semibold text-foreground">COD: {property.code}</span>
-            </div>
-          </div>
         </div>
 
         {/* Content */}
         <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
-          {/* Location */}
-          <div className="flex items-center justify-center gap-2 text-foreground mb-4">
-            <span className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-primary" />
+          {/* Category and Location */}
+          <div className="flex flex-col items-center gap-1 mb-4">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              {property.type}
             </span>
-            <span className="text-lg font-bold">{property.location}</span>
+            <div className="flex items-center justify-center gap-2 text-foreground">
+              <span className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-primary" />
+              </span>
+              <span className="text-lg font-bold">{property.location}</span>
+            </div>
           </div>
 
           {/* Feature Icons */}
