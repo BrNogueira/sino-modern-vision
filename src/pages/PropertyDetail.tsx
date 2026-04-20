@@ -388,22 +388,22 @@ const PropertyDetail = () => {
 
             {/* Metragem */}
             {(property.areaTerreno || property.areaConstruida || property.area) && (
-              <div className="rounded-[20px] px-7 py-6 bg-primary">
-                <h3 className="font-extrabold uppercase tracking-wider mb-3 pb-2.5 border-b border-primary-foreground/25 text-2xl text-center text-primary-foreground">Metragem</h3>
-                <div className="flex flex-col gap-4 mt-4">
+              <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
+                <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Metragem</h3>
+                <div className="flex flex-col gap-4 px-7 py-6 bg-background">
                   {property.areaTerreno && (
                     <InlineEditField value={String(property.areaTerreno)} field="Área Terreno" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaTerreno", v)} type="number">
                       <div className="w-full flex items-center justify-start text-3xl">
-                        <span className="flex items-center gap-2.5 min-w-[120px] text-primary-foreground text-3xl"><LandPlot className="w-[18px] h-[18px] text-primary-foreground/90" /> terreno:</span>
-                        <span className="font-bold text-primary-foreground ml-auto text-3xl">{property.areaTerreno} m<sup className="text-[0.7em]">2</sup></span>
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-primary text-3xl"><LandPlot className="w-[18px] h-[18px] text-primary" /> terreno:</span>
+                        <span className="font-bold text-primary ml-auto text-3xl">{property.areaTerreno} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.areaConstruida && (
                     <InlineEditField value={String(property.areaConstruida)} field="Área Construída" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaConstruida", v)} type="number">
                       <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 text-primary-foreground/85 min-w-[120px] text-3xl"><Home className="w-[18px] h-[18px] text-primary-foreground/90" /> casa:</span>
-                        <span className="font-bold text-primary-foreground ml-auto text-3xl">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
+                        <span className="flex items-center gap-2.5 text-primary min-w-[120px] text-3xl"><Home className="w-[18px] h-[18px] text-primary" /> casa:</span>
+                        <span className="font-bold text-primary ml-auto text-3xl">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
