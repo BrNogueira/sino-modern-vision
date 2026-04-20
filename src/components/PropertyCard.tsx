@@ -182,12 +182,14 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                   <span className="text-sm text-muted-foreground">Piscina</span>
                 </div>
               )}
-              {property.area && !property.bedrooms && (
+              {property.area && (
                 <div className="flex flex-col items-center gap-1">
                   <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
                     <GroupIcon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">{property.area}m²</span>
+                  <span className="text-xl font-bold text-foreground">
+                    {property.area}m² {property.areaDimensions && `(${property.areaDimensions})`}
+                  </span>
                   <span className="text-sm text-muted-foreground">Área</span>
                 </div>
               )}
