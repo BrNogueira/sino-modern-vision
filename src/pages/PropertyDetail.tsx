@@ -531,7 +531,7 @@ const PropertyDetail = () => {
             {/* Valor de Venda */}
             {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5">
-                <p className="text-muted-foreground uppercase font-semibold mb-1 text-lg">Valor de Venda</p>
+                <p className="text-muted-foreground uppercase font-semibold mb-1 text-3xl">Valor de Venda</p>
                 <InlineEditField value={property.priceFormatted} field="Preço Venda" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("priceFormatted", v)}>
                   <span className="font-bold text-primary text-3xl">{property.priceFormatted}</span>
                 </InlineEditField>
