@@ -132,7 +132,7 @@ export const properties: Property[] = [
     price: 265000,
     priceFormatted: "R$265.000,00",
     area: 983,
-    areaDimensions: "16,5x59,61",
+    areaDimensions: "15x35",
     featured: true,
     areaTerreno: 983,
     gallery: [propertyTerreno, propertyDetail3],
