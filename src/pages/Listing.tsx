@@ -78,13 +78,6 @@ const Listing = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Search bar below header */}
-      <div className="bg-primary py-4">
-        <div className="container mx-auto px-4 flex justify-center">
-          <SearchBar />
-        </div>
-      </div>
-
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
         <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-3">
