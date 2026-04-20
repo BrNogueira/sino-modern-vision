@@ -39,6 +39,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       ? property.valorAluguelFormatted || property.priceFormatted
       : property.priceFormatted;
 
+  const displayArea = property.area || (property as any).areaTotal || (property as any).areaUtil || property.areaTerreno || property.areaConstruida;
+  const displayDimensions = property.areaDimensions || (property as any).areaDimensions;
+
   return (
     <div className="group/card relative">
       <div className="bg-card rounded-2xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col">
