@@ -584,13 +584,13 @@ const PropertyDetail = () => {
 
             {/* CTAs — stack on mobile, side by side on sm+ */}
             <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase w-full">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 font-bold uppercase w-full text-2xl">
                 <a href={property.linkWhatsapp || "https://wa.me/555198765432"} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted w-full">
+              <Button asChild variant="outline" size="lg" className="gap-2 font-bold uppercase border-foreground text-foreground hover:bg-muted w-full text-2xl">
                 <a href={`mailto:${property.emailContato || "contato@sinosimoveis.com.br"}`}>
                   <Mail className="w-4 h-4" />
                   E-mail
@@ -600,13 +600,13 @@ const PropertyDetail = () => {
 
             {/* Sugestão + Acompanhar */}
             <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 text-xs font-bold uppercase w-full">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 font-bold uppercase w-full text-center text-base">
                 <a href={`https://wa.me/555198765432?text=${encodeURIComponent("Olá, tenho uma sugestão de melhoria para o imóvel " + property.code)}`} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4" />
                   Sugestão de Melhoria
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="gap-2 text-xs font-bold uppercase border-foreground text-foreground hover:bg-muted w-full">
+              <Button asChild variant="outline" size="lg" className="gap-2 font-bold uppercase border-foreground text-foreground hover:bg-muted w-full text-sm">
                 <a href={`mailto:${property.emailContato || "contato@sinosimoveis.com.br"}?subject=${encodeURIComponent("Acompanhar novidades - " + property.code)}`}>
                   <Mail className="w-4 h-4" />
                   Acompanhar Novidades
@@ -620,12 +620,12 @@ const PropertyDetail = () => {
                 href={property.linkWhatsapp || "https://wa.me/555198765432"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-primary font-bold text-sm hover:underline"
+                className="flex items-center justify-center gap-2 text-primary font-bold hover:underline text-2xl"
               >
                 <MessageCircle className="w-5 h-5" />
                 Mais Informações via WhatsApp
               </a>
-              <p className="text-xs text-muted-foreground leading-relaxed text-center">
+              <p className="text-muted-foreground leading-relaxed text-center text-2xl">
                 Os preços, disponibilidades e condições de pagamento poderão ser alterados sem prévia comunicação.
               </p>
               <div className="flex items-center justify-center gap-3 pt-1">
@@ -675,18 +675,17 @@ const PropertyDetail = () => {
                 </a>
               </div>
             </div>
-
-            {/* Corretor */}
+              {/* Corretor */}
             {property.corretor && (
               <div className="rounded-xl border border-border bg-card p-4 mt-2">
-                <p className="text-xs text-muted-foreground mb-2">Corretor responsável</p>
+                <p className="text-muted-foreground mb-2 text-2xl">Corretor responsável</p>
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-full bg-primary/15 flex items-center justify-center">
-                    <span className="text-base font-bold text-primary">{property.corretor.nome.split(" ").map(n => n[0]).join("")}</span>
+                    <span className="font-bold text-primary text-2xl">{property.corretor.nome.split(" ").map(n => n[0]).join("")}</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground text-sm">{property.corretor.nome}</p>
-                    <p className="text-xs text-muted-foreground">{property.corretor.creci}</p>
+                    <p className="font-semibold text-foreground text-3xl">{property.corretor.nome}</p>
+                    <p className="text-muted-foreground text-2xl">{property.corretor.creci}</p>
                   </div>
                 </div>
               </div>
@@ -699,7 +698,7 @@ const PropertyDetail = () => {
       {similarProperties.length > 0 && (
         <section className="bg-muted/30 py-12">
           <div className="container mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground text-center mb-16 uppercase tracking-wide">
+            <h2 className="text-xl font-bold text-foreground text-center mb-16 uppercase tracking-wide md:text-3xl">
               Imóveis Semelhantes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
