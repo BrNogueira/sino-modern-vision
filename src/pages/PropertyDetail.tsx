@@ -628,7 +628,53 @@ const PropertyDetail = () => {
               <p className="text-muted-foreground leading-relaxed text-center text-2xl">
                 Os preços, disponibilidades e condições de pagamento poderão ser alterados sem prévia comunicação.
               </p>
-// ... keep existing code
+              <div className="flex items-center justify-center gap-3 pt-1">
+                <button
+                  onClick={() => navigator.share?.({ title: property.title, url: window.location.href }) || navigator.clipboard.writeText(window.location.href)}
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                  title="Compartilhar"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => toggleFavorite(property.code)}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isFavorite(property.code) ? "bg-yellow-400 text-foreground" : "bg-foreground text-background hover:bg-foreground/80"}`}
+                  title="Favoritar"
+                >
+                  <Star className={`w-4 h-4 ${isFavorite(property.code) ? "fill-current" : ""}`} />
+                </button>
+                <button
+                  onClick={() => window.print()}
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                  title="Imprimir"
+                >
+                  <Printer className="w-4 h-4" />
+                </button>
+                <button
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                  title="Simulação Financeira"
+                  onClick={() => window.open("https://www.caixa.gov.br/voce/habitacao/Paginas/default.aspx", "_blank")}
+                >
+                  <DollarSign className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Social media links */}
+              <div className="flex items-center justify-center gap-3 pt-2 border-t border-border">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#1877F2', color: '#fff' }}>
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', color: '#fff' }}>
+                  <InstagramIcon className="w-4 h-4" />
+                </a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#000000', color: '#fff' }}>
+                  <TikTokIcon className="w-4 h-4" />
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#FF0000', color: '#fff' }}>
+                  <Youtube className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
               {/* Corretor */}
             {property.corretor && (
               <div className="rounded-xl border border-border bg-card p-4 mt-2">
