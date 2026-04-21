@@ -1,4 +1,4 @@
-import { Phone, MapPin, Mail, Clock } from "lucide-react";
+import { Phone, MapPin, Mail, Clock, Facebook, Instagram, Youtube } from "lucide-react";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Footer = () => {
@@ -12,7 +12,7 @@ const Footer = () => {
 
             {/* Col 1: Logo + slogan */}
             <div className="flex flex-col items-center md:items-start gap-2">
-              <img src={logoSinos} alt="Sinos Imóveis" className="h-16 w-auto" />
+              <img src={logoSinos} alt="Sinos Imóveis" className="h-48 w-auto" />
               <span className="text-white/80 mt-1 text-2xl">
                 <strong>15 anos</strong> realizando sonhos
               </span>
@@ -54,7 +54,17 @@ const Footer = () => {
             <div className="flex flex-col items-center md:items-end gap-5">
               <div>
                 <p className="font-semibold mb-3 text-center md:text-right text-3xl">Redes Sociais</p>
-// ... keep existing code
+                <div className="flex items-center gap-4 justify-center md:justify-end">
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-16 h-16 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#1877F2', color: '#fff' }}>
+                    <Facebook className="w-9 h-9" />
+                  </a>
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-16 h-16 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', color: '#fff' }}>
+                    <Instagram className="w-9 h-9" />
+                  </a>
+                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-16 h-16 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#FF0000', color: '#fff' }}>
+                    <Youtube className="w-9 h-9" />
+                  </a>
+                </div>
               </div>
               <a
                 href="https://www8.caixa.gov.br/siopiinternet-web/simulaOperacaoInternet.do?method=inicializarCasoUso"
