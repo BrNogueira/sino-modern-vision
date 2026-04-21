@@ -12,7 +12,7 @@ const Footer = () => {
 
             {/* Col 1: Logo + slogan */}
             <div className="flex flex-col items-center md:items-start gap-2">
-              <img src={logoSinos} alt="Sinos Imóveis" className="h-48 w-auto" />
+              <img src={logoSinos} alt="Sinos Imóveis" className="h-48 w-auto" style={{ height: '12rem', width: 'auto' }} />
               <span className="text-white/80 mt-1 text-2xl">
                 <strong>15 anos</strong> realizando sonhos
               </span>
