@@ -82,7 +82,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-white/15">
           <div className="container mx-auto px-4 py-4 text-center">
-            <p className="text-white/50 text-xs">
+            <p className="text-white/50 text-2xl">
               © {new Date().getFullYear()} Sinos Imóveis. Todos os direitos reservados.
             </p>
           </div>
