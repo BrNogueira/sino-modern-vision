@@ -198,7 +198,9 @@ const PhotoUploadSection = ({
       >
         <Upload className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
         <p className="text-sm text-muted-foreground">
-          Arraste fotos aqui ou <span className="text-primary font-semibold">clique para selecionar</span>
+          {uploading
+            ? "Enviando fotos..."
+            : <>Arraste fotos aqui ou <span className="text-primary font-semibold">clique para selecionar</span></>}
         </p>
         <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WEBP — sem limite de quantidade</p>
         <input
