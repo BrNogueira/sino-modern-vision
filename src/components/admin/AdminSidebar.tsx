@@ -18,6 +18,7 @@ import {
   UserCircle,
   PlusCircle,
   Sparkles,
+  LayoutGrid,
 } from "lucide-react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import {
@@ -69,6 +70,7 @@ const groups: NavGroup[] = [
     items: [
       { label: "Todos os Imóveis", href: "/admin/imoveis", icon: Building2, module: "imoveis", exact: true },
       { label: "Cadastrar Imóvel", href: "/admin/imoveis/novo", icon: PlusCircle, module: "imoveis" },
+      { label: "Categorias (Home)", href: "/admin/categorias", icon: LayoutGrid, module: "imoveis" },
       { label: "Condomínios", href: "/admin/condominios", icon: Building, module: "condominios" },
     ],
   },
