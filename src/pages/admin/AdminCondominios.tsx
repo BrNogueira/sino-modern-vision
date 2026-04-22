@@ -14,7 +14,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
-import { Building, Plus, Pencil, Trash2, Loader2, Save, Search } from "lucide-react";
+import { Building, Plus, Pencil, Trash2, Loader2, Save, Search, Upload, X, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/components/admin/PageHeader";
 
 interface Condominio {
@@ -39,6 +39,7 @@ interface Condominio {
   tem_academia: boolean;
   observacoes: string;
   ativo: boolean;
+  fotos: string[];
 }
 
 const emptyCondominio: Omit<Condominio, "id"> = {
@@ -46,7 +47,7 @@ const emptyCondominio: Omit<Condominio, "id"> = {
   sindico: "", telefone_sindico: "", administradora: "", valor_condominio: 0,
   qtd_unidades: 0, qtd_blocos: 0, tem_portaria: false, tem_elevador: false,
   tem_piscina: false, tem_salao_festas: false, tem_churrasqueira: false,
-  tem_academia: false, observacoes: "", ativo: true,
+  tem_academia: false, observacoes: "", ativo: true, fotos: [],
 };
 
 const AdminCondominios = () => {
@@ -57,6 +58,36 @@ const AdminCondominios = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState<Omit<Condominio, "id"> & { id?: string }>(emptyCondominio);
   const [search, setSearch] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const handleUploadFotos = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    const uploaded: string[] = [];
+    try {
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop();
+        const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const { error } = await supabase.storage.from("condominios-fotos").upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+        if (error) throw error;
+        const { data } = supabase.storage.from("condominios-fotos").getPublicUrl(path);
+        uploaded.push(data.publicUrl);
+      }
+      setForm(prev => ({ ...prev, fotos: [...(prev.fotos || []), ...uploaded] }));
+      toast({ title: `${uploaded.length} foto(s) enviada(s)` });
+    } catch (err: any) {
+      toast({ title: "Erro no upload", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeFoto = (url: string) => {
+    setForm(prev => ({ ...prev, fotos: (prev.fotos || []).filter(f => f !== url) }));
+  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -87,7 +118,7 @@ const AdminCondominios = () => {
   };
 
   const handleEdit = (item: Condominio) => {
-    setForm(item);
+    setForm({ ...item, fotos: Array.isArray(item.fotos) ? item.fotos : [] });
     setDialogOpen(true);
   };
 
@@ -219,6 +250,56 @@ const AdminCondominios = () => {
             <div className="space-y-1.5">
               <Label>Observações</Label>
               <Textarea rows={3} value={form.observacoes} onChange={e => updateField("observacoes", e.target.value)} />
+            </div>
+
+            {/* Fotos da Área Comum */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  Fotos da Área Comum
+                  <span className="text-xs text-muted-foreground font-normal">
+                    ({(form.fotos || []).length})
+                  </span>
+                </Label>
+                <label className="cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    disabled={uploading}
+                    onChange={(e) => {
+                      handleUploadFotos(e.target.files);
+                      e.target.value = "";
+                    }}
+                  />
+                  <span className="inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm bg-secondary hover:bg-secondary/80 text-secondary-foreground transition-colors">
+                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    {uploading ? "Enviando..." : "Adicionar fotos"}
+                  </span>
+                </label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Estas fotos serão exibidas como áreas comuns nos imóveis vinculados a este condomínio.
+              </p>
+              {(form.fotos || []).length > 0 && (
+                <div className="grid grid-cols-3 md:grid-cols-4 gap-2 pt-2">
+                  {(form.fotos || []).map((url) => (
+                    <div key={url} className="relative group aspect-square rounded-lg overflow-hidden border border-border bg-muted">
+                      <img src={url} alt="Área comum" className="w-full h-full object-cover" loading="lazy" />
+                      <button
+                        type="button"
+                        onClick={() => removeFoto(url)}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Remover foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
