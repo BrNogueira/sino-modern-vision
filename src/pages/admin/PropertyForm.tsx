@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { useCategorias } from "@/contexts/CategoriasContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -316,6 +317,7 @@ const PropertyForm = () => {
   const isEditing = !!id;
   const navigate = useNavigate();
   const { addProperty, updateProperty, getProperty, properties } = useAdminProperties();
+  const { categorias } = useCategorias();
   const { toast } = useToast();
   const [form, setForm] = useState<FormData>(emptyForm);
 
@@ -489,6 +491,28 @@ const PropertyForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {textField("Código do Imóvel", "codigoImovel", "CA0003", 50, true)}
             {textField("Título do Imóvel (10-100 chars)", "tituloImovel", "Lindo Apartamento a venda em São Paulo", 100, true)}
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-foreground text-sm">Categoria da Home</Label>
+            <Select
+              value={form.categoriaId || "__none__"}
+              onValueChange={(v) => set("categoriaId", v === "__none__" ? null : v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sem categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">Sem categoria</SelectItem>
+                {categorias.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.nome} {!c.ativo && "(inativa)"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-[11px] text-muted-foreground">
+              Vincula este imóvel a uma categoria do carrossel da home. Gerencie em <span className="font-medium">Imóveis › Categorias</span>.
+            </p>
           </div>
         </section>
 
