@@ -8,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import SearchBar from "@/components/SearchBar";
 import { properties as staticProperties } from "@/data/properties";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { useCategorias } from "@/contexts/CategoriasContext";
 import { zapToProperty } from "@/lib/zapToProperty";
 
 const ITEMS_PER_PAGE = 9;
@@ -16,17 +17,25 @@ const Listing = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { properties: dbProperties } = useAdminProperties();
+  const { categorias } = useCategorias();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const allProperties = useMemo(
-    () => [
-      ...dbProperties.filter((p) => p.ativo).map(zapToProperty),
-      ...staticProperties,
-    ],
-    [dbProperties],
-  );
+  const categoriaSlug = searchParams.get("categoria");
+  const categoriaFiltro = categoriaSlug
+    ? categorias.find((c) => c.slug === categoriaSlug)
+    : null;
+
+  const allProperties = useMemo(() => {
+    let dbList = dbProperties.filter((p) => p.ativo);
+    if (categoriaFiltro) {
+      dbList = dbList.filter((p) => p.categoriaId === categoriaFiltro.id);
+    }
+    const fromDb = dbList.map(zapToProperty);
+    // When filtering by categoria, only show DB properties (mocks têm categoria)
+    return categoriaFiltro ? fromDb : [...fromDb, ...staticProperties];
+  }, [dbProperties, categoriaFiltro]);
 
   const filtered = useMemo(() => {
     let result = [...allProperties];
