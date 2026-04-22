@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Bell, LogOut, User, Command, ExternalLink } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -15,12 +14,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { openAdminPalette } from "./AdminCommandPalette";
 
-interface AdminHeaderProps {
-  onOpenPalette: () => void;
-}
-
-export function AdminHeader({ onOpenPalette }: AdminHeaderProps) {
+export function AdminHeader() {
   const { profile, roles, logout } = useAdminAuth();
   const navigate = useNavigate();
 
@@ -36,10 +32,9 @@ export function AdminHeader({ onOpenPalette }: AdminHeaderProps) {
       <SidebarTrigger className="text-foreground" />
       <Separator orientation="vertical" className="h-6 hidden md:block" />
 
-      {/* Search trigger (opens command palette) */}
       <button
-        onClick={onOpenPalette}
-        className="group flex-1 max-w-md flex items-center gap-2 h-9 px-3 rounded-lg bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-sm"
+        onClick={openAdminPalette}
+        className="group flex items-center gap-2 h-9 px-3 rounded-lg bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-sm w-full max-w-md"
       >
         <Search className="w-4 h-4" />
         <span className="hidden sm:inline">Buscar páginas, imóveis...</span>
@@ -51,7 +46,6 @@ export function AdminHeader({ onOpenPalette }: AdminHeaderProps) {
 
       <div className="flex-1" />
 
-      {/* View site */}
       <Button asChild variant="ghost" size="sm" className="hidden md:flex gap-2 text-muted-foreground hover:text-foreground">
         <a href="/" target="_blank" rel="noreferrer">
           <ExternalLink className="w-4 h-4" />
@@ -59,13 +53,11 @@ export function AdminHeader({ onOpenPalette }: AdminHeaderProps) {
         </a>
       </Button>
 
-      {/* Notifications */}
       <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
         <Bell className="w-4 h-4" />
         <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[hsl(48,100%,50%)] ring-2 ring-card" />
       </Button>
 
-      {/* Profile */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-2 hover:bg-muted/60 rounded-lg pl-1 pr-2 py-1 transition-colors">
