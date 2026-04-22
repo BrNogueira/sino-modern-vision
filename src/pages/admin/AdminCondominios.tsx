@@ -252,6 +252,56 @@ const AdminCondominios = () => {
               <Textarea rows={3} value={form.observacoes} onChange={e => updateField("observacoes", e.target.value)} />
             </div>
 
+            {/* Fotos da Área Comum */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  Fotos da Área Comum
+                  <span className="text-xs text-muted-foreground font-normal">
+                    ({(form.fotos || []).length})
+                  </span>
+                </Label>
+                <label className="cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    disabled={uploading}
+                    onChange={(e) => {
+                      handleUploadFotos(e.target.files);
+                      e.target.value = "";
+                    }}
+                  />
+                  <span className="inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm bg-secondary hover:bg-secondary/80 text-secondary-foreground transition-colors">
+                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    {uploading ? "Enviando..." : "Adicionar fotos"}
+                  </span>
+                </label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Estas fotos serão exibidas como áreas comuns nos imóveis vinculados a este condomínio.
+              </p>
+              {(form.fotos || []).length > 0 && (
+                <div className="grid grid-cols-3 md:grid-cols-4 gap-2 pt-2">
+                  {(form.fotos || []).map((url) => (
+                    <div key={url} className="relative group aspect-square rounded-lg overflow-hidden border border-border bg-muted">
+                      <img src={url} alt="Área comum" className="w-full h-full object-cover" loading="lazy" />
+                      <button
+                        type="button"
+                        onClick={() => removeFoto(url)}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Remover foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center gap-2">
               <Checkbox checked={form.ativo} onCheckedChange={v => updateField("ativo", v)} />
               <Label>Ativo</Label>
