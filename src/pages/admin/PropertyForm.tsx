@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -90,19 +91,43 @@ const PhotoUploadSection = ({
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const dragItemRef = useRef<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addPhotos = useCallback(
-    (files: FileList | File[]) => {
+    async (files: FileList | File[]) => {
       const fileArray = Array.from(files).filter((f) => f.type.startsWith("image/"));
       if (!fileArray.length) return;
 
-      const newPhotos: ZapImovelPhoto[] = fileArray.map((f, i) => ({
-        url: URL.createObjectURL(f),
-        principal: photos.length === 0 && i === 0,
-      }));
-      onChange([...photos, ...newPhotos]);
+      setUploading(true);
+      try {
+        const uploaded: ZapImovelPhoto[] = [];
+        for (let i = 0; i < fileArray.length; i++) {
+          const file = fileArray[i];
+          const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+          const path = `${crypto.randomUUID()}.${ext}`;
+          const { error: upErr } = await supabase.storage
+            .from("imoveis-fotos")
+            .upload(path, file, {
+              cacheControl: "3600",
+              upsert: false,
+              contentType: file.type,
+            });
+          if (upErr) {
+            console.error("Photo upload failed:", upErr);
+            continue;
+          }
+          const { data: pub } = supabase.storage.from("imoveis-fotos").getPublicUrl(path);
+          uploaded.push({
+            url: pub.publicUrl,
+            principal: photos.length === 0 && uploaded.length === 0,
+          });
+        }
+        if (uploaded.length) onChange([...photos, ...uploaded]);
+      } finally {
+        setUploading(false);
+      }
     },
     [photos, onChange]
   );
