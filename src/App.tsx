@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 import { AdminPropertiesProvider } from "@/contexts/AdminPropertiesContext";
+import { CategoriasProvider } from "@/contexts/CategoriasContext";
 import { ChangeLogProvider } from "@/contexts/ChangeLogContext";
 import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -23,6 +24,7 @@ import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminUserCreate from "./pages/admin/AdminUserCreate";
 import AdminPermissoes from "./pages/admin/AdminPermissoes";
 import AdminCondominios from "./pages/admin/AdminCondominios";
+import AdminCategorias from "./pages/admin/AdminCategorias";
 import AdminLeads from "./pages/admin/AdminLeads";
 import AdminRelatorios from "./pages/admin/AdminRelatorios";
 import AdminCorretores from "./pages/admin/AdminCorretores";
@@ -45,6 +47,7 @@ const App = () => (
       <FavoritesProvider>
         <AdminAuthProvider>
           <AdminPropertiesProvider>
+          <CategoriasProvider>
           <ChangeLogProvider>
             <Toaster />
             <Sonner />
@@ -67,6 +70,7 @@ const App = () => (
                   <Route path="usuarios/novo" element={<AdminUserCreate />} />
                   <Route path="permissoes" element={<AdminPermissoes />} />
                   <Route path="condominios" element={<AdminCondominios />} />
+                  <Route path="categorias" element={<AdminCategorias />} />
                   <Route path="leads" element={<AdminLeads />} />
                   <Route path="relatorios" element={<AdminRelatorios />} />
                   <Route path="corretores" element={<AdminCorretores />} />
@@ -88,6 +92,7 @@ const App = () => (
               </Routes>
             </BrowserRouter>
           </ChangeLogProvider>
+          </CategoriasProvider>
           </AdminPropertiesProvider>
         </AdminAuthProvider>
       </FavoritesProvider>

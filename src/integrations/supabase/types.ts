@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      categorias: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          created_by: string | null
+          descricao: string | null
+          foto_url: string | null
+          id: string
+          nome: string
+          ordem: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          created_by?: string | null
+          descricao?: string | null
+          foto_url?: string | null
+          id?: string
+          nome: string
+          ordem?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          created_by?: string | null
+          descricao?: string | null
+          foto_url?: string | null
+          id?: string
+          nome?: string
+          ordem?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       condominios: {
         Row: {
           administradora: string | null
@@ -103,6 +142,7 @@ export type Database = {
           area_util: number | null
           ativo: boolean
           bairro: string | null
+          categoria_id: string | null
           categoria_imovel: string
           cep: string
           cidade: string
@@ -152,6 +192,7 @@ export type Database = {
           area_util?: number | null
           ativo?: boolean
           bairro?: string | null
+          categoria_id?: string | null
           categoria_imovel?: string
           cep?: string
           cidade?: string
@@ -201,6 +242,7 @@ export type Database = {
           area_util?: number | null
           ativo?: boolean
           bairro?: string | null
+          categoria_id?: string | null
           categoria_imovel?: string
           cep?: string
           cidade?: string
@@ -243,7 +285,15 @@ export type Database = {
           video_url?: string | null
           zona?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "imoveis_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads: {
         Row: {
