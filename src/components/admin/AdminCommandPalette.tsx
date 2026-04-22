@@ -60,6 +60,11 @@ const commands = [
   ]},
 ];
 
+export const ADMIN_PALETTE_EVENT = "admin:open-palette";
+export const openAdminPalette = () => {
+  window.dispatchEvent(new Event(ADMIN_PALETTE_EVENT));
+};
+
 export function AdminCommandPalette() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -72,8 +77,13 @@ export function AdminCommandPalette() {
         setOpen((o) => !o);
       }
     };
+    const onOpen = () => setOpen(true);
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    window.addEventListener(ADMIN_PALETTE_EVENT, onOpen);
+    return () => {
+      document.removeEventListener("keydown", down);
+      window.removeEventListener(ADMIN_PALETTE_EVENT, onOpen);
+    };
   }, []);
 
   const go = (href: string) => {

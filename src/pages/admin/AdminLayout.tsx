@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useState } from "react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Loader2 } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
@@ -9,7 +8,6 @@ import { AdminCommandPalette } from "@/components/admin/AdminCommandPalette";
 
 const AdminLayout = () => {
   const { isAuthenticated, isLoading } = useAdminAuth();
-  const [paletteOpen, setPaletteOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -27,8 +25,8 @@ const AdminLayout = () => {
     <SidebarProvider defaultOpen>
       <div className="min-h-screen flex w-full bg-muted/30">
         <AdminSidebar />
-        <SidebarInset className="flex-1 flex flex-col min-w-0">
-          <AdminHeader onOpenPalette={() => setPaletteOpen(true)} />
+        <SidebarInset className="flex-1 flex flex-col min-w-0 bg-transparent">
+          <AdminHeader />
           <main className="flex-1 p-4 md:p-8 overflow-auto">
             <div className="max-w-[1600px] mx-auto w-full">
               <Outlet />
@@ -36,8 +34,6 @@ const AdminLayout = () => {
           </main>
         </SidebarInset>
         <AdminCommandPalette />
-        {/* Trigger from header — palette listens for ⌘K globally; manual open through state not strictly needed */}
-        {paletteOpen && <span className="hidden">{void 0}</span>}
       </div>
     </SidebarProvider>
   );
