@@ -1,8 +1,20 @@
+import { useMemo } from "react";
 import PropertyCard from "./PropertyCard";
-import { properties } from "@/data/properties";
+import { properties as staticProperties } from "@/data/properties";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { zapToProperty } from "@/lib/zapToProperty";
 
 const PropertyCarousel = () => {
-  const featured = properties.filter((p) => p.featured || p.exclusive);
+  const { properties: dbProperties } = useAdminProperties();
+
+  const featured = useMemo(() => {
+    const fromDb = dbProperties
+      .filter((p) => p.ativo && (p.destaque || p.exclusivo))
+      .map(zapToProperty);
+    const fromStatic = staticProperties.filter((p) => p.featured || p.exclusive);
+    // DB items first so newly added properties show up immediately
+    return [...fromDb, ...fromStatic];
+  }, [dbProperties]);
 
   return (
     <section id="imoveis" className="py-16 bg-background">

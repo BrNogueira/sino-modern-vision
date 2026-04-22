@@ -6,19 +6,30 @@ import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SearchBar from "@/components/SearchBar";
-import { properties } from "@/data/properties";
+import { properties as staticProperties } from "@/data/properties";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { zapToProperty } from "@/lib/zapToProperty";
 
 const ITEMS_PER_PAGE = 9;
 
 const Listing = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { properties: dbProperties } = useAdminProperties();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const allProperties = useMemo(
+    () => [
+      ...dbProperties.filter((p) => p.ativo).map(zapToProperty),
+      ...staticProperties,
+    ],
+    [dbProperties],
+  );
+
   const filtered = useMemo(() => {
-    let result = [...properties];
+    let result = [...allProperties];
 
     const transacao = searchParams.get("transacao");
     if (transacao) result = result.filter((p) => p.transactionType === transacao);
