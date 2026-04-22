@@ -77,7 +77,7 @@ const Listing = () => {
     );
 
     return result;
-  }, [searchParams, sortOrder]);
+  }, [searchParams, sortOrder, allProperties]);
 
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const paginated = filtered.slice(
