@@ -358,10 +358,26 @@ export interface ZapImovel {
   // Modalidade (Aluguel / Venda)
   modalidade: ("aluguel" | "venda")[];
 
+  // Categoria customizada (vínculo com tabela categorias)
+  categoriaId?: string | null;
+
   // Controle interno
   ativo: boolean;
   destaque: boolean;
   exclusivo: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ====== CATEGORIA CUSTOMIZADA ======
+export interface Categoria {
+  id: string;
+  nome: string;
+  slug: string;
+  descricao: string;
+  fotoUrl: string;
+  ordem: number;
+  ativo: boolean;
   createdAt: string;
   updatedAt: string;
 }
