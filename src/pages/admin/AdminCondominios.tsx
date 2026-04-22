@@ -118,7 +118,7 @@ const AdminCondominios = () => {
   };
 
   const handleEdit = (item: Condominio) => {
-    setForm(item);
+    setForm({ ...item, fotos: Array.isArray(item.fotos) ? item.fotos : [] });
     setDialogOpen(true);
   };
 
