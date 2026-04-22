@@ -47,6 +47,7 @@ const App = () => (
       <FavoritesProvider>
         <AdminAuthProvider>
           <AdminPropertiesProvider>
+          <CategoriasProvider>
           <ChangeLogProvider>
             <Toaster />
             <Sonner />
@@ -69,6 +70,7 @@ const App = () => (
                   <Route path="usuarios/novo" element={<AdminUserCreate />} />
                   <Route path="permissoes" element={<AdminPermissoes />} />
                   <Route path="condominios" element={<AdminCondominios />} />
+                  <Route path="categorias" element={<AdminCategorias />} />
                   <Route path="leads" element={<AdminLeads />} />
                   <Route path="relatorios" element={<AdminRelatorios />} />
                   <Route path="corretores" element={<AdminCorretores />} />
