@@ -129,17 +129,18 @@ const AdminLeads = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Leads & Contatos</h1>
-          <p className="text-sm text-muted-foreground">Gerencie clientes interessados</p>
-        </div>
-        {canEdit("leads") && (
-          <Button onClick={() => { setForm(emptyLead); setDialogOpen(true); }}>
-            <Plus className="w-4 h-4 mr-2" />Novo Lead
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Leads & Contatos"
+        description="Funil de vendas e gestão de clientes interessados"
+        icon={TrendingUp}
+        actions={
+          canEdit("leads") && (
+            <Button size="lg" className="gap-2" onClick={() => { setForm(emptyLead); setDialogOpen(true); }}>
+              <Plus className="w-4 h-4" />Novo Lead
+            </Button>
+          )
+        }
+      />
 
       {/* Mini stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
