@@ -15,6 +15,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { Building, Plus, Pencil, Trash2, Loader2, Save, Search } from "lucide-react";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 interface Condominio {
   id: string;
@@ -111,21 +112,22 @@ const AdminCondominios = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Condomínios</h1>
-          <p className="text-sm text-muted-foreground">Gerencie condomínios cadastrados</p>
-        </div>
-        <div className="flex gap-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 w-56" />
+      <PageHeader
+        title="Condomínios"
+        description="Centralize dados de prédios e infraestrutura"
+        icon={Building}
+        actions={
+          <div className="flex gap-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 w-56" />
+            </div>
+            {canEdit("condominios") && (
+              <Button size="lg" className="gap-2" onClick={handleNew}><Plus className="w-4 h-4" />Novo</Button>
+            )}
           </div>
-          {canEdit("condominios") && (
-            <Button onClick={handleNew}><Plus className="w-4 h-4 mr-2" />Novo</Button>
-          )}
-        </div>
-      </div>
+        }
+      />
 
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>

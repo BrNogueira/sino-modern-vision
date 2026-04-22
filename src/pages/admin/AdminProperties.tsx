@@ -1,9 +1,10 @@
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Plus, Pencil, Trash2, Search, Eye, EyeOff, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye, EyeOff, ExternalLink, Building2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { PageHeader } from "@/components/admin/PageHeader";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,18 +48,19 @@ const AdminProperties = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Imóveis</h1>
-          <p className="text-muted-foreground text-sm">{properties.length} imóveis cadastrados</p>
-        </div>
-        <Button asChild>
-          <Link to="/admin/imoveis/novo">
-            <Plus className="w-4 h-4 mr-2" />
-            Novo Imóvel
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="Imóveis"
+        description={`${properties.length} ${properties.length === 1 ? "imóvel cadastrado" : "imóveis cadastrados"} no portfólio`}
+        icon={Building2}
+        actions={
+          <Button asChild size="lg" className="gap-2">
+            <Link to="/admin/imoveis/novo">
+              <Plus className="w-4 h-4" />
+              Novo Imóvel
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
