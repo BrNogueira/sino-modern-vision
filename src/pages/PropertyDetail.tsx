@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import InlineEditField from "@/components/InlineEditField";
 import InlinePhotoEditor from "@/components/InlinePhotoEditor";
@@ -52,8 +52,10 @@ import SearchBar from "@/components/SearchBar";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyMap from "@/components/PropertyMap";
 import { Button } from "@/components/ui/button";
-import { properties, type Property } from "@/data/properties";
+import { properties as staticProperties, type Property } from "@/data/properties";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { zapToProperty } from "@/lib/zapToProperty";
 
 const generateSlug = (title: string) =>
   title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -161,6 +163,11 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { properties: dbProperties } = useAdminProperties();
+  const properties = useMemo(
+    () => [...dbProperties.filter((p) => p.ativo).map(zapToProperty), ...staticProperties],
+    [dbProperties],
+  );
   const baseProperty = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
   const { hasRole } = useAdminAuth();
 
