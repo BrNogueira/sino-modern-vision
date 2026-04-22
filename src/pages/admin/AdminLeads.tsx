@@ -17,6 +17,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { TrendingUp, Plus, Pencil, Trash2, Loader2, Save, Search, Phone, Mail } from "lucide-react";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 interface Lead {
   id: string;

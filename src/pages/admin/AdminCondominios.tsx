@@ -15,6 +15,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { Building, Plus, Pencil, Trash2, Loader2, Save, Search } from "lucide-react";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 interface Condominio {
   id: string;

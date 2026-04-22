@@ -6,6 +6,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Users, Loader2, Phone, Mail } from "lucide-react";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 interface CorretorInfo {
   id: string;
@@ -46,10 +47,11 @@ const AdminCorretores = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-foreground">Corretores</h1>
-        <p className="text-sm text-muted-foreground">Equipe de corretores ativos</p>
-      </div>
+      <PageHeader
+        title="Corretores"
+        description={`${corretores.length} ${corretores.length === 1 ? "profissional ativo" : "profissionais ativos"} na equipe`}
+        icon={Users}
+      />
 
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>

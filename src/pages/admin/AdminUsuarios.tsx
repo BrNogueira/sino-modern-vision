@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Shield, UserPlus, Pencil, Trash2, Loader2 } from "lucide-react";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 interface UserWithRoles {
   id: string;
