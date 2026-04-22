@@ -52,8 +52,10 @@ import SearchBar from "@/components/SearchBar";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyMap from "@/components/PropertyMap";
 import { Button } from "@/components/ui/button";
-import { properties, type Property } from "@/data/properties";
+import { properties as staticProperties, type Property } from "@/data/properties";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { zapToProperty } from "@/lib/zapToProperty";
 
 const generateSlug = (title: string) =>
   title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
