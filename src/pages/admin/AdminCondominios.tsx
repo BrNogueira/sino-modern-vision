@@ -14,7 +14,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
-import { Building, Plus, Pencil, Trash2, Loader2, Save, Search } from "lucide-react";
+import { Building, Plus, Pencil, Trash2, Loader2, Save, Search, Upload, X, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/components/admin/PageHeader";
 
 interface Condominio {
@@ -39,6 +39,7 @@ interface Condominio {
   tem_academia: boolean;
   observacoes: string;
   ativo: boolean;
+  fotos: string[];
 }
 
 const emptyCondominio: Omit<Condominio, "id"> = {
@@ -46,7 +47,7 @@ const emptyCondominio: Omit<Condominio, "id"> = {
   sindico: "", telefone_sindico: "", administradora: "", valor_condominio: 0,
   qtd_unidades: 0, qtd_blocos: 0, tem_portaria: false, tem_elevador: false,
   tem_piscina: false, tem_salao_festas: false, tem_churrasqueira: false,
-  tem_academia: false, observacoes: "", ativo: true,
+  tem_academia: false, observacoes: "", ativo: true, fotos: [],
 };
 
 const AdminCondominios = () => {
@@ -57,6 +58,36 @@ const AdminCondominios = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState<Omit<Condominio, "id"> & { id?: string }>(emptyCondominio);
   const [search, setSearch] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const handleUploadFotos = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    const uploaded: string[] = [];
+    try {
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop();
+        const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const { error } = await supabase.storage.from("condominios-fotos").upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+        if (error) throw error;
+        const { data } = supabase.storage.from("condominios-fotos").getPublicUrl(path);
+        uploaded.push(data.publicUrl);
+      }
+      setForm(prev => ({ ...prev, fotos: [...(prev.fotos || []), ...uploaded] }));
+      toast({ title: `${uploaded.length} foto(s) enviada(s)` });
+    } catch (err: any) {
+      toast({ title: "Erro no upload", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeFoto = (url: string) => {
+    setForm(prev => ({ ...prev, fotos: (prev.fotos || []).filter(f => f !== url) }));
+  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
