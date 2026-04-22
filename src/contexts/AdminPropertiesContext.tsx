@@ -65,6 +65,7 @@ const fromRow = (row: any): ZapImovel => ({
   ativo: row.ativo,
   destaque: row.destaque,
   exclusivo: row.exclusivo,
+  categoriaId: row.categoria_id ?? null,
   createdAt: row.created_at,
   updatedAt: row.updated_at,
 });
@@ -114,6 +115,7 @@ const toRow = (p: Partial<ZapImovel>): any => {
   if (p.ativo !== undefined) row.ativo = p.ativo;
   if (p.destaque !== undefined) row.destaque = p.destaque;
   if (p.exclusivo !== undefined) row.exclusivo = p.exclusivo;
+  if (p.categoriaId !== undefined) row.categoria_id = p.categoriaId;
   return row;
 };
 
