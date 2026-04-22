@@ -92,6 +92,7 @@ const App = () => (
               </Routes>
             </BrowserRouter>
           </ChangeLogProvider>
+          </CategoriasProvider>
           </AdminPropertiesProvider>
         </AdminAuthProvider>
       </FavoritesProvider>
