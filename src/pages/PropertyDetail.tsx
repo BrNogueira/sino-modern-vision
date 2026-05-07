@@ -244,12 +244,12 @@ const PropertyDetail = () => {
 
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-3">
-          <Link to="/" className="flex items-center gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-2xl">
+        <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
+          <Link to="/" className="flex items-center gap-1 md:gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl">
             <Home className="w-4 h-4" />
             Início
           </Link>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-2xl">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1 md:gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl">
             <ChevronLeft className="w-4 h-4" />
             Voltar
           </button>
@@ -279,7 +279,7 @@ const PropertyDetail = () => {
               </a>
             )}
           </div>
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center justify-between md:justify-end gap-3 flex-shrink-0 w-full md:w-auto">
             <InlineEditField value={property.code} field="Código" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("code", v)}>
               <span className="px-4 py-1.5 rounded bg-primary text-primary-foreground font-bold" style={{ fontSize: "1.4rem", lineHeight: "1.5rem" }}>CÓD: {property.code}</span>
             </InlineEditField>

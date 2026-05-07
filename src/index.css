@@ -221,13 +221,19 @@
     border-radius: 1rem;
     background: #00000080;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     position: relative;
     z-index: 10;
   }
 
   .search-bar .text-m {
-    font-size: 1.2rem;
+    font-size: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .search-bar .text-m {
+      font-size: 1.2rem;
+    }
   }
 
   .header__menu-button--home {
@@ -256,8 +262,23 @@
   }
 
   .search-bar__row--filters {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .search-bar__row--filters {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .search-bar__row--filters {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
   }
 
   .search-bar__input-group {
