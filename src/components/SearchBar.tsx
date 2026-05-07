@@ -83,7 +83,7 @@ const SearchBar = () => {
   return (
     <div className="search-bar">
       {/* Row 1 */}
-      <div className="search-bar__row search-bar__row--top">
+      <div className="search-bar__row search-bar__row--top flex flex-col md:flex-row gap-2">
         <div className="search-bar__input-group">
           <Search className="search-bar__icon" />
           <input

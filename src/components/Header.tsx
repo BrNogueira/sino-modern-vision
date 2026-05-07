@@ -19,7 +19,7 @@ const Header = () => {
   // ===== HOME HEADER =====
   if (isHome) {
     return (
-      <header className="absolute top-0 left-0 right-0 z-50">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-primary/10 backdrop-blur-sm">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
           <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[6rem] md:h-[20rem]" />
@@ -33,10 +33,10 @@ const Header = () => {
 
           <div className="flex items-center gap-6">
             <button
-              className="p-2 header__menu-button--home text-primary-foreground"
+              className="p-2 text-primary-foreground"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Menu"
-              style={{ marginTop: "-60px" }}
+              style={{ marginTop: "0" }}
             >
               {isMenuOpen ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
             </button>
@@ -45,8 +45,8 @@ const Header = () => {
 
         {isMenuOpen && (
           <div
-            className="absolute top-full left-0 right-0 bg-foreground/50 backdrop-blur-sm border-b border-primary/80 shadow-lg"
-            style={{ marginTop: "-9rem" }}
+            className="absolute top-full left-0 right-0 bg-primary/95 backdrop-blur-md border-b border-primary/80 shadow-2xl z-[100]"
+            style={{ marginTop: "0" }}
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
               {navLinks.map((link) => (
