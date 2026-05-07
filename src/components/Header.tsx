@@ -22,12 +22,12 @@ const Header = () => {
       <header className="absolute top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
           <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[6rem] md:h-[20rem]" />
             <span
               className="text-foreground font-normal -mt-1"
               style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
             >
-              <span className="text-sm md:text-[2rem]"><strong>15 anos</strong> realizando sonhos</span>
+              <span className="text-sm md:text-[2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
             </span>
           </Link>
 
@@ -36,7 +36,7 @@ const Header = () => {
               className="p-2 header__menu-button--home text-primary-foreground"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Menu"
-              style={{ marginTop: "-100px" }}
+              style={{ marginTop: "-60px" }}
             >
               {isMenuOpen ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
             </button>
@@ -71,8 +71,8 @@ const Header = () => {
     <header className="relative z-50 bg-primary border-b border-primary/80 shadow-sm">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
         <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto" style={{ height: "16rem" }} />
-          <span className="text-primary-foreground" style={{ fontSize: "30px", marginTop: "-40px", marginLeft: "10px" }}>
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-32 md:h-64" />
+          <span className="text-primary-foreground text-sm md:text-3xl -mt-6 md:-mt-10 ml-2">
             <strong>15 anos</strong> realizando sonhos
           </span>
         </Link>

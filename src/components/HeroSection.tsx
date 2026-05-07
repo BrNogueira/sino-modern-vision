@@ -92,7 +92,7 @@ const HeroSection = () => {
       <div className="hero-section__water">
         <div className="relative flex items-start justify-center px-4">
           {/* Single search container */}
-            <div className="search-bar px-[15px] py-[15px]" style={{ top: "-120px" }}>
+            <div className="search-bar px-[15px] py-[15px] relative md:top-[-120px] top-[-80px]">
             {/* Row 1: Search input with Aluguel/Venda inline before Buscar */}
             <div className="search-bar__row search-bar__row--top" style={{ marginBottom: "5px" }}>
               <div className="search-bar__input-group">
@@ -339,7 +339,7 @@ const HeroSection = () => {
       </div>
 
       {/* Favoritos link below search bar */}
-      <div className="hero-favorites z-[8] flex justify-center w-full absolute" style={{ top: "770px", height: "35px" }}>
+      <div className="hero-favorites z-[8] flex justify-center w-full absolute md:top-[770px] top-[1100px] mb-8" style={{ height: "35px" }}>
         <Link
           to="/favoritos"
           className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"

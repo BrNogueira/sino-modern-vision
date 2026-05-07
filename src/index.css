@@ -390,7 +390,7 @@
   }
 
   .search-bar__field {
-    flex: 1 1 140px;
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -455,10 +455,6 @@
     .search-bar__row {
       flex-direction: row;
       align-items: center;
-    }
-
-    .search-bar__row--filters {
-      flex-wrap: nowrap;
     }
 
     .search-bar__row--top .search-bar__select-container {
