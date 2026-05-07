@@ -40,10 +40,23 @@ const SearchBar = () => {
     );
   };
 
+  const toggleAllModalidades = () => {
+    const options = ["Venda", "Aluguel"];
+    setModalidade((prev) => (prev.length === options.length ? [] : options));
+  };
+
   const toggleMulti = (key: "state" | "city" | "neighborhood", val: string) => {
     setFilters((prev) => {
       const list = prev[key];
       const next = list.includes(val) ? list.filter((item) => item !== val) : [...list, val];
+      return { ...prev, [key]: next };
+    });
+  };
+
+  const toggleAllMulti = (key: "state" | "city" | "neighborhood", options: string[]) => {
+    setFilters((prev) => {
+      const list = prev[key];
+      const next = list.length === options.length ? [] : options;
       return { ...prev, [key]: next };
     });
   };
@@ -96,6 +109,16 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
           {modalidadeOpen && (
             <div className="search-bar__dropdown">
+              <button
+                type="button"
+                onClick={toggleAllModalidades}
+                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+              >
+                <span className={`search-bar__check ${modalidade.length === 2 ? "search-bar__check--active" : ""}`}>
+                  {modalidade.length === 2 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                </span>
+                Selecionar todos
+              </button>
               {["Venda", "Aluguel"].map((opt) => (
                 <button key={opt} type="button" onClick={() => toggleModalidade(opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${modalidade.includes(opt) ? "search-bar__check--active" : ""}`}>
@@ -119,6 +142,16 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
           {stateOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
+              <button
+                type="button"
+                onClick={() => toggleAllMulti("state", ["RS", "SC", "PR"])}
+                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+              >
+                <span className={`search-bar__check ${filters.state.length === 3 ? "search-bar__check--active" : ""}`}>
+                  {filters.state.length === 3 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                </span>
+                Selecionar todos
+              </button>
               {["RS", "SC", "PR"].map((opt) => (
                 <button key={opt} type="button" onClick={() => toggleMulti("state", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.state.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.state.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
@@ -133,6 +166,16 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
           {cityOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
+              <button
+                type="button"
+                onClick={() => toggleAllMulti("city", ["Novo Hamburgo", "São Leopoldo", "Campo Bom"])}
+                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+              >
+                <span className={`search-bar__check ${filters.city.length === 3 ? "search-bar__check--active" : ""}`}>
+                  {filters.city.length === 3 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                </span>
+                Selecionar todos
+              </button>
               {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
                 <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.city.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.city.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
@@ -147,6 +190,16 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
           {neighborhoodOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
+              <button
+                type="button"
+                onClick={() => toggleAllMulti("neighborhood", ["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"])}
+                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+              >
+                <span className={`search-bar__check ${filters.neighborhood.length === 4 ? "search-bar__check--active" : ""}`}>
+                  {filters.neighborhood.length === 4 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                </span>
+                Selecionar todos
+              </button>
               {["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"].map((opt) => (
                 <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.neighborhood.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.neighborhood.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
