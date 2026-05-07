@@ -54,7 +54,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </span>
           </div>
 
-          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-64 rounded-t-2xl">
+          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-80 rounded-t-2xl">
             {images.map((img, idx) => (
               <img
                 key={idx}
@@ -118,9 +118,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="px-6 pt-8 pb-5 flex flex-col flex-1">
+        <div className="px-6 pt-5 pb-5 flex flex-col flex-1">
           {/* Category and Location */}
-          <div className="flex flex-col items-center gap-1 mb-4">
+          <div className="flex flex-col items-center gap-1 mb-3">
             <span className="text-lg font-bold text-foreground uppercase tracking-wider">
               {property.type}
             </span>
@@ -134,7 +134,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
           {/* Feature Icons */}
           {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || displayArea) && (
-            <div className="flex items-start justify-center gap-3 my-8 flex-wrap">
+            <div className="flex items-start justify-center gap-3 my-4 flex-wrap">
               {property.bedrooms !== undefined && property.bedrooms > 0 && (
                 <div className="flex flex-col items-center gap-1">
                   <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
