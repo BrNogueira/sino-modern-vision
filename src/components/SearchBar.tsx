@@ -166,6 +166,16 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
           {cityOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
+              <button
+                type="button"
+                onClick={() => toggleAllMulti("city", ["Novo Hamburgo", "São Leopoldo", "Campo Bom"])}
+                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+              >
+                <span className={`search-bar__check ${filters.city.length === 3 ? "search-bar__check--active" : ""}`}>
+                  {filters.city.length === 3 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                </span>
+                Selecionar todos
+              </button>
               {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
                 <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${filters.city.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.city.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
