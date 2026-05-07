@@ -155,7 +155,7 @@ const HeroSection = () => {
             </div>
 
             {/* Row 2: Filters + WhatsApp */}
-            <div className="search-bar__row search-bar__row--filters">
+            <div className="search-bar__row search-bar__row--filters grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-row lg:flex-nowrap gap-2">
               {/* 1. Código */}
               <div className="relative search-bar__field">
                 <input
@@ -339,7 +339,7 @@ const HeroSection = () => {
       </div>
 
       {/* Favoritos link below search bar */}
-      <div className="hero-favorites z-[8] flex justify-center w-full absolute md:top-[770px] top-[1020px] mb-8" style={{ height: "35px" }}>
+      <div className="hero-favorites z-[8] flex justify-center w-full absolute md:top-[770px] top-[1150px] mb-8" style={{ height: "35px" }}>
         <Link
           to="/favoritos"
           className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"

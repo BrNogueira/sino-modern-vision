@@ -272,7 +272,7 @@ const PropertyDetail = () => {
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${property.neighborhood}, ${property.city} - ${property.state}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors mt-1 text-2xl font-medium"
+                className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors mt-1 text-lg md:text-2xl font-medium"
               >
                 <MapPin className="w-4 h-4 text-primary" />
                 {property.city} - {property.neighborhood}

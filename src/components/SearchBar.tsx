@@ -133,7 +133,7 @@ const SearchBar = () => {
       </div>
 
       {/* Row 2 */}
-      <div className="search-bar__row search-bar__row--filters">
+      <div className="search-bar__row search-bar__row--filters grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-row lg:flex-nowrap gap-2">
         <div className="relative search-bar__field">
           <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m" />
         </div>
