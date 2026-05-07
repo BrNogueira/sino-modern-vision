@@ -92,9 +92,9 @@ const HeroSection = () => {
       <div className="hero-section__water">
         <div className="relative flex items-start justify-center px-4">
           {/* Single search container */}
-            <div className="search-bar px-[15px] py-[15px]" style={{ top: "-120px" }}>
+            <div className="search-bar px-[15px] py-[15px] relative md:top-[-120px] top-[-30px]">
             {/* Row 1: Search input with Aluguel/Venda inline before Buscar */}
-            <div className="search-bar__row search-bar__row--top" style={{ marginBottom: "5px" }}>
+            <div className="search-bar__row search-bar__row--top flex flex-col md:flex-row gap-2" style={{ marginBottom: "5px" }}>
               <div className="search-bar__input-group">
                 <Search className="search-bar__icon" />
                 <input
@@ -155,7 +155,7 @@ const HeroSection = () => {
             </div>
 
             {/* Row 2: Filters + WhatsApp */}
-            <div className="search-bar__row search-bar__row--filters">
+            <div className="search-bar__row search-bar__row--filters grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-row lg:flex-nowrap gap-2">
               {/* 1. Código */}
               <div className="relative search-bar__field">
                 <input
@@ -339,7 +339,7 @@ const HeroSection = () => {
       </div>
 
       {/* Favoritos link below search bar */}
-      <div className="hero-favorites z-[8] flex justify-center w-full absolute" style={{ top: "770px", height: "35px" }}>
+      <div className="hero-favorites z-[8] flex justify-center w-full absolute md:top-[770px] top-[1150px] mb-8" style={{ height: "35px" }}>
         <Link
           to="/favoritos"
           className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"

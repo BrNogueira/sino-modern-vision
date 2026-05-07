@@ -100,17 +100,17 @@ const Listing = () => {
 
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-3">
+        <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
           <Link
             to="/"
-            className="flex items-center gap-2 text-primary font-bold text-sm uppercase hover:opacity-80 transition-opacity"
+            className="flex items-center gap-1 md:gap-2 text-primary font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
           >
             <Home className="w-4 h-4" />
             Início
           </Link>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-primary font-bold text-sm uppercase hover:opacity-80 transition-opacity"
+            className="flex items-center gap-1 md:gap-2 text-primary font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar
@@ -120,7 +120,7 @@ const Listing = () => {
 
       <div className="container mx-auto px-4 pt-8 pb-16">
         {/* Results Bar */}
-        <div className="flex items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3 gap-4">
           <div>
             <span className="text-lg font-bold text-foreground">{filtered.length}</span>
             <span className="text-muted-foreground ml-2">imóveis encontrados</span>
@@ -163,7 +163,7 @@ const Listing = () => {
           <div
             className={
               viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-[70px]"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 md:mt-[70px]"
                 : "flex flex-col gap-4"
             }
           >
