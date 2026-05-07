@@ -109,6 +109,16 @@ const SearchBar = () => {
           <ChevronDown className="search-bar__chevron" />
           {modalidadeOpen && (
             <div className="search-bar__dropdown">
+              <button
+                type="button"
+                onClick={toggleAllModalidades}
+                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+              >
+                <span className={`search-bar__check ${modalidade.length === 2 ? "search-bar__check--active" : ""}`}>
+                  {modalidade.length === 2 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                </span>
+                Selecionar todos
+              </button>
               {["Venda", "Aluguel"].map((opt) => (
                 <button key={opt} type="button" onClick={() => toggleModalidade(opt)} className="search-bar__dropdown-item text-m">
                   <span className={`search-bar__check ${modalidade.includes(opt) ? "search-bar__check--active" : ""}`}>
