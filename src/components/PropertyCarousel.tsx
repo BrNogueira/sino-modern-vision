@@ -26,7 +26,7 @@ const PropertyCarousel = () => {
           <div className="w-20 h-0.5 bg-primary mx-auto mt-4" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-[70px]">
           {featured.map((property) => (
             <PropertyCard key={property.code} property={property} />
           ))}

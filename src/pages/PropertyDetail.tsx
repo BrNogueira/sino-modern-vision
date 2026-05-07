@@ -708,7 +708,7 @@ const PropertyDetail = () => {
             <h2 className="text-xl font-bold text-foreground text-center mb-16 uppercase tracking-wide md:text-3xl">
               Imóveis Semelhantes
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-[70px]">
               {similarProperties.map((p) => (
                 <PropertyCard key={p.code} property={p} />
               ))}
