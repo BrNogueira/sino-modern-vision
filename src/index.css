@@ -366,6 +366,7 @@
     padding: 0.5rem 0.75rem;
     color: #000;
     transition: background-color 0.2s ease;
+    text-align: left;
   }
 
   .search-bar__dropdown-item:hover {
