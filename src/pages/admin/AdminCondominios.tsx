@@ -151,7 +151,7 @@ const AdminCondominios = () => {
           <div className="flex gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 w-56" />
+              <Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 w-full md:w-56" />
             </div>
             {canEdit("condominios") && (
               <Button size="lg" className="gap-2" onClick={handleNew}><Plus className="w-4 h-4" />Novo</Button>
@@ -163,7 +163,7 @@ const AdminCondominios = () => {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
       ) : (
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="bg-card border border-border rounded-xl overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
