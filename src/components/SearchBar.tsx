@@ -40,10 +40,23 @@ const SearchBar = () => {
     );
   };
 
+  const toggleAllModalidades = () => {
+    const options = ["Venda", "Aluguel"];
+    setModalidade((prev) => (prev.length === options.length ? [] : options));
+  };
+
   const toggleMulti = (key: "state" | "city" | "neighborhood", val: string) => {
     setFilters((prev) => {
       const list = prev[key];
       const next = list.includes(val) ? list.filter((item) => item !== val) : [...list, val];
+      return { ...prev, [key]: next };
+    });
+  };
+
+  const toggleAllMulti = (key: "state" | "city" | "neighborhood", options: string[]) => {
+    setFilters((prev) => {
+      const list = prev[key];
+      const next = list.length === options.length ? [] : options;
       return { ...prev, [key]: next };
     });
   };
