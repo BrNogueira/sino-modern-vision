@@ -62,7 +62,7 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="fixed inset-x-0 top-[110px] md:top-[160px] bottom-0 bg-primary/95 backdrop-blur-md z-[100] overflow-y-auto">
+          <div className="fixed inset-x-0 top-[110px] md:top-[160px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
             {renderNavLinks()}
           </div>
         )}
