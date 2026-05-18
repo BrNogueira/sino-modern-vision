@@ -1,4 +1,5 @@
 import { Phone, MapPin, Mail, Clock, Facebook, Instagram, Youtube } from "lucide-react";
+import { Link } from "react-router-dom";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 
 const Footer = () => {
@@ -82,9 +83,14 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-white/15">
           <div className="container mx-auto px-4 py-4 text-center">
-            <p className="text-white/50 text-2xl">
-              © {new Date().getFullYear()} Sinos Imóveis. Todos os direitos reservados.
-            </p>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+              <p className="text-white/50 text-2xl">
+                © {new Date().getFullYear()} Sinos Imóveis. Todos os direitos reservados.
+              </p>
+              <Link to="/politica-de-privacidade" className="text-white/50 hover:text-white transition-colors text-2xl underline md:no-underline">
+                Política de Privacidade
+              </Link>
+            </div>
           </div>
         </div>
       </div>
