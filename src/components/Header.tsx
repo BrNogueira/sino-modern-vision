@@ -67,7 +67,7 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
-    <header className="relative z-50 bg-primary border-b border-primary/80 shadow-sm">
+    <header className="sticky top-0 z-50 bg-primary border-b border-primary/80 shadow-sm">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
         <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-20 md:h-64" />
