@@ -19,7 +19,7 @@ const Header = () => {
   // ===== HOME HEADER =====
   if (isHome) {
     return (
-      <header className="absolute top-0 left-0 right-0 z-50 bg-primary/20 backdrop-blur-md border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-primary/20 backdrop-blur-md border-b border-white/10">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
           <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[4rem] md:h-[20rem]" />
