@@ -22,12 +22,12 @@ const Header = () => {
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary/20 backdrop-blur-md border-b border-white/10">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
           <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[4rem] md:h-[20rem]" />
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[4rem] md:h-[8rem]" />
             <span
               className="text-foreground font-normal -mt-1"
-              style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
+              style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-10px" }}
             >
-              <span className="text-sm md:text-[2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
+              <span className="text-sm md:text-[1.2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
             </span>
           </Link>
 
