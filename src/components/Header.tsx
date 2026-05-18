@@ -72,21 +72,27 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
-    <header className="sticky top-0 z-50 bg-primary border-b border-primary/80 shadow-sm">
+    <header className="bg-transparent">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
         <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-16 md:h-32" />
-          <span className="text-primary-foreground text-sm md:text-xl -mt-4 md:-mt-6 ml-2">
+          <span className="text-primary text-sm md:text-xl -mt-4 md:-mt-6 ml-2">
             <strong>15 anos</strong> realizando sonhos
           </span>
         </Link>
         <div className="flex items-center gap-6">
-          {menuButton}
+          <button
+            className="p-2 text-primary"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Menu"
+          >
+            {isMenuOpen ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
+          </button>
         </div>
       </div>
 
       {isMenuOpen && (
-        <div className="fixed inset-x-0 top-[100px] md:top-[180px] bottom-0 bg-primary/95 backdrop-blur-md z-[100] overflow-y-auto">
+        <div className="fixed inset-x-0 top-[100px] md:top-[180px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
           {renderNavLinks()}
         </div>
       )}
