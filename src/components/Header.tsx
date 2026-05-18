@@ -47,12 +47,12 @@ const Header = () => {
       <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
         <div className="container mx-auto px-4 flex items-center justify-between py-3">
           <Link to="/" className="flex flex-col items-start">
-            <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-16 md:h-32" />
+            <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
             <span
               className="text-foreground font-normal -mt-1"
-              style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-10px" }}
+              style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
             >
-              <span className="text-sm md:text-[1.2rem] whitespace-nowrap text-white"><strong>15 anos</strong> realizando sonhos</span>
+              <span className="text-sm md:text-[2rem] whitespace-nowrap text-white"><strong>15 anos</strong> realizando sonhos</span>
             </span>
           </Link>
 
@@ -62,7 +62,7 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="fixed inset-x-0 top-[110px] md:top-[160px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
+          <div className="fixed inset-x-0 top-[180px] md:top-[400px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
             {renderNavLinks()}
           </div>
         )}
@@ -75,9 +75,12 @@ const Header = () => {
     <header className="bg-transparent">
       <div className="container mx-auto px-4 flex items-center justify-between py-2">
         <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-16 md:h-32" />
-          <span className="text-primary text-sm md:text-xl -mt-4 md:-mt-6 ml-2">
-            <strong>15 anos</strong> realizando sonhos
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
+          <span
+            className="text-foreground font-normal -mt-1"
+            style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
+          >
+            <span className="text-sm md:text-[2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
           </span>
         </Link>
         <div className="flex items-center gap-6">
@@ -92,7 +95,7 @@ const Header = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="fixed inset-x-0 top-[100px] md:top-[180px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
+        <div className="fixed inset-x-0 top-[180px] md:top-[400px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
           {renderNavLinks()}
         </div>
       )}
