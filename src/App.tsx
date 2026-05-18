@@ -39,6 +39,8 @@ import CadastroProprietarioPage from "./pages/admin/corretor/CadastroProprietari
 import CadastroClientePage from "./pages/admin/corretor/CadastroClientePage";
 import CanalProPage from "./pages/admin/CanalProPage";
 import Contato from "./pages/Contato";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
 
@@ -54,12 +56,14 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <ScrollToTop />
+              <CookieConsent />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/imoveis" element={<Listing />} />
                 <Route path="/favoritos" element={<Favorites />} />
                 <Route path="/imovel/:slug" element={<PropertyDetail />} />
                 <Route path="/contato" element={<Contato />} />
+                <Route path="/politica-de-privacidade" element={<PrivacyPolicy />} />
 
                 {/* Admin */}
                 <Route path="/admin/login" element={<AdminLogin />} />
