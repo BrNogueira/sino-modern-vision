@@ -49,10 +49,10 @@ const Header = () => {
           <Link to="/" className="flex flex-col items-start">
             <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
             <span
-              className="text-foreground font-normal -mt-1"
+              className="text-black font-normal -mt-1"
               style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
             >
-              <span className="text-sm md:text-[2rem] whitespace-nowrap text-white"><strong>15 anos</strong> realizando sonhos</span>
+              <span className="text-sm md:text-[2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
             </span>
           </Link>
 
@@ -77,7 +77,7 @@ const Header = () => {
         <Link to="/" className="flex flex-col items-start">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
           <span
-            className="text-foreground font-normal -mt-1"
+            className="text-black font-normal -mt-1"
             style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
           >
             <span className="text-sm md:text-[2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
