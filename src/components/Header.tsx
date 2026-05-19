@@ -85,9 +85,10 @@ const Header = () => {
         </Link>
 
         {/* Search bar on the right for desktop */}
-        <div className="hidden lg:block flex-1 max-w-5xl">
+        <div className="hidden lg:block flex-1 max-w-5xl header-search-container">
           <SearchBar />
         </div>
+
 
         <div className="flex items-center gap-4">
           <button
