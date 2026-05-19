@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCategorias, slugify } from "@/contexts/CategoriasContext";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -66,7 +66,7 @@ const AdminCategorias = () => {
   const [uploadingHero, setUploadingHero] = useState(false);
   const heroFileInputRef = useRef<HTMLInputElement>(null);
 
-  useState(() => {
+  useEffect(() => {
     const fetchHero = async () => {
       const { data } = await supabase
         .from("site_settings")
@@ -77,7 +77,8 @@ const AdminCategorias = () => {
       setLoadingHero(false);
     };
     fetchHero();
-  });
+  }, []);
+
 
   const handleUpdateHeroBanner = async (url: string) => {
     try {
