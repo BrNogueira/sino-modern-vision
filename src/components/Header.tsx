@@ -75,7 +75,7 @@ const Header = () => {
     <header className="bg-white border-b border-border shadow-sm mb-6 sticky top-0 z-40">
       <div className="container mx-auto px-4 flex items-center justify-between py-2 gap-8">
         <Link to="/" className="flex flex-col items-start flex-shrink-0">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[5rem] md:h-[8rem]" />
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[6rem] md:h-[10rem]" />
           <span
             className="text-black font-normal"
             style={{ lineHeight: "1.2rem", marginLeft: "5px", marginTop: "-10px" }}
