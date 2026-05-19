@@ -72,38 +72,44 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
-    <header className="bg-transparent">
-      <div className="container mx-auto px-4 flex items-center justify-between py-2">
-        <Link to="/" className="flex flex-col items-start">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[8rem] md:h-[20rem]" />
+    <header className="bg-white border-b border-border shadow-sm mb-6 sticky top-0 z-40">
+      <div className="container mx-auto px-4 flex items-center justify-between py-2 gap-8">
+        <Link to="/" className="flex flex-col items-start flex-shrink-0">
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[5rem] md:h-[8rem]" />
           <span
-            className="text-black font-normal -mt-1"
-            style={{ lineHeight: "1.5rem", marginLeft: "10px", marginTop: "-20px" }}
+            className="text-black font-normal"
+            style={{ lineHeight: "1.2rem", marginLeft: "5px", marginTop: "-10px" }}
           >
-            <span className="text-sm md:text-[2rem] whitespace-nowrap"><strong>15 anos</strong> realizando sonhos</span>
+            <span className="text-xs md:text-sm whitespace-nowrap font-medium"><strong>15 anos</strong> realizando sonhos</span>
           </span>
         </Link>
-        <div className="flex items-center gap-6">
+
+        {/* Search bar on the right for desktop */}
+        <div className="hidden lg:block flex-1 max-w-5xl">
+          <SearchBar />
+        </div>
+
+        <div className="flex items-center gap-4">
           <button
             className="p-2 text-primary"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
-            {isMenuOpen ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
+            {isMenuOpen ? <X className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} /> : <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} />}
           </button>
         </div>
       </div>
 
+      {/* Search bar for mobile/tablet */}
+      <div className="lg:hidden px-4 pb-4">
+        <SearchBar />
+      </div>
+
       {isMenuOpen && (
-        <div className="fixed inset-x-0 top-[180px] md:top-[400px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
+        <div className="fixed inset-x-0 top-[180px] lg:top-[120px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
           {renderNavLinks()}
         </div>
       )}
-
-      {/* Search bar identical to home */}
-      <div className="container mx-auto px-4 pb-4">
-        <SearchBar />
-      </div>
     </header>
   );
 };
