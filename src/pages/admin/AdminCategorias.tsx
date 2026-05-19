@@ -60,6 +60,68 @@ const AdminCategorias = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Hero Banner State
+  const [heroBannerUrl, setHeroBannerUrl] = useState<string>("");
+  const [loadingHero, setLoadingHero] = useState(true);
+  const [uploadingHero, setUploadingHero] = useState(false);
+  const heroFileInputRef = useRef<HTMLInputElement>(null);
+
+  useState(() => {
+    const fetchHero = async () => {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "hero_banner")
+        .single();
+      if (data) setHeroBannerUrl(data.value);
+      setLoadingHero(false);
+    };
+    fetchHero();
+  });
+
+  const handleUpdateHeroBanner = async (url: string) => {
+    try {
+      const { error } = await supabase
+        .from("site_settings")
+        .update({ value: url })
+        .eq("key", "hero_banner");
+      if (error) throw error;
+      setHeroBannerUrl(url);
+      toast({ title: "Banner atualizado com sucesso" });
+    } catch (e: any) {
+      toast({
+        title: "Erro ao atualizar banner",
+        description: e.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUploadHero = async (file: File) => {
+    setUploadingHero(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `hero-banner-${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("categorias")
+        .upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+      
+      if (error) throw error;
+      
+      const { data: pub } = supabase.storage.from("categorias").getPublicUrl(path);
+      await handleUpdateHeroBanner(pub.publicUrl);
+    } catch (e: any) {
+      toast({
+        title: "Erro ao enviar banner",
+        description: e.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingHero(false);
+    }
+  };
+
+
   const countByCategoria = (id: string) =>
     properties.filter((p) => p.categoriaId === id && p.ativo).length;
 
