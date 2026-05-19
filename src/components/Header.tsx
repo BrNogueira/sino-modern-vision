@@ -72,15 +72,15 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
-    <header className="bg-white border-b border-border shadow-sm mb-6 sticky top-0 z-40">
-      <div className="container mx-auto px-4 flex items-center justify-between py-2 gap-8">
-        <Link to="/" className="flex flex-col items-start flex-shrink-0">
-          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[5rem] md:h-[8rem]" />
+    <header className="bg-primary shadow-md mb-8 sticky top-0 z-40 transition-all duration-300">
+      <div className="container mx-auto px-4 flex items-center justify-between py-4 gap-8">
+        <Link to="/" className="flex flex-col items-start flex-shrink-0 hover:opacity-90 transition-opacity">
+          <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[6rem] md:h-[10rem] drop-shadow-sm" />
           <span
-            className="text-black font-normal"
-            style={{ lineHeight: "1.2rem", marginLeft: "5px", marginTop: "-10px" }}
+            className="text-white font-normal"
+            style={{ lineHeight: "1.2rem", marginLeft: "8px", marginTop: "-12px" }}
           >
-            <span className="text-xs md:text-sm whitespace-nowrap font-medium"><strong>15 anos</strong> realizando sonhos</span>
+            <span className="text-sm md:text-lg whitespace-nowrap font-medium drop-shadow-sm"><strong>15 anos</strong> realizando sonhos</span>
           </span>
         </Link>
 
@@ -92,7 +92,7 @@ const Header = () => {
 
         <div className="flex items-center gap-4">
           <button
-            className="p-2 text-primary"
+            className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -102,12 +102,12 @@ const Header = () => {
       </div>
 
       {/* Search bar for mobile/tablet */}
-      <div className="lg:hidden px-4 pb-4">
+      <div className="lg:hidden px-4 pb-6">
         <SearchBar />
       </div>
 
       {isMenuOpen && (
-        <div className="fixed inset-x-0 top-[280px] lg:top-[120px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
+        <div className="fixed inset-x-0 top-[220px] lg:top-[160px] bottom-0 bg-primary/95 z-[100] overflow-y-auto backdrop-blur-sm">
           {renderNavLinks()}
         </div>
       )}
