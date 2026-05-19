@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, ChevronDown, Check, Star } from "lucide-react";
+import { Search, ChevronDown, Check, Star, ImageIcon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-
+import { supabase } from "@/integrations/supabase/client";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -24,7 +24,20 @@ const HeroSection = () => {
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [neighborhoodOpen, setNeighborhoodOpen] = useState(false);
-  
+  const [heroBanner, setHeroBanner] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "hero_banner")
+        .single();
+      if (data) setHeroBanner(data.value);
+    };
+    fetchHero();
+  }, []);
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (modalidadeRef.current && !modalidadeRef.current.contains(e.target as Node)) {
@@ -83,7 +96,10 @@ const HeroSection = () => {
     <section className="relative">
       {/* Hero banner */}
       <div className="relative h-[300px] md:h-[680px] overflow-hidden">
-        <div className="hero-banner" />
+        <div 
+          className="hero-banner" 
+          style={heroBanner ? { backgroundImage: `url(${heroBanner})` } : {}}
+        />
         {/* Bottom fade into water color */}
         <div className="absolute bottom-0 left-0 right-0 h-[100px] hero-banner__fade" />
       </div>

@@ -236,6 +236,92 @@ const AdminCategorias = () => {
         }
       />
 
+      {/* Bloco de Banner Hero */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden mb-6">
+        <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-primary/5">
+          <div className="flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold text-foreground">Banner Principal (Hero)</h2>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <div className="aspect-[21/9] rounded-lg bg-muted overflow-hidden border border-border relative group">
+                {loadingHero ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : heroBannerUrl ? (
+                  <img src={heroBannerUrl} alt="Hero Banner Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <ImageIcon className="w-12 h-12 text-muted-foreground/20" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="gap-2"
+                    onClick={() => heroFileInputRef.current?.click()}
+                    disabled={uploadingHero}
+                  >
+                    <Upload className="w-4 h-4" />
+                    Alterar Imagem
+                  </Button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="font-medium text-foreground">Configurações do Banner</h3>
+                <p className="text-sm text-muted-foreground">
+                  Esta imagem é exibida no topo da página inicial, atrás da barra de busca.
+                </p>
+              </div>
+
+              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 space-y-2">
+                <p className="text-sm font-medium text-yellow-700 flex items-center gap-2">
+                  <LayoutGrid className="w-4 h-4" />
+                  Dimensões Recomendadas
+                </p>
+                <ul className="text-xs text-yellow-600 space-y-1 list-disc list-inside">
+                  <li>Largura mínima: <strong>1920px</strong></li>
+                  <li>Altura mínima: <strong>680px</strong></li>
+                  <li>Proporção ideal: <strong>21:9</strong></li>
+                  <li>Tamanho máximo: <strong>2MB</strong> (para melhor performance)</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => heroFileInputRef.current?.click()} 
+                  disabled={uploadingHero}
+                  className="gap-2"
+                >
+                  {uploadingHero ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  ) : (
+                    <Upload className="w-4 h-4" />
+                  )}
+                  {uploadingHero ? "Enviando..." : "Enviar Nova Imagem"}
+                </Button>
+                <input
+                  ref={heroFileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && handleUploadHero(e.target.files[0])}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="px-6 py-4 border-b border-border flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">Listagem</h2>
