@@ -497,3 +497,41 @@
     }
   }
 }
+
+/* Header specific search bar styles */
+.header-search-container .search-bar {
+  padding: 0;
+  margin: 0;
+}
+
+.header-search-container .search-bar__row {
+  gap: 0.5rem;
+}
+
+.header-search-container .search-bar__input-group,
+.header-search-container .search-bar__button,
+.header-search-container .search-bar__select-button {
+  height: 44px !important;
+  border: 1px solid #e5e5e5;
+}
+
+.header-search-container .search-bar__submit {
+  height: 38px !important;
+  padding: 0 1rem;
+}
+
+.header-search-container .search-bar__field .search-bar__select-button,
+.header-search-container .search-bar__field-input,
+.header-search-container .search-bar__select {
+  height: 38px !important;
+  border: 1px solid #e5e5e5;
+}
+
+.header-search-container .search-bar__row--filters {
+  margin-top: -0.25rem;
+}
+
+.header-search-container .search-bar__whatsapp {
+  height: 38px !important;
+  width: 38px !important;
+}
