@@ -5,9 +5,11 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Instala deps com cache do lockfile (npm). Se preferir bun, troque pelo bloco abaixo.
+# Instala deps com cache do lockfile (npm).
+# --legacy-peer-deps é necessário porque react-leaflet@5 declara peer react@^19,
+# mas o projeto roda em react@18 (mesmo conflito ignorado pelo bun localmente).
 COPY package.json package-lock.json* ./
-RUN --mount=type=cache,target=/root/.npm npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci --legacy-peer-deps
 
 # Copia código e builda
 COPY . .

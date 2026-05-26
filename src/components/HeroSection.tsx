@@ -13,18 +13,34 @@ const HeroSection = () => {
   const stateRef = useRef<HTMLDivElement>(null);
   const cityRef = useRef<HTMLDivElement>(null);
   const neighborhoodRef = useRef<HTMLDivElement>(null);
+  const typeRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
   const [filters, setFilters] = useState({
     code: "",
     state: [] as string[],
     city: [] as string[],
     neighborhood: [] as string[],
-    type: "",
-    priceRange: "",
+    type: [] as string[],
+    priceRange: [] as string[],
   });
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [neighborhoodOpen, setNeighborhoodOpen] = useState(false);
+  const [typeOpen, setTypeOpen] = useState(false);
+  const [priceOpen, setPriceOpen] = useState(false);
   const [heroBanner, setHeroBanner] = useState<string | null>(null);
+
+  const STATE_OPTIONS = ["RS", "SC", "PR"];
+  const CITY_OPTIONS = ["Novo Hamburgo", "São Leopoldo", "Campo Bom"];
+  const NEIGHBORHOOD_OPTIONS = ["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"];
+  const TYPE_OPTIONS = ["Casa", "Terreno", "Apartamento", "Sítio", "Comercial", "Condomínio", "Lançamento", "Pavilhão", "Permuta"];
+  const PRICE_OPTIONS = [
+    { value: "0-200000", label: "Até R$ 200mil" },
+    { value: "200000-500000", label: "R$ 200mil - 500mil" },
+    { value: "500000-1000000", label: "R$ 500mil - 1M" },
+    { value: "1000000+", label: "Acima de R$ 1M" },
+  ];
+  const MODALIDADE_OPTIONS = ["Venda", "Aluguel"];
 
   useEffect(() => {
     const fetchHero = async () => {
@@ -40,18 +56,12 @@ const HeroSection = () => {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (modalidadeRef.current && !modalidadeRef.current.contains(e.target as Node)) {
-        setModalidadeOpen(false);
-      }
-      if (stateRef.current && !stateRef.current.contains(e.target as Node)) {
-        setStateOpen(false);
-      }
-      if (cityRef.current && !cityRef.current.contains(e.target as Node)) {
-        setCityOpen(false);
-      }
-      if (neighborhoodRef.current && !neighborhoodRef.current.contains(e.target as Node)) {
-        setNeighborhoodOpen(false);
-      }
+      if (modalidadeRef.current && !modalidadeRef.current.contains(e.target as Node)) setModalidadeOpen(false);
+      if (stateRef.current && !stateRef.current.contains(e.target as Node)) setStateOpen(false);
+      if (cityRef.current && !cityRef.current.contains(e.target as Node)) setCityOpen(false);
+      if (neighborhoodRef.current && !neighborhoodRef.current.contains(e.target as Node)) setNeighborhoodOpen(false);
+      if (typeRef.current && !typeRef.current.contains(e.target as Node)) setTypeOpen(false);
+      if (priceRef.current && !priceRef.current.contains(e.target as Node)) setPriceOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -63,12 +73,26 @@ const HeroSection = () => {
     );
   };
 
-  const toggleMulti = (key: "state" | "city" | "neighborhood", val: string) => {
+  const toggleAllModalidades = () => {
+    setModalidade((prev) => (prev.length === MODALIDADE_OPTIONS.length ? [] : MODALIDADE_OPTIONS));
+  };
+
+  type MultiKey = "state" | "city" | "neighborhood" | "type" | "priceRange";
+
+  const toggleMulti = (key: MultiKey, val: string) => {
     setFilters((prev) => {
       const list = prev[key];
       const next = list.includes(val)
         ? list.filter((item) => item !== val)
         : [...list, val];
+      return { ...prev, [key]: next };
+    });
+  };
+
+  const toggleAllMulti = (key: MultiKey, options: string[]) => {
+    setFilters((prev) => {
+      const list = prev[key];
+      const next = list.length === options.length ? [] : options;
       return { ...prev, [key]: next };
     });
   };
@@ -87,8 +111,8 @@ const HeroSection = () => {
     if (filters.state.length) params.set("estado", filters.state.join(","));
     if (filters.city.length) params.set("cidade", filters.city.join(","));
     if (filters.neighborhood.length) params.set("bairro", filters.neighborhood.join(","));
-    if (filters.type) params.set("tipo", filters.type);
-    if (filters.priceRange) params.set("valor", filters.priceRange);
+    if (filters.type.length) params.set("tipo", filters.type.join(","));
+    if (filters.priceRange.length) params.set("valor", filters.priceRange.join(","));
     navigate(`/imoveis?${params.toString()}`);
   };
 
@@ -137,7 +161,17 @@ const HeroSection = () => {
                 <ChevronDown className="search-bar__chevron" />
                 {modalidadeOpen && (
                   <div className="search-bar__dropdown search-bar__dropdown--left">
-                    {["Venda", "Aluguel"].map((opt) => (
+                    <button
+                      type="button"
+                      onClick={toggleAllModalidades}
+                      className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                    >
+                      <span className={`search-bar__check ${modalidade.length === MODALIDADE_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                        {modalidade.length === MODALIDADE_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                      </span>
+                      Selecionar todos
+                    </button>
+                    {MODALIDADE_OPTIONS.map((opt) => (
                       <button
                         key={opt}
                         type="button"
@@ -195,7 +229,17 @@ const HeroSection = () => {
                 <ChevronDown className="search-bar__chevron" />
                 {stateOpen && (
                   <div className="search-bar__dropdown search-bar__dropdown--left">
-                    {["RS", "SC", "PR"].map((opt) => (
+                    <button
+                      type="button"
+                      onClick={() => toggleAllMulti("state", STATE_OPTIONS)}
+                      className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                    >
+                      <span className={`search-bar__check ${filters.state.length === STATE_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                        {filters.state.length === STATE_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                      </span>
+                      Selecionar todos
+                    </button>
+                    {STATE_OPTIONS.map((opt) => (
                       <button
                         key={opt}
                         type="button"
@@ -232,7 +276,17 @@ const HeroSection = () => {
                 <ChevronDown className="search-bar__chevron" />
                 {cityOpen && (
                   <div className="search-bar__dropdown search-bar__dropdown--left">
-                    {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
+                    <button
+                      type="button"
+                      onClick={() => toggleAllMulti("city", CITY_OPTIONS)}
+                      className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                    >
+                      <span className={`search-bar__check ${filters.city.length === CITY_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                        {filters.city.length === CITY_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                      </span>
+                      Selecionar todos
+                    </button>
+                    {CITY_OPTIONS.map((opt) => (
                       <button
                         key={opt}
                         type="button"
@@ -269,12 +323,17 @@ const HeroSection = () => {
                 <ChevronDown className="search-bar__chevron" />
                 {neighborhoodOpen && (
                   <div className="search-bar__dropdown search-bar__dropdown--left">
-                    {[
-                      "Centro",
-                      "Lomba Grande",
-                      "Colina do Sol",
-                      "Rondônia",
-                    ].map((opt) => (
+                    <button
+                      type="button"
+                      onClick={() => toggleAllMulti("neighborhood", NEIGHBORHOOD_OPTIONS)}
+                      className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                    >
+                      <span className={`search-bar__check ${filters.neighborhood.length === NEIGHBORHOOD_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                        {filters.neighborhood.length === NEIGHBORHOOD_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                      </span>
+                      Selecionar todos
+                    </button>
+                    {NEIGHBORHOOD_OPTIONS.map((opt) => (
                       <button
                         key={opt}
                         type="button"
@@ -300,40 +359,75 @@ const HeroSection = () => {
               </div>
 
               {/* 5. Tipo de Imóvel */}
-              <div className="relative search-bar__field">
-                <select
-                  value={filters.type}
-                  onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                  className="search-bar__select text-m font-normal"
+              <div className="relative search-bar__field" ref={typeRef}>
+                <button
+                  type="button"
+                  onClick={() => setTypeOpen(!typeOpen)}
+                  className="search-bar__select-button text-m"
                 >
-                  <option value="">Tipo de Imóvel</option>
-                  <option value="Casa">Casa</option>
-                  <option value="Terreno">Terreno</option>
-                  <option value="Apartamento">Apartamento</option>
-                  <option value="Sítio">Sítio</option>
-                  <option value="Comercial">Comercial</option>
-                  <option value="Condomínio">Condomínio</option>
-                  <option value="Lançamento">Lançamento</option>
-                  <option value="Pavilhão">Pavilhão</option>
-                  <option value="Permuta">Permuta</option>
-                </select>
+                  {formatSelection("Tipo de Imóvel", filters.type)}
+                </button>
                 <ChevronDown className="search-bar__chevron" />
+                {typeOpen && (
+                  <div className="search-bar__dropdown search-bar__dropdown--left">
+                    <button
+                      type="button"
+                      onClick={() => toggleAllMulti("type", TYPE_OPTIONS)}
+                      className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                    >
+                      <span className={`search-bar__check ${filters.type.length === TYPE_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                        {filters.type.length === TYPE_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                      </span>
+                      Selecionar todos
+                    </button>
+                    {TYPE_OPTIONS.map((opt) => (
+                      <button key={opt} type="button" onClick={() => toggleMulti("type", opt)} className="search-bar__dropdown-item text-m">
+                        <span className={`search-bar__check ${filters.type.includes(opt) ? "search-bar__check--active" : ""}`}>
+                          {filters.type.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                        </span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* 6. Valor */}
-              <div className="relative search-bar__field">
-                <select
-                  value={filters.priceRange}
-                  onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                  className="search-bar__select text-m"
+              <div className="relative search-bar__field" ref={priceRef}>
+                <button
+                  type="button"
+                  onClick={() => setPriceOpen(!priceOpen)}
+                  className="search-bar__select-button text-m"
                 >
-                  <option value="">Valor</option>
-                  <option value="0-200000">Até R$ 200mil</option>
-                  <option value="200000-500000">R$ 200mil - 500mil</option>
-                  <option value="500000-1000000">R$ 500mil - 1M</option>
-                  <option value="1000000+">Acima de R$ 1M</option>
-                </select>
+                  {filters.priceRange.length === 0
+                    ? "Valor"
+                    : filters.priceRange.length === 1
+                    ? PRICE_OPTIONS.find((p) => p.value === filters.priceRange[0])?.label || filters.priceRange[0]
+                    : `${filters.priceRange.length} selecionados`}
+                </button>
                 <ChevronDown className="search-bar__chevron" />
+                {priceOpen && (
+                  <div className="search-bar__dropdown search-bar__dropdown--left">
+                    <button
+                      type="button"
+                      onClick={() => toggleAllMulti("priceRange", PRICE_OPTIONS.map((p) => p.value))}
+                      className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                    >
+                      <span className={`search-bar__check ${filters.priceRange.length === PRICE_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                        {filters.priceRange.length === PRICE_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                      </span>
+                      Selecionar todos
+                    </button>
+                    {PRICE_OPTIONS.map((opt) => (
+                      <button key={opt.value} type="button" onClick={() => toggleMulti("priceRange", opt.value)} className="search-bar__dropdown-item text-m">
+                        <span className={`search-bar__check ${filters.priceRange.includes(opt.value) ? "search-bar__check--active" : ""}`}>
+                          {filters.priceRange.includes(opt.value) && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                        </span>
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
 
