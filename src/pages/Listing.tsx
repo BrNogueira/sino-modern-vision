@@ -46,27 +46,30 @@ const Listing = () => {
     const codigo = searchParams.get("codigo");
     if (codigo) result = result.filter((p) => p.code.includes(codigo));
 
-    const estado = searchParams.get("estado");
-    if (estado) result = result.filter((p) => p.state === estado);
+    const splitParam = (key: string): string[] =>
+      searchParams.get(key)?.split(",").map((s) => s.trim()).filter(Boolean) ?? [];
 
-    const cidade = searchParams.get("cidade");
-    if (cidade) result = result.filter((p) => p.city === cidade);
+    const estados = splitParam("estado");
+    if (estados.length) result = result.filter((p) => estados.includes(p.state));
 
-    const bairro = searchParams.get("bairro");
-    if (bairro) result = result.filter((p) => p.neighborhood === bairro);
+    const cidades = splitParam("cidade");
+    if (cidades.length) result = result.filter((p) => cidades.includes(p.city));
 
-    const tipo = searchParams.get("tipo");
-    if (tipo) result = result.filter((p) => p.type === tipo);
+    const bairros = splitParam("bairro");
+    if (bairros.length) result = result.filter((p) => bairros.includes(p.neighborhood));
 
-    const valor = searchParams.get("valor");
-    if (valor) {
-      if (valor.endsWith("+")) {
-        const min = parseInt(valor);
-        result = result.filter((p) => p.price >= min);
-      } else {
-        const [min, max] = valor.split("-").map(Number);
-        result = result.filter((p) => p.price >= min && p.price <= max);
-      }
+    const tipos = splitParam("tipo");
+    if (tipos.length) result = result.filter((p) => tipos.includes(p.type));
+
+    const valores = splitParam("valor");
+    if (valores.length) {
+      result = result.filter((p) =>
+        valores.some((valor) => {
+          if (valor.endsWith("+")) return p.price >= parseInt(valor);
+          const [min, max] = valor.split("-").map(Number);
+          return p.price >= min && p.price <= max;
+        })
+      );
     }
 
     const q = searchParams.get("q");

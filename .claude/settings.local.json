@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -A 40 \"^CREATE TABLE \\\\`produtos\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
+      "Bash(grep -A 50 \"^CREATE TABLE \\\\`itens\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
+      "Bash(grep \"PRIMARY KEY\\\\|KEY \\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
+      "Bash(grep -A 60 \"^CREATE TABLE \\\\`usuarios\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
+      "Bash(grep \"INSERT INTO \\\\`produtos\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
+      "Bash(grep -A 5 \"INSERT INTO \\\\`produtos\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)"
+    ]
+  }
+}
