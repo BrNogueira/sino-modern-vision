@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Property } from "@/data/properties";
 
+const supabaseAny = supabase as any;
+
 // ──────────────────────────────────────────────────────────────
 // Tipos do banco de dados
 // ──────────────────────────────────────────────────────────────
@@ -164,8 +166,8 @@ export function useImoveis(filter: ImoveisFilter = {}) {
   return useQuery({
     queryKey: ["imoveis", filter],
     queryFn: async () => {
-      let query = supabase
-        .from("imoveis_completo" as any)
+      let query = supabaseAny
+        .from("imoveis_completo")
         .select("*")
         .eq("ativo", true);
 
@@ -194,7 +196,7 @@ export function useImoveis(filter: ImoveisFilter = {}) {
 
       const { data, error } = await query;
       if (error) throw error;
-      return (data ?? []) as ImovelDB[];
+      return (data ?? []) as any as ImovelDB[];
     },
     staleTime: 1000 * 60 * 5, // 5 minutos
   });
@@ -211,7 +213,7 @@ export function useImovel(idOrLegacy: string | number | undefined) {
     queryFn: async () => {
       const isUUID = typeof idOrLegacy === "string" && idOrLegacy.includes("-");
 
-      let query = supabase.from("imoveis_completo").select("*");
+      let query = supabaseAny.from("imoveis_completo").select("*");
       if (isUUID) {
         query = query.eq("id", idOrLegacy);
       } else {
@@ -220,7 +222,7 @@ export function useImovel(idOrLegacy: string | number | undefined) {
 
       const { data, error } = await query.maybeSingle();
       if (error) throw error;
-      return data as ImovelDB | null;
+      return data as any as ImovelDB | null;
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -235,13 +237,13 @@ export function useImovelImagens(imovelId: string | undefined) {
     queryKey: ["imovel-imagens", imovelId],
     enabled:  !!imovelId,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseAny
         .from("imoveis_imagens")
         .select("*")
         .eq("imovel_id", imovelId!)
         .order("posicao", { ascending: true });
       if (error) throw error;
-      return (data ?? []) as ImovelImagem[];
+      return (data ?? []) as any as ImovelImagem[];
     },
     staleTime: 1000 * 60 * 10,
   });
@@ -285,17 +287,17 @@ export function useImovelBySlug(slug: string | undefined) {
       // Tenta como legacy_id numérico
       const numeric = parseInt(slug);
       if (!isNaN(numeric) && String(numeric) === slug) {
-        const { data } = await supabase
+        const { data } = await supabaseAny
           .from("imoveis_completo")
           .select("*")
           .eq("legacy_id", numeric)
           .maybeSingle();
-        if (data) return data as ImovelDB;
+        if (data) return data as any as ImovelDB;
       }
 
       // Tenta busca por título (todas as palavras do slug devem estar no título)
       const terms = slug.replace(/-/g, " ");
-      const { data } = await supabase
+      const { data } = await supabaseAny
         .from("imoveis_completo")
         .select("*")
         .ilike("titulo", `%${terms.split(" ")[0]}%`)
@@ -306,10 +308,10 @@ export function useImovelBySlug(slug: string | undefined) {
       if (!data || data.length === 0) return null;
 
       // Compara slug gerado para encontrar o mais próximo
-      const match = (data as ImovelDB[]).find(
+      const match = (data as any as ImovelDB[]).find(
         (i) => i.titulo && generateSlug(i.titulo) === slug
       );
-      return match ?? (data[0] as ImovelDB);
+      return match ?? (data[0] as any as ImovelDB);
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -323,7 +325,7 @@ export function useCategorias(grupo?: string) {
   return useQuery({
     queryKey: ["categorias", grupo],
     queryFn: async () => {
-      let query = supabase
+      let query = supabaseAny
         .from("categorias")
         .select("id, legacy_id, titulo, grupo, posicao")
         .eq("ativo", true)
