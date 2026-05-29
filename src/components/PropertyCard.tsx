@@ -48,8 +48,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {/* Image area - flush with card edges */}
         <div className="relative">
           {/* Property Code Badge - Green pill overlapping the top of the photo */}
-          <div className="absolute left-1/2 -translate-x-1/2 -top-[30px] z-30">
-            <span className="bg-emerald-600 text-white font-bold text-2xl p-2 rounded-md shadow-md whitespace-nowrap">
+          <div className="absolute left-1/2 -translate-x-1/2 -top-[20px] z-30">
+            <span className="bg-emerald-600 text-white font-bold text-xl p-2 rounded-md shadow-md whitespace-nowrap">
               Cód: {property.code}
             </span>
           </div>
