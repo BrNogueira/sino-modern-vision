@@ -118,7 +118,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="px-6 pt-5 pb-5 flex flex-col flex-1">
+        <div className="px-6 pt-4 pb-4 flex flex-col h-[40%] overflow-hidden">
           {/* Category and Location */}
           <div className="flex flex-col items-center gap-1 mb-3">
             <span className="text-lg font-bold text-foreground uppercase tracking-wider">
