@@ -165,7 +165,7 @@ export function useImoveis(filter: ImoveisFilter = {}) {
     queryKey: ["imoveis", filter],
     queryFn: async () => {
       let query = supabase
-        .from("imoveis_completo")
+        .from("imoveis_completo" as any)
         .select("*")
         .eq("ativo", true);
 
