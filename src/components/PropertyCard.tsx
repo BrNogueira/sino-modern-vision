@@ -54,7 +54,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </span>
           </div>
 
-          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-80 rounded-t-2xl">
+          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-full rounded-t-2xl">
             {images.map((img, idx) => (
               <img
                 key={idx}
