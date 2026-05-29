@@ -43,10 +43,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const displayDimensions = property.areaDimensions || (property as any).area_dimensions;
 
   return (
-    <div className="group/card relative h-full">
+    <div className="group/card relative h-[580px] md:h-[650px]">
       <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-full mt-[25px]">
         {/* Image area - flush with card edges */}
-        <div className="relative">
+        <div className="relative h-[60%] shrink-0">
           {/* Property Code Badge - Green pill overlapping the top of the photo */}
           <div className="absolute left-1/2 -translate-x-1/2 -top-[20px] z-30">
             <span className="bg-emerald-600 text-white font-bold text-xl p-2 rounded-md shadow-md whitespace-nowrap">
@@ -54,7 +54,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </span>
           </div>
 
-          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-80 rounded-t-2xl">
+          <Link to={`/imovel/${slug}`} className="block relative overflow-hidden h-full rounded-t-2xl">
             {images.map((img, idx) => (
               <img
                 key={idx}
@@ -118,7 +118,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="px-6 pt-5 pb-5 flex flex-col flex-1">
+        <div className="px-6 pt-4 pb-4 flex flex-col h-[40%] overflow-hidden">
           {/* Category and Location */}
           <div className="flex flex-col items-center gap-1 mb-3">
             <span className="text-lg font-bold text-foreground uppercase tracking-wider">
