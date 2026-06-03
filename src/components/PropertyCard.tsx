@@ -118,12 +118,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="px-6 pt-4 pb-4 flex flex-col h-[40%] overflow-hidden">
-          {/* Category and Location */}
-          <div className="flex flex-col items-center gap-1 mb-3">
-            <span className="text-lg font-bold text-foreground uppercase tracking-wider">
-              {property.type}
-            </span>
+        <div className="px-6 pt-4 pb-4 flex flex-col h-[40%]">
+          {/* Location */}
+          <div className="flex flex-col items-center gap-1 mb-2">
             <div className="flex items-center justify-center gap-2 text-foreground">
               <span className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
                 <MapPin className="w-5 h-5 text-primary" />
