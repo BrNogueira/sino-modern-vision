@@ -43,10 +43,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const displayDimensions = property.areaDimensions || (property as any).area_dimensions;
 
   return (
-    <div className="group/card relative h-[580px] md:h-[750px]">
+    <div className="group/card relative min-h-[580px] md:min-h-[750px]">
       <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-full mt-[25px]">
         {/* Image area - flush with card edges */}
-        <div className="relative h-[60%] shrink-0">
+        <div className="relative h-[348px] md:h-[450px] shrink-0">
           {/* Property Code Badge - Green pill overlapping the top of the photo */}
           <div className="absolute left-1/2 -translate-x-1/2 -top-[20px] z-30">
             <span className="bg-emerald-600 text-white font-bold text-xl p-2 rounded-md shadow-md whitespace-nowrap">
