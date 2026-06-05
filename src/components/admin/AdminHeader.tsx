@@ -28,7 +28,7 @@ export function AdminHeader() {
     .join("");
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-card/80 backdrop-blur-xl border-b border-border flex items-center gap-3 px-3 md:px-6">
+    <header className="sticky top-0 z-[999] h-16 bg-card/80 backdrop-blur-xl border-b border-border flex items-center gap-3 px-3 md:px-6">
       <SidebarTrigger className="text-foreground" />
       <Separator orientation="vertical" className="h-6 hidden md:block" />
 
