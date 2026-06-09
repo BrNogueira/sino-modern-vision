@@ -14,12 +14,15 @@ const VALID_ROLES: Role[] = ["admin", "gerente", "corretor", "financeiro"];
 adminRouter.post("/users", requireRole("admin"), async (c) => {
   const body = (await c.req.json().catch(() => ({}))) as {
     email?: string; password?: string; full_name?: string; name?: string;
-    role?: Role; phone?: string; creci?: string;
+    role?: Role; roles?: Role[]; phone?: string; creci?: string;
   };
   const email = body.email?.trim();
   const password = body.password ?? "";
   const fullName = body.full_name ?? body.name ?? email?.split("@")[0] ?? "Usuário";
-  const role: Role = VALID_ROLES.includes(body.role as Role) ? (body.role as Role) : "corretor";
+  // O front envia `roles: Role[]` (checkboxes); aceitamos também `role` singular.
+  const requested = Array.isArray(body.roles) ? body.roles : body.role ? [body.role] : [];
+  const roles = [...new Set(requested.filter((r): r is Role => VALID_ROLES.includes(r as Role)))];
+  if (roles.length === 0) roles.push("corretor");
 
   if (!email || password.length < 8)
     return c.json({ error: "email e senha (mín. 8 chars) obrigatórios" }, 400);
@@ -47,10 +50,12 @@ adminRouter.post("/users", requireRole("admin"), async (c) => {
      ON DUPLICATE KEY UPDATE full_name=VALUES(full_name), email=VALUES(email)`,
     [userId, fullName, email, body.phone ?? "", body.creci ?? ""],
   );
-  await exec(
-    "INSERT INTO user_roles (id, user_id, role) VALUES (UUID(), ?, ?) ON DUPLICATE KEY UPDATE role=role",
-    [userId, role],
-  );
+  for (const role of roles) {
+    await exec(
+      "INSERT INTO user_roles (id, user_id, role) VALUES (UUID(), ?, ?) ON DUPLICATE KEY UPDATE role=role",
+      [userId, role],
+    );
+  }
 
-  return c.json({ user: { id: userId, email, full_name: fullName, role } });
+  return c.json({ user: { id: userId, email, full_name: fullName, roles } });
 });

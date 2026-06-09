@@ -47,8 +47,13 @@ const AdminUserCreate = () => {
       return;
     }
     
-    if (formData.password.length < 6) {
-      toast({ title: "Erro", description: "Senha deve ter ao menos 6 caracteres.", variant: "destructive" });
+    if (formData.password.length < 8) {
+      toast({ title: "Erro", description: "Senha deve ter ao menos 8 caracteres.", variant: "destructive" });
+      return;
+    }
+
+    if (selectedRoles.length === 0) {
+      toast({ title: "Erro", description: "Selecione ao menos um perfil de acesso.", variant: "destructive" });
       return;
     }
 
