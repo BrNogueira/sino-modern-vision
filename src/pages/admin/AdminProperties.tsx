@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { ImportImoveisDialog } from "@/components/admin/ImportImoveisDialog";
 
 const generateSlug = (title: string) =>
   title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -53,12 +54,15 @@ const AdminProperties = () => {
         description={`${properties.length} ${properties.length === 1 ? "imóvel cadastrado" : "imóveis cadastrados"} no portfólio`}
         icon={Building2}
         actions={
-          <Button asChild size="lg" className="gap-2">
-            <Link to="/admin/imoveis/novo">
-              <Plus className="w-4 h-4" />
-              Novo Imóvel
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <ImportImoveisDialog />
+            <Button asChild size="lg" className="gap-2">
+              <Link to="/admin/imoveis/novo">
+                <Plus className="w-4 h-4" />
+                Novo Imóvel
+              </Link>
+            </Button>
+          </div>
         }
       />
 

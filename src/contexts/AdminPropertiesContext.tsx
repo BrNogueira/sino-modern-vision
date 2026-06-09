@@ -14,6 +14,11 @@ interface AdminPropertiesContextType {
   updateProperty: (id: string, property: Partial<ZapImovel>) => Promise<void>;
   deleteProperty: (id: string) => Promise<void>;
   getProperty: (id: string) => ZapImovel | undefined;
+  /** Importação em lote (CSV). `rows` em snake_case prontos para a tabela imoveis. */
+  importImoveis: (
+    rows: Record<string, unknown>[],
+    onProgress?: (done: number, total: number) => void,
+  ) => Promise<{ inserted: number; errors: { index: number; message: string }[] }>;
   refresh: () => Promise<void>;
 }
 
@@ -191,9 +196,42 @@ export const AdminPropertiesProvider: React.FC<{ children: React.ReactNode }> = 
     [properties],
   );
 
+  const importImoveis = useCallback(
+    async (
+      rows: Record<string, unknown>[],
+      onProgress?: (done: number, total: number) => void,
+    ) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const createdBy = user?.id ?? null;
+      const CHUNK = 50;
+      let inserted = 0;
+      const errors: { index: number; message: string }[] = [];
+
+      for (let i = 0; i < rows.length; i += CHUNK) {
+        const chunk = rows.slice(i, i + CHUNK).map((r) => ({ ...r, created_by: createdBy }));
+        const { data, error } = await supabase.from("imoveis").insert(chunk).select();
+        if (error) {
+          // Falha no lote → reinsere linha a linha para isolar os registros ruins.
+          for (let j = 0; j < chunk.length; j++) {
+            const { error: e1 } = await supabase.from("imoveis").insert(chunk[j]).select();
+            if (e1) errors.push({ index: i + j, message: e1.message });
+            else inserted++;
+          }
+        } else {
+          inserted += Array.isArray(data) ? data.length : chunk.length;
+        }
+        onProgress?.(Math.min(i + CHUNK, rows.length), rows.length);
+      }
+
+      await refresh();
+      return { inserted, errors };
+    },
+    [refresh],
+  );
+
   return (
     <AdminPropertiesContext.Provider
-      value={{ properties, loading, addProperty, updateProperty, deleteProperty, getProperty, refresh }}
+      value={{ properties, loading, addProperty, updateProperty, deleteProperty, getProperty, importImoveis, refresh }}
     >
       {children}
     </AdminPropertiesContext.Provider>
