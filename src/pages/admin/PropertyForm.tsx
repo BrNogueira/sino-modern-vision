@@ -398,10 +398,6 @@ const PropertyForm = () => {
       toast({ title: "Erro", description: "Título deve ter pelo menos 10 caracteres.", variant: "destructive" });
       return;
     }
-    if (!form.cep.trim()) {
-      toast({ title: "Erro", description: "CEP é obrigatório.", variant: "destructive" });
-      return;
-    }
     if (!form.observacao.trim()) {
       toast({ title: "Erro", description: "Descrição é obrigatória.", variant: "destructive" });
       return;
@@ -601,7 +597,7 @@ const PropertyForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <Label className="text-foreground text-sm">
-                CEP <span className="text-destructive">*</span>
+                CEP
                 {cepLoading && <span className="text-xs text-muted-foreground ml-2">buscando...</span>}
               </Label>
               <Input
