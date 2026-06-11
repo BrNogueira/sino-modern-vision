@@ -6,7 +6,21 @@
       "Bash(grep \"PRIMARY KEY\\\\|KEY \\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
       "Bash(grep -A 60 \"^CREATE TABLE \\\\`usuarios\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
       "Bash(grep \"INSERT INTO \\\\`produtos\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
-      "Bash(grep -A 5 \"INSERT INTO \\\\`produtos\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)"
+      "Bash(grep -A 5 \"INSERT INTO \\\\`produtos\\\\`\" /mnt/c/Users/Rodrigo Nogueira/Documents/4k/sino-modern-vision/sinos7596_maya.sql)",
+      "Bash(curl -s -m 5 http://localhost:8080/healthz)",
+      "Bash(curl -s -m5 http://localhost:8080/)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -m 20 http://localhost:8080/assets/index-CyRPsO0e.js -o bundle.js)",
+      "Bash(timeout 180 npx playwright install chromium)",
+      "Bash(timeout 180 \"/mnt/c/Program Files/nodejs/npm.cmd\" install playwright --no-save --no-audit --no-fund)",
+      "Bash(timeout 60 git fetch origin)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(env)",
+      "Read(//home/rodrigo_ogueira/**)",
+      "Read(//home/rodrigo_ogueira/.config/gh/**)",
+      "Bash(npx tsc *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'fix: corrige edicao de imovel no admin e adiciona troca venda/aluguel *)"
     ]
   }
 }

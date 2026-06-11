@@ -316,22 +316,25 @@ const PropertyForm = () => {
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
   const navigate = useNavigate();
-  const { addProperty, updateProperty, getProperty, properties } = useAdminProperties();
+  const { addProperty, updateProperty, getProperty, properties, loading } = useAdminProperties();
   const { categorias } = useCategorias();
   const { toast } = useToast();
   const [form, setForm] = useState<FormData>(emptyForm);
 
   useEffect(() => {
-    if (isEditing && id) {
-      const existing = getProperty(id);
-      if (existing) {
-        const { id: _, createdAt, updatedAt, ...rest } = existing;
-        setForm(rest);
-      } else {
-        navigate("/admin/imoveis", { replace: true });
-      }
+    if (!isEditing || !id) return;
+    // Aguarda o carregamento dos imóveis antes de decidir; caso contrário,
+    // ao abrir a edição direto pela URL (ou recarregar a página) o contexto
+    // ainda está vazio e redirecionaria de volta indevidamente.
+    if (loading) return;
+    const existing = getProperty(id);
+    if (existing) {
+      const { id: _, createdAt, updatedAt, ...rest } = existing;
+      setForm(rest);
+    } else {
+      navigate("/admin/imoveis", { replace: true });
     }
-  }, [id, isEditing, getProperty, navigate]);
+  }, [id, isEditing, loading, getProperty, navigate]);
 
   const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -461,6 +464,14 @@ const PropertyForm = () => {
   );
 
   const selectedFeaturesCount = Object.values(form.features).filter(Boolean).length;
+
+  if (isEditing && loading) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 text-center text-muted-foreground">
+        Carregando imóvel...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

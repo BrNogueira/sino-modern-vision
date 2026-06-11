@@ -9,6 +9,8 @@ import propertyDetail3 from "@/assets/property-detail-3.jpg";
 import propertyDetail4 from "@/assets/property-detail-4.jpg";
 
 export interface Property {
+  /** ID do registro no banco (presente apenas para imóveis vindos do admin/DB). */
+  id?: string;
   code: string;
   image: string;
   title: string;

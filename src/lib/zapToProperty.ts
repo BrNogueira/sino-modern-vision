@@ -11,7 +11,17 @@ const transactionTypeFromOferta = (
   oferta: number,
   precoVenda?: number,
   precoAluguel?: number,
+  modalidade?: string[],
 ): Property["transactionType"] => {
+  // A modalidade marcada no admin é a intenção explícita do usuário e tem
+  // prioridade sobre o tipoOferta/preços ao definir venda × aluguel.
+  const m = Array.isArray(modalidade) ? modalidade : [];
+  const hasVenda = m.includes("venda");
+  const hasAluguel = m.includes("aluguel");
+  if (hasVenda && hasAluguel) return "venda/aluguel";
+  if (hasAluguel) return "aluguel";
+  if (hasVenda) return "venda";
+  // Sem modalidade definida → deriva de tipoOferta/preços.
   // tipoOferta: 1=Venda, 2=Aluguel, 3=Venda e Aluguel
   if (oferta === 3 || (precoVenda && precoAluguel)) return "venda/aluguel";
   if (oferta === 2 || (!precoVenda && precoAluguel)) return "aluguel";
@@ -28,14 +38,16 @@ export const zapToProperty = (z: ZapImovel): Property => {
 
   const transactionType = transactionTypeFromOferta(
     z.tipoOferta,
-    z.precoVenda,
-    z.precoAluguel,
+    z.precoVenda ?? undefined,
+    z.precoAluguel ?? undefined,
+    z.modalidade,
   );
 
   const price = z.precoVenda ?? z.precoAluguel ?? 0;
   const location = [z.bairro, z.cidade].filter(Boolean).join(", ") || z.cidade;
 
   return {
+    id: z.id,
     code: z.codigoImovel || z.id,
     image: cover,
     title: z.tituloImovel,

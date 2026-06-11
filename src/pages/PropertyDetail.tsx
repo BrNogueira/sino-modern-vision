@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import InlineEditField from "@/components/InlineEditField";
+import InlineModalidadeEditor from "@/components/InlineModalidadeEditor";
 import InlinePhotoEditor from "@/components/InlinePhotoEditor";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { useChangeLog } from "@/contexts/ChangeLogContext";
@@ -163,7 +164,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { properties: dbProperties } = useAdminProperties();
+  const { properties: dbProperties, updateProperty } = useAdminProperties();
   const properties = useMemo(
     () => [...dbProperties.filter((p) => p.ativo).map(zapToProperty), ...staticProperties],
     [dbProperties],
@@ -267,6 +268,29 @@ const PropertyDetail = () => {
                 </span> — {property.title}
               </h1>
             </InlineEditField>
+            {baseProperty.id && (
+              <div className="mt-1">
+                <InlineModalidadeEditor
+                  value={property.transactionType}
+                  propertyCode={property.code}
+                  propertyTitle={property.title}
+                  onSave={(modalidade, tipoOferta) =>
+                    updateProperty(baseProperty.id!, { modalidade, tipoOferta: tipoOferta as any })
+                  }
+                >
+                  <span className="text-xs text-muted-foreground">
+                    Modalidade:{" "}
+                    <span className="font-semibold text-foreground">
+                      {property.transactionType === "venda/aluguel"
+                        ? "Venda e Aluguel"
+                        : property.transactionType === "aluguel"
+                        ? "Aluguel"
+                        : "Venda"}
+                    </span>
+                  </span>
+                </InlineModalidadeEditor>
+              </div>
+            )}
             {property.city && property.neighborhood && (
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${property.neighborhood}, ${property.city} - ${property.state}`)}`}
