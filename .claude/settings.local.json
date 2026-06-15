@@ -20,7 +20,8 @@
       "Read(//home/rodrigo_ogueira/.config/gh/**)",
       "Bash(npx tsc *)",
       "Bash(git add *)",
-      "Bash(git commit -q -m 'fix: corrige edicao de imovel no admin e adiciona troca venda/aluguel *)"
+      "Bash(git commit -q -m 'fix: corrige edicao de imovel no admin e adiciona troca venda/aluguel *)",
+      "Bash(git commit -q -m 'fix: robustez no CRUD de imoveis \\(edicao, exclusao, codigo duplicado\\) *)"
     ]
   }
 }

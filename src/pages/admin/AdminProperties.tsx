@@ -35,16 +35,30 @@ const AdminProperties = () => {
       p.bairro.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = (id: string, title: string) => {
-    deleteProperty(id);
-    toast({ title: "Imóvel excluído", description: `"${title}" foi removido.` });
+  const handleDelete = async (id: string, title: string) => {
+    try {
+      await deleteProperty(id);
+      toast({ title: "Imóvel excluído", description: `"${title}" foi removido.` });
+    } catch (err: any) {
+      toast({
+        title: "Erro ao excluir imóvel",
+        description: err?.message || "Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const toggleAtivo = (id: string, currentStatus: boolean) => {
-    updateProperty(id, { ativo: !currentStatus });
-    toast({
-      title: currentStatus ? "Imóvel desativado" : "Imóvel ativado",
-    });
+  const toggleAtivo = async (id: string, currentStatus: boolean) => {
+    try {
+      await updateProperty(id, { ativo: !currentStatus });
+      toast({ title: currentStatus ? "Imóvel desativado" : "Imóvel ativado" });
+    } catch (err: any) {
+      toast({
+        title: "Erro ao alterar status",
+        description: err?.message || "Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

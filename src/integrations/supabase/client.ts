@@ -120,7 +120,7 @@ export const supabase = {
   storage: {
     from(bucket: string) {
       return {
-        async upload(path: string, file: File | Blob, _opts?: { contentType?: string; upsert?: boolean }) {
+        async upload(path: string, file: File | Blob, _opts?: { contentType?: string; upsert?: boolean; cacheControl?: string }) {
           try {
             const form = new FormData();
             form.append("path", path);

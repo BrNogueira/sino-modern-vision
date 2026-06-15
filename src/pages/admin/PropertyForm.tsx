@@ -352,9 +352,9 @@ const PropertyForm = () => {
     }));
 
   const handleTipoChange = (tipo: TipoImovel) => {
-    const subTipos = subTipoByTipo[tipo];
+    const subTipos = subTipoByTipo[tipo] ?? [];
     set("tipoImovel", tipo);
-    set("subTipoImovel", subTipos[0]);
+    if (subTipos[0]) set("subTipoImovel", subTipos[0]);
     set("categoriaImovel", "Padrão");
   };
 
@@ -425,9 +425,13 @@ const PropertyForm = () => {
       }
       navigate("/admin/imoveis");
     } catch (err: any) {
+      const raw = String(err?.message || "");
+      const isDupCode = /duplicate/i.test(raw) && /codigo/i.test(raw);
       toast({
         title: "Erro ao salvar imóvel",
-        description: err?.message || "Verifique os dados e tente novamente.",
+        description: isDupCode
+          ? `Já existe um imóvel com o código "${form.codigoImovel}".`
+          : raw || "Verifique os dados e tente novamente.",
         variant: "destructive",
       });
     } finally {
@@ -545,7 +549,7 @@ const PropertyForm = () => {
               <Select value={form.subTipoImovel} onValueChange={(v) => set("subTipoImovel", v as SubTipoImovel)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {subTipoByTipo[form.tipoImovel].map((s) => (
+                  {(subTipoByTipo[form.tipoImovel] ?? []).map((s) => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
                 </SelectContent>
