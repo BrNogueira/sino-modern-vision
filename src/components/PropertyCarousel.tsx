@@ -4,15 +4,21 @@ import { properties as staticProperties } from "@/data/properties";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { zapToProperty } from "@/lib/zapToProperty";
 
+const MAX_HOME = 9;
+
 const PropertyCarousel = () => {
   const { properties: dbProperties } = useAdminProperties();
 
   const featured = useMemo(() => {
-    const fromDb = dbProperties
-      .filter((p) => p.ativo && (p.destaque || p.exclusivo))
-      .map(zapToProperty);
-    const fromStatic = staticProperties.filter((p) => p.featured || p.exclusive);
-    // DB items first so newly added properties show up immediately
+    // Imóveis ativos vindos do banco (já ordenados por created_at desc).
+    const active = dbProperties.filter((p) => p.ativo);
+    const highlighted = active.filter((p) => p.destaque || p.exclusivo);
+    const rest = active.filter((p) => !(p.destaque || p.exclusivo));
+    // Destaques/exclusivos primeiro, depois os mais recentes, até MAX_HOME.
+    const fromDb = [...highlighted, ...rest].slice(0, MAX_HOME).map(zapToProperty);
+    // Demos estáticos só como fallback quando ainda não há imóveis no banco.
+    const fromStatic =
+      fromDb.length === 0 ? staticProperties.filter((p) => p.featured || p.exclusive) : [];
     return [...fromDb, ...fromStatic];
   }, [dbProperties]);
 

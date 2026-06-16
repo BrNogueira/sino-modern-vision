@@ -21,7 +21,26 @@
       "Bash(npx tsc *)",
       "Bash(git add *)",
       "Bash(git commit -q -m 'fix: corrige edicao de imovel no admin e adiciona troca venda/aluguel *)",
-      "Bash(git commit -q -m 'fix: robustez no CRUD de imoveis \\(edicao, exclusao, codigo duplicado\\) *)"
+      "Bash(git commit -q -m 'fix: robustez no CRUD de imoveis \\(edicao, exclusao, codigo duplicado\\) *)",
+      "Bash(docker compose *)",
+      "Bash(curl -s -m 5 http://localhost:4001/health)",
+      "Bash(docker exec *)",
+      "Bash(npx tsx *)",
+      "Bash(rm -f sino_cookies.txt)",
+      "Bash(curl -s -m 10 -c sino_cookies.txt -X POST http://localhost:4001/api/auth/sign-in/email -H \"content-type: application/json\" -H \"origin: http://localhost:8080\" -d '{\"email\":\"e2e@test.local\",\"password\":\"Teste1234!\"}' -w \"\\\\nHTTP %{http_code}\\\\n\")",
+      "Bash(curl -s -m 10 -b sino_cookies.txt http://localhost:4001/api/auth/get-session -H \"origin: http://localhost:8080\")",
+      "Bash(bash *)",
+      "Bash(curl -s -m 10 -b /tmp/sino_cookies.txt -H origin:http://localhost:8080 -X DELETE http://localhost:4001/api/data/imoveis/208c4814-fade-4bae-bbab-fd9c366b530e)",
+      "Bash(npx vitest *)",
+      "Bash(\"/mnt/c/Program Files/nodejs/node.exe\" -v)",
+      "Bash(npx vite *)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(echo \"restante: $\\(docker exec sino-mysql mysql -uroot -psino_root -N -e \"SELECT count\\(*\\) FROM \\\\`user\\\\` WHERE email='e2e@test.local';\" sino \\)\")",
+      "Bash(echo \"user restante: $\\(docker exec sino-mysql mysql -uroot -psino_root -N -e \"SELECT count\\(*\\) FROM \\\\`user\\\\` WHERE email LIKE 'e2e@test%';\" sino \\)\")",
+      "Bash(echo \"profile restante: $\\(docker exec sino-mysql mysql -uroot -psino_root -N -e \"SELECT count\\(*\\) FROM profiles WHERE email LIKE 'e2e@test%';\" sino \\)\")",
+      "Bash(echo \"profiles e2e restante: $\\(docker exec sino-mysql mysql -uroot -psino_root -N -e \"SELECT count\\(*\\) FROM profiles WHERE id='389743d5-8916-4df2-b2e0-10ff9745b596';\" sino \\)\")",
+      "Bash(echo \"profiles totais: $\\(docker exec sino-mysql mysql -uroot -psino_root -N -e \"SELECT count\\(*\\) FROM profiles;\" sino \\)\")",
+      "Bash(git commit -q -m 'fix: home exibe imoveis cadastrados \\(destaques + recentes\\) *)"
     ]
   }
 }
