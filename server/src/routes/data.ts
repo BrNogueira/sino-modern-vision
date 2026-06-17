@@ -15,6 +15,7 @@ const RESOURCES: ResourceConfig[] = [
     anonReadFilter: { col: "ativo", value: 1 },
     writeRoles: STAFF,
     defaultOrder: "created_at.desc",
+    searchColumns: ["titulo_imovel", "codigo_imovel", "cidade", "bairro"],
   },
   // Read-models de compatibilidade (Model A) — VIEWS read-only sobre `imoveis`
   // (ver db/views.sql). O site público lê por aqui; escrita vai em `imoveis`.

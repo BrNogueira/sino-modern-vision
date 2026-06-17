@@ -26,6 +26,8 @@ export interface ResourceConfig {
   /** Filtro forçado para leitores anônimos (ex.: {col:'ativo',value:1}). */
   anonReadFilter?: { col: string; value: unknown };
   defaultOrder?: string;
+  /** Colunas pesquisáveis via ?q=termo (LIKE %termo%) */
+  searchColumns?: string[];
 }
 
 const _colCache = new Map<string, Set<string>>();
@@ -84,7 +86,7 @@ function buildWhere(filters: Filter[], allowed: Set<string>) {
 function parseQueryFilters(query: Record<string, string>, allowed: Set<string>): Filter[] {
   const out: Filter[] = [];
   for (const [key, raw] of Object.entries(query)) {
-    if (["select", "order", "limit", "offset", "single"].includes(key)) continue;
+    if (["select", "order", "limit", "offset", "single", "count", "q"].includes(key)) continue;
     if (!allowed.has(key)) continue;
     const m = /^(eq|neq|gt|gte|lt|lte|like|ilike|in|is)\.(.*)$/s.exec(raw);
     if (m) {
@@ -150,18 +152,36 @@ export function makeCrudRouter(cfg: ResourceConfig): Hono {
         filters.push({ col: cfg.anonReadFilter.col, op: "eq", value: cfg.anonReadFilter.value });
 
       const { clauses, params } = buildWhere(filters, allowed);
+      if (q.q?.trim() && cfg.searchColumns?.length) {
+        const term = `%${q.q.trim()}%`;
+        const parts = cfg.searchColumns.filter((c) => allowed.has(c)).map((c) => `${qIdent(c)} LIKE ?`);
+        if (parts.length) {
+          clauses.push(`(${parts.join(" OR ")})`);
+          params.push(...parts.map(() => term));
+        }
+      }
       const where = clauses.length ? ` WHERE ${clauses.join(" AND ")}` : "";
       const sel = buildSelect(q.select, allowed);
       const order = buildOrder(q.order ?? cfg.defaultOrder, allowed);
+      let total: number | undefined;
+      if (q.count === "exact") {
+        const [countRows] = await pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) AS cnt FROM ${qIdent(cfg.table)}${where}`,
+          params,
+        );
+        total = Number((countRows[0] as RowDataPacket)?.cnt ?? 0);
+      }
+
       let sql = `SELECT ${sel} FROM ${qIdent(cfg.table)}${where}${order}`;
-      if (q.limit) {
-        const limit = Math.min(parseInt(q.limit, 10) || 0, 1000);
+      if (q.limit !== undefined) {
+        const limit = Math.min(Math.max(parseInt(q.limit, 10) || 0, 0), 1000);
         const offset = q.offset ? parseInt(q.offset, 10) || 0 : 0;
         sql += ` LIMIT ? OFFSET ?`;
         params.push(limit, offset);
       }
       const [rows] = await pool.query<RowDataPacket[]>(sql, params);
       if (q.single === "true") return c.json(rows[0] ?? null);
+      if (q.count === "exact") return c.json({ data: rows, total: total ?? rows.length });
       return c.json(rows);
     } catch (e) { return errJson(c, e); }
   });
