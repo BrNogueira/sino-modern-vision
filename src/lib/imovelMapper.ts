@@ -1,0 +1,66 @@
+import {
+  ZapImovel,
+  defaultFeatureFlags,
+  defaultGarantias,
+} from "@/types/zapImoveis";
+import {
+  ensureStringArray,
+  normalizeSubTipoImovel,
+  normalizeTipoImovel,
+  parseJsonField,
+} from "@/lib/imovelNormalize";
+
+// Map DB row (snake_case) to ZapImovel (camelCase)
+export function fromRow(row: any): ZapImovel {
+  const tipoImovel = normalizeTipoImovel(row.tipo_imovel);
+  return {
+  id: row.id,
+  codigoImovel: row.codigo_imovel,
+  tituloImovel: row.titulo_imovel,
+  tipoImovel,
+  subTipoImovel: normalizeSubTipoImovel(tipoImovel, row.sub_tipo_imovel),
+  categoriaImovel: row.categoria_imovel,
+  tipoOferta: row.tipo_oferta,
+  modalidade: ensureStringArray(row.modalidade),
+  cep: row.cep || "",
+  estado: row.estado || "",
+  cidade: row.cidade || "",
+  zona: row.zona || "",
+  bairro: row.bairro || "",
+  endereco: row.endereco || "",
+  numero: row.numero || "",
+  complemento: row.complemento || "",
+  latitude: row.latitude || "",
+  longitude: row.longitude || "",
+  precoVenda: row.preco_venda,
+  precoAluguel: row.preco_aluguel,
+  iptu: row.iptu,
+  valorCondominio: row.valor_condominio,
+  areaTotal: row.area_total,
+  areaUtil: row.area_util,
+  areaDimensions: row.area_dimensions,
+  qtdDormitorios: row.qtd_dormitorios,
+  qtdSuites: row.qtd_suites,
+  qtdBanheiros: row.qtd_banheiros,
+  qtdVagas: row.qtd_vagas,
+  observacao: row.observacao || "",
+  descricaoCurta: row.descricao_curta || "",
+  fotos: parseJsonField(row.fotos, []),
+  videoUrl: row.video_url || "",
+  linkTourVirtual: row.link_tour_virtual || "",
+  features: { ...defaultFeatureFlags(), ...parseJsonField(row.features, {}) },
+  garantias: { ...defaultGarantias, ...parseJsonField(row.garantias, {}) },
+  anoConstrucao: row.ano_construcao,
+  proprietarioNome: row.proprietario_nome || "",
+  proprietarioTelefone: row.proprietario_telefone || "",
+  proprietarioEmail: row.proprietario_email || "",
+  proprietarioDocumento: row.proprietario_documento || "",
+  ativo: row.ativo,
+  destaque: row.destaque,
+  exclusivo: row.exclusivo,
+  categoriaId: row.categoria_id ?? null,
+  createdAt: row.created_at,
+  updatedAt: row.updated_at,
+};
+};
+

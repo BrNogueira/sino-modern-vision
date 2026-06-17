@@ -3,6 +3,7 @@ import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, GroupIc
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
+import { propertyPlaceholder } from "@/lib/resolvePhotoUrl";
 
 interface PropertyCardProps {
   property: Property;
@@ -64,6 +65,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                   idx === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
                 loading="lazy"
+                onError={(e) => { (e.target as HTMLImageElement).src = propertyPlaceholder; }}
               />
             ))}
 

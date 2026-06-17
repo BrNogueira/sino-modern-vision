@@ -24,56 +24,7 @@ interface AdminPropertiesContextType {
 
 const AdminPropertiesContext = createContext<AdminPropertiesContextType | null>(null);
 
-// Map DB row (snake_case) to ZapImovel (camelCase)
-const fromRow = (row: any): ZapImovel => ({
-  id: row.id,
-  codigoImovel: row.codigo_imovel,
-  tituloImovel: row.titulo_imovel,
-  tipoImovel: row.tipo_imovel,
-  subTipoImovel: row.sub_tipo_imovel,
-  categoriaImovel: row.categoria_imovel,
-  tipoOferta: row.tipo_oferta,
-  modalidade: row.modalidade || [],
-  cep: row.cep || "",
-  estado: row.estado || "",
-  cidade: row.cidade || "",
-  zona: row.zona || "",
-  bairro: row.bairro || "",
-  endereco: row.endereco || "",
-  numero: row.numero || "",
-  complemento: row.complemento || "",
-  latitude: row.latitude || "",
-  longitude: row.longitude || "",
-  precoVenda: row.preco_venda,
-  precoAluguel: row.preco_aluguel,
-  iptu: row.iptu,
-  valorCondominio: row.valor_condominio,
-  areaTotal: row.area_total,
-  areaUtil: row.area_util,
-  areaDimensions: row.area_dimensions,
-  qtdDormitorios: row.qtd_dormitorios,
-  qtdSuites: row.qtd_suites,
-  qtdBanheiros: row.qtd_banheiros,
-  qtdVagas: row.qtd_vagas,
-  observacao: row.observacao || "",
-  descricaoCurta: row.descricao_curta || "",
-  fotos: row.fotos || [],
-  videoUrl: row.video_url || "",
-  linkTourVirtual: row.link_tour_virtual || "",
-  features: { ...defaultFeatureFlags(), ...(row.features || {}) },
-  garantias: { ...defaultGarantias, ...(row.garantias || {}) },
-  anoConstrucao: row.ano_construcao,
-  proprietarioNome: row.proprietario_nome || "",
-  proprietarioTelefone: row.proprietario_telefone || "",
-  proprietarioEmail: row.proprietario_email || "",
-  proprietarioDocumento: row.proprietario_documento || "",
-  ativo: row.ativo,
-  destaque: row.destaque,
-  exclusivo: row.exclusivo,
-  categoriaId: row.categoria_id ?? null,
-  createdAt: row.created_at,
-  updatedAt: row.updated_at,
-});
+import { fromRow } from "@/lib/imovelMapper";
 
 const toRow = (p: Partial<ZapImovel>): any => {
   const row: any = {};
@@ -132,7 +83,7 @@ export const AdminPropertiesProvider: React.FC<{ children: React.ReactNode }> = 
     setLoading(true);
     const { data, error } = await supabase
       .from("imoveis")
-      .select("*")
+      .select("id,codigo_imovel,titulo_imovel,tipo_imovel,sub_tipo_imovel,categoria_imovel,tipo_oferta,modalidade,cep,estado,cidade,zona,bairro,endereco,numero,complemento,latitude,longitude,preco_venda,preco_aluguel,iptu,valor_condominio,area_total,area_util,area_dimensions,qtd_dormitorios,qtd_suites,qtd_banheiros,qtd_vagas,descricao_curta,fotos,video_url,link_tour_virtual,ano_construcao,proprietario_nome,proprietario_telefone,proprietario_email,proprietario_documento,ativo,destaque,exclusivo,categoria_id,created_at,updated_at")
       .order("created_at", { ascending: false });
     if (error) {
       console.error("Failed to load imoveis:", error);

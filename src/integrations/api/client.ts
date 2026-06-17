@@ -5,9 +5,15 @@
 
 function resolveApiBase(): string {
   const fromEnv = import.meta.env.VITE_API_URL as string | undefined;
-  if (fromEnv !== undefined && fromEnv !== "") return fromEnv;
-  if (import.meta.env.DEV) return "http://localhost:4001";
-  return ""; // produção: mesma origem (proxy /api → api)
+  if (fromEnv !== undefined && fromEnv !== "") {
+    const trimmed = fromEnv.trim().replace(/\/$/, "");
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+      return trimmed;
+    }
+    return `https://${trimmed}`;
+  }
+  // Mesma origem: em dev o Vite faz proxy de /api → backend local.
+  return "";
 }
 
 const API_BASE = resolveApiBase();

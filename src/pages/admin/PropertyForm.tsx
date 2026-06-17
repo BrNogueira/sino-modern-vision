@@ -32,6 +32,8 @@ import {
   GarantiasAluguel,
   ZapImovelPhoto,
 } from "@/types/zapImoveis";
+import { safeSelectValue } from "@/lib/imovelNormalize";
+import { fromRow } from "@/lib/imovelMapper";
 
 type FormData = Omit<ZapImovel, "id" | "createdAt" | "updatedAt">;
 
@@ -323,18 +325,20 @@ const PropertyForm = () => {
 
   useEffect(() => {
     if (!isEditing || !id) return;
-    // Aguarda o carregamento dos imóveis antes de decidir; caso contrário,
-    // ao abrir a edição direto pela URL (ou recarregar a página) o contexto
-    // ainda está vazio e redirecionaria de volta indevidamente.
-    if (loading) return;
-    const existing = getProperty(id);
-    if (existing) {
-      const { id: _, createdAt, updatedAt, ...rest } = existing;
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.from("imoveis").select("*").eq("id", id).single();
+      if (cancelled) return;
+      if (error || !data) {
+        if (!loading) navigate("/admin/imoveis", { replace: true });
+        return;
+      }
+      const mapped = fromRow(data);
+      const { id: _id, createdAt, updatedAt, ...rest } = mapped;
       setForm(rest);
-    } else {
-      navigate("/admin/imoveis", { replace: true });
-    }
-  }, [id, isEditing, loading, getProperty, navigate]);
+    })();
+    return () => { cancelled = true; };
+  }, [id, isEditing, loading, navigate]);
 
   const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -535,7 +539,7 @@ const PropertyForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-1.5">
               <Label className="text-foreground text-sm">Tipo do Imóvel <span className="text-destructive">*</span></Label>
-              <Select value={form.tipoImovel} onValueChange={(v) => handleTipoChange(v as TipoImovel)}>
+              <Select value={safeSelectValue(form.tipoImovel, tipoImovelOptions)} onValueChange={(v) => handleTipoChange(v as TipoImovel)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {tipoImovelOptions.map((t) => (
@@ -546,8 +550,8 @@ const PropertyForm = () => {
             </div>
             <div className="space-y-1.5">
               <Label className="text-foreground text-sm">Subtipo <span className="text-destructive">*</span></Label>
-              <Select value={form.subTipoImovel} onValueChange={(v) => set("subTipoImovel", v as SubTipoImovel)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Select value={safeSelectValue(form.subTipoImovel, subTipoByTipo[form.tipoImovel] ?? [])} onValueChange={(v) => set("subTipoImovel", v as SubTipoImovel)}>
+                <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                 <SelectContent>
                   {(subTipoByTipo[form.tipoImovel] ?? []).map((s) => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>

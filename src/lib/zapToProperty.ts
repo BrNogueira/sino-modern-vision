@@ -1,6 +1,7 @@
 import type { Property } from "@/data/properties";
 import type { ZapImovel } from "@/types/zapImoveis";
-import propertyPlaceholder from "@/assets/property-casa.jpg";
+import { ensureStringArray } from "@/lib/imovelNormalize";
+import { propertyPlaceholder, resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
 
 const formatBRL = (n?: number) =>
   typeof n === "number" && !isNaN(n)
@@ -15,7 +16,7 @@ const transactionTypeFromOferta = (
 ): Property["transactionType"] => {
   // A modalidade marcada no admin é a intenção explícita do usuário e tem
   // prioridade sobre o tipoOferta/preços ao definir venda × aluguel.
-  const m = Array.isArray(modalidade) ? modalidade : [];
+  const m = ensureStringArray(modalidade);
   const hasVenda = m.includes("venda");
   const hasAluguel = m.includes("aluguel");
   if (hasVenda && hasAluguel) return "venda/aluguel";
@@ -31,7 +32,8 @@ const transactionTypeFromOferta = (
 export const zapToProperty = (z: ZapImovel): Property => {
   const fotosUrls = (Array.isArray(z.fotos) ? z.fotos : [])
     .map((f: any) => (typeof f === "string" ? f : f?.url))
-    .filter(Boolean) as string[];
+    .filter(Boolean)
+    .map((u: string) => resolvePhotoUrl(u));
 
   const cover = fotosUrls[0] || propertyPlaceholder;
   const gallery = fotosUrls.slice(1);

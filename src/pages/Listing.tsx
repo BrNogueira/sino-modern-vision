@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { LayoutGrid, List, ArrowUpDown, Home, ArrowLeft } from "lucide-react";
+import { LayoutGrid, List, ArrowUpDown, Home, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
@@ -11,12 +11,18 @@ import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { useCategorias } from "@/contexts/CategoriasContext";
 import { zapToProperty } from "@/lib/zapToProperty";
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 12;
+
+function pageWindow(current: number, total: number): number[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = new Set<number>([1, total, current, current - 1, current + 1]);
+  return [...pages].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b);
+}
 
 const Listing = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { properties: dbProperties } = useAdminProperties();
+  const { properties: dbProperties, loading } = useAdminProperties();
   const { categorias } = useCategorias();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -27,14 +33,18 @@ const Listing = () => {
     ? categorias.find((c) => c.slug === categoriaSlug)
     : null;
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchParams, categoriaFiltro?.id, sortOrder]);
+
   const allProperties = useMemo(() => {
     let dbList = dbProperties.filter((p) => p.ativo);
     if (categoriaFiltro) {
       dbList = dbList.filter((p) => p.categoriaId === categoriaFiltro.id);
     }
     const fromDb = dbList.map(zapToProperty);
-    // When filtering by categoria, only show DB properties (mocks têm categoria)
-    return categoriaFiltro ? fromDb : [...fromDb, ...staticProperties];
+    if (fromDb.length > 0) return fromDb;
+    return categoriaFiltro ? [] : staticProperties;
   }, [dbProperties, categoriaFiltro]);
 
   const filtered = useMemo(() => {
@@ -83,7 +93,6 @@ const Listing = () => {
       );
     }
 
-    // Sort
     result.sort((a, b) =>
       sortOrder === "asc" ? a.price - b.price : b.price - a.price
     );
@@ -91,17 +100,18 @@ const Listing = () => {
     return result;
   }, [searchParams, sortOrder, allProperties]);
 
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
   const paginated = filtered.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (safePage - 1) * ITEMS_PER_PAGE,
+    safePage * ITEMS_PER_PAGE
   );
+  const visiblePages = pageWindow(safePage, totalPages);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
         <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
           <Link
@@ -122,26 +132,23 @@ const Listing = () => {
       </div>
 
       <div className="container mx-auto px-4 pt-8 pb-16">
-        {/* Results Bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3 gap-4">
           <div>
             <span className="text-lg font-bold text-foreground">{filtered.length}</span>
             <span className="text-muted-foreground ml-2">imóveis encontrados</span>
-            <p className="text-xs text-muted-foreground">Resultados para sua busca</p>
+            <p className="text-xs text-muted-foreground">
+              {loading ? "Carregando imóveis..." : `Página ${safePage} de ${totalPages}`}
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Sort */}
             <button
               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
               className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              title={sortOrder === "asc" ? "Menor preço primeiro" : "Maior preço primeiro"}
             >
               <ArrowUpDown className="w-4 h-4" />
               Preço {sortOrder === "asc" ? "↑" : "↓"}
             </button>
-
-            {/* View Toggle */}
             <button
               onClick={() => setViewMode("grid")}
               className={`p-2 rounded transition-colors ${
@@ -161,7 +168,6 @@ const Listing = () => {
           </div>
         </div>
 
-        {/* Property Grid/List */}
         {paginated.length > 0 ? (
           <div
             className={
@@ -171,32 +177,58 @@ const Listing = () => {
             }
           >
             {paginated.map((property) => (
-              <PropertyCard key={property.code} property={property} />
+              <PropertyCard key={property.id ?? property.code} property={property} />
             ))}
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground">Nenhum imóvel encontrado</p>
-            <p className="text-sm text-muted-foreground mt-2">Tente ajustar os filtros de busca</p>
+            <p className="text-xl text-muted-foreground">
+              {loading ? "Carregando imóveis..." : "Nenhum imóvel encontrado"}
+            </p>
+            {!loading && (
+              <p className="text-sm text-muted-foreground mt-2">Tente ajustar os filtros de busca</p>
+            )}
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-10">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-10 h-10 rounded-lg text-sm font-semibold transition-colors ${
-                  currentPage === page
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card border border-border text-foreground hover:bg-muted"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-10">
+            <button
+              type="button"
+              disabled={safePage <= 1}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              className="h-10 px-3 rounded-lg border border-border bg-card disabled:opacity-40 flex items-center gap-1"
+            >
+              <ChevronLeft className="w-4 h-4" /> Anterior
+            </button>
+            {visiblePages.map((page, idx) => {
+              const prev = visiblePages[idx - 1];
+              const gap = prev != null && page - prev > 1;
+              return (
+                <span key={page} className="flex items-center gap-2">
+                  {gap && <span className="text-muted-foreground px-1">…</span>}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-10 h-10 rounded-lg text-sm font-semibold transition-colors ${
+                      safePage === page
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-card border border-border text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                </span>
+              );
+            })}
+            <button
+              type="button"
+              disabled={safePage >= totalPages}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              className="h-10 px-3 rounded-lg border border-border bg-card disabled:opacity-40 flex items-center gap-1"
+            >
+              Próxima <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
         )}
       </div>

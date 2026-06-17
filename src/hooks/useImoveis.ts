@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Property } from "@/data/properties";
+import { resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
 
 const supabaseAny = supabase as any;
 
@@ -93,8 +94,8 @@ export function toProperty(imovel: ImovelDB, imagens?: ImovelImagem[]): Property
     ?? (imovel.dormitorios ? parseInt(imovel.dormitorios) || undefined : undefined);
 
   return {
-    code:               String(imovel.legacy_id ?? imovel.id),
-    image:              mainImage,
+    code:               String(imovel.cod_referencia ?? imovel.legacy_id ?? imovel.id),
+    image:              resolvePhotoUrl(mainImage),
     title:              imovel.titulo ?? "",
     type:               imovel.tipo ?? "",
     transactionType:    (imovel.transacao as Property["transactionType"]) ?? "venda",
@@ -117,12 +118,12 @@ export function toProperty(imovel: ImovelDB, imagens?: ImovelImagem[]): Property
     exclusive:          imovel.exclusivo,
     salas:              imovel.salas ?? undefined,
     lavabos:            imovel.lavabos ?? undefined,
-    gallery:            gallery.length > 0 ? gallery : undefined,
-    acabamentos:        imovel.acabamentos
+    gallery:            gallery.length > 0 ? gallery.map((u) => resolvePhotoUrl(u)) : undefined,
+    acabamentos:        typeof imovel.acabamentos === "string"
                           ? imovel.acabamentos.split(";").map((s) => s.trim()).filter(Boolean)
                           : undefined,
     amenidades:         [],
-    aceitaFinanciamento: imovel.apto_financiamento
+    aceitaFinanciamento: typeof imovel.apto_financiamento === "string"
                           ? imovel.apto_financiamento.toLowerCase().startsWith("sim")
                           : undefined,
     description:        imovel.descricao ?? undefined,
@@ -180,7 +181,7 @@ export function useImoveis(filter: ImoveisFilter = {}) {
       if (filter.precoMax != null) query = query.lte("preco", filter.precoMax);
       if (filter.destaque != null) query = query.eq("destaque", filter.destaque);
       if (filter.lancamento != null) query = query.eq("lancamento", filter.lancamento);
-      if (filter.codigo)          query = query.eq("legacy_id", parseInt(filter.codigo));
+      if (filter.codigo)          query = query.eq("cod_referencia", filter.codigo);
 
       if (filter.q) {
         query = query.or(

@@ -12,17 +12,30 @@ export const pool = env.DATABASE_URL
       // DECIMAL volta como number (não string) → preco/lat/long batem com o front.
       decimalNumbers: true,
     })
-  : mysql.createPool({
-      host: env.MYSQL_HOST,
-      port: env.MYSQL_PORT,
-      user: env.MYSQL_USER,
-      password: env.MYSQL_PASSWORD,
-      database: env.MYSQL_DATABASE,
-      connectionLimit: 15,
-      charset: "utf8mb4",
-      timezone: "Z",
-      decimalNumbers: true,
-    });
+  : mysql.createPool(
+      env.MYSQL_SOCKET
+        ? {
+            socketPath: env.MYSQL_SOCKET,
+            user: env.MYSQL_USER,
+            password: env.MYSQL_PASSWORD,
+            database: env.MYSQL_DATABASE,
+            connectionLimit: 15,
+            charset: "utf8mb4",
+            timezone: "Z",
+            decimalNumbers: true,
+          }
+        : {
+            host: env.MYSQL_HOST,
+            port: env.MYSQL_PORT,
+            user: env.MYSQL_USER,
+            password: env.MYSQL_PASSWORD,
+            database: env.MYSQL_DATABASE,
+            connectionLimit: 15,
+            charset: "utf8mb4",
+            timezone: "Z",
+            decimalNumbers: true,
+          },
+    );
 
 /** Nome do banco conectado (para consultas ao information_schema). */
 export const DB_NAME =

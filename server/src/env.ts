@@ -11,6 +11,7 @@ const EnvSchema = z.object({
   MYSQL_USER: z.string().default("root"),
   MYSQL_PASSWORD: z.string().default(""),
   MYSQL_DATABASE: z.string().default("sino"),
+  MYSQL_SOCKET: z.string().optional(),
 
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET deve ter pelo menos 32 chars"),
   AUTH_TRUSTED_ORIGINS: z.string().default("http://localhost:8080"),

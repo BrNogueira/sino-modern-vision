@@ -1,4 +1,7 @@
 import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
@@ -35,6 +38,18 @@ app.route("/api/rpc", rpcRouter);
 app.route("/api/feed", feedRouter);
 app.route("/api/storage", storageRouter);
 app.route("/api/admin", adminRouter);
+
+
+// Frontend estático (produção — app.js define STATIC_DIR)
+const staticDir = process.env.STATIC_DIR;
+if (staticDir && existsSync(staticDir)) {
+  app.get("/healthz", (c) => c.text("ok\n"));
+  app.use("/assets/*", serveStatic({ root: staticDir }));
+  app.get("*", serveStatic({
+    root: staticDir,
+    rewriteRequestPath: (p) => (p === "/" || !path.extname(p) ? "/index.html" : p),
+  }));
+}
 
 app.onError((err, c) => {
   logger.error({ err }, "request_error");
