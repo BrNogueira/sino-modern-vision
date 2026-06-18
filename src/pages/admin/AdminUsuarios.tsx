@@ -130,7 +130,9 @@ const AdminUsuarios = () => {
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <>
+        {/* Desktop: table */}
+        <div className="hidden md:block bg-card border border-border rounded-xl overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -184,6 +186,45 @@ const AdminUsuarios = () => {
             </TableBody>
           </Table>
         </div>
+
+        {/* Mobile: cards */}
+        <div className="md:hidden space-y-3">
+          {users.length === 0 ? (
+            <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
+              Nenhum usuário cadastrado.
+            </div>
+          ) : (
+            users.map(user => (
+              <div key={user.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground truncate">{user.full_name || "—"}</p>
+                    <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+                  </div>
+                  <Badge variant={user.active ? "default" : "outline"} className="text-xs shrink-0">
+                    {user.active ? "Ativo" : "Inativo"}
+                  </Badge>
+                </div>
+                <div className="flex gap-1 flex-wrap">
+                  {user.roles.length > 0 ? user.roles.map(r => (
+                    <Badge key={r} variant="secondary" className="text-xs">{ROLE_LABELS[r]}</Badge>
+                  )) : (
+                    <span className="text-xs text-muted-foreground">Sem perfil</span>
+                  )}
+                </div>
+                <div className="flex gap-2 border-t border-border pt-3">
+                  <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => handleEditRoles(user)}>
+                    <Pencil className="w-3.5 h-3.5" /> Perfis
+                  </Button>
+                  <Button size="sm" variant="outline" className="flex-1" onClick={() => handleToggleActive(user)}>
+                    {user.active ? "Desativar" : "Ativar"}
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        </>
       )}
 
       {/* Edit roles dialog */}

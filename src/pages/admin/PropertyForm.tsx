@@ -176,7 +176,7 @@ const PhotoUploadSection = ({
   const nextSlide = () => setCarouselIndex((i) => (i + 1) % photos.length);
 
   return (
-    <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+    <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
       <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
         📷 Fotos do Imóvel
         <span className="text-sm font-normal text-muted-foreground ml-2">
@@ -499,7 +499,7 @@ const PropertyForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Identificação */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             📋 Identificação
           </h2>
@@ -532,7 +532,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Classificação */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             🏷️ Classificação
           </h2>
@@ -609,7 +609,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Endereço */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             📍 Endereço
           </h2>
@@ -643,7 +643,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Preços */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             💰 Preços e Valores <span className="text-sm font-normal text-muted-foreground">(ao menos um obrigatório)</span>
           </h2>
@@ -656,7 +656,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Áreas e Quantidades */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             📐 Áreas e Quantidades
           </h2>
@@ -673,7 +673,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Descrição */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             📝 Descrição <span className="text-destructive">*</span>
           </h2>
@@ -697,7 +697,7 @@ const PropertyForm = () => {
         />
 
         {/* Vídeo e Tour */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             🎥 Vídeo e Tour Virtual
           </h2>
@@ -708,7 +708,7 @@ const PropertyForm = () => {
         </section>
 
         {/* ====== SISTEMA DE ÍCONES ====== */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-6">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-6">
           <div className="border-b border-border pb-2">
             <h2 className="text-lg font-semibold text-foreground">
               📋 Características do Imóvel
@@ -763,7 +763,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Garantias */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             🔐 Garantias (Aluguel)
           </h2>
@@ -781,7 +781,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Proprietário */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             👤 Proprietário
           </h2>
@@ -851,7 +851,7 @@ const PropertyForm = () => {
         </section>
 
         {/* Controle */}
-        <section className="bg-card rounded-xl border border-border p-6 space-y-4">
+        <section className="bg-card rounded-xl border border-border p-4 md:p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
             ⚙️ Controle Interno
           </h2>
@@ -872,11 +872,11 @@ const PropertyForm = () => {
         </section>
 
         {/* Submit */}
-        <div className="flex items-center justify-end gap-3 pb-8">
-          <Button variant="outline" type="button" onClick={() => navigate("/admin/imoveis")}>
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pb-8">
+          <Button variant="outline" type="button" className="w-full sm:w-auto" onClick={() => navigate("/admin/imoveis")}>
             Cancelar
           </Button>
-          <Button type="submit" size="lg" disabled={submitting}>
+          <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
             <Save className="w-4 h-4 mr-2" />
             {submitting ? "Salvando..." : isEditing ? "Salvar Alterações" : "Cadastrar Imóvel"}
           </Button>

@@ -204,6 +204,42 @@ const AdminCorretorImoveis = () => {
   const rangeStart = totalItems === 0 ? 0 : (safePage - 1) * ITEMS_PER_PAGE + 1;
   const rangeEnd = Math.min(safePage * ITEMS_PER_PAGE, totalItems);
 
+  const priceLabel = (p: ZapImovel) =>
+    p.precoVenda
+      ? `R$ ${p.precoVenda.toLocaleString("pt-BR")}`
+      : p.precoAluguel
+      ? `R$ ${p.precoAluguel.toLocaleString("pt-BR")}/mês`
+      : "—";
+
+  // Shared action buttons (desktop table + mobile cards)
+  const RowActions = ({ p, slug }: { p: ZapImovel; slug: string }) => (
+    <>
+      <Button variant="ghost" size="icon" asChild title="Visualizar no site">
+        <Link to={`/imovel/${slug}-${p.id}`} target="_blank">
+          <ExternalLink className="w-4 h-4" />
+        </Link>
+      </Button>
+      <Button variant="ghost" size="icon" asChild title="Editar">
+        <Link to={`/admin/imoveis/editar/${p.id}`}>
+          <Pencil className="w-4 h-4" />
+        </Link>
+      </Button>
+      <Button variant="ghost" size="icon" disabled={busyId === p.id} onClick={() => handleToggleActive(p.id, p.ativo)} title={p.ativo ? "Desativar" : "Ativar"}>
+        <Power className={`w-4 h-4 ${p.ativo ? "text-primary" : "text-muted-foreground"}`} />
+      </Button>
+      <Button variant="ghost" size="icon" disabled={busyId === p.id} onClick={() => setDeleteId(p.id)} title="Excluir" className="text-destructive hover:text-destructive hover:bg-destructive/10">
+        <Trash2 className="w-4 h-4" />
+      </Button>
+    </>
+  );
+
+  const StatusPill = ({ ativo }: { ativo: boolean }) => (
+    <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${ativo ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${ativo ? "bg-primary" : "bg-muted-foreground"}`} />
+      {ativo ? "Ativo" : "Inativo"}
+    </span>
+  );
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -271,7 +307,8 @@ const AdminCorretorImoveis = () => {
           </div>
         ) : (
           <>
-            <Table>
+            {/* Desktop: table */}
+            <Table className="hidden md:table">
               <TableHeader>
                 <TableRow>
                   <TableHead>Imóvel</TableHead>
@@ -322,63 +359,14 @@ const AdminCorretorImoveis = () => {
                         {p.codigoImovel}
                       </TableCell>
                       <TableCell>
-                        <p className="text-sm font-semibold text-primary whitespace-nowrap">
-                          {p.precoVenda
-                            ? `R$ ${p.precoVenda.toLocaleString("pt-BR")}`
-                            : p.precoAluguel
-                              ? `R$ ${p.precoAluguel.toLocaleString("pt-BR")}/mês`
-                              : "—"}
-                        </p>
+                        <p className="text-sm font-semibold text-primary whitespace-nowrap">{priceLabel(p)}</p>
                       </TableCell>
                       <TableCell>
-                        <span
-                          className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${
-                            p.ativo
-                              ? "bg-primary/10 text-primary"
-                              : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full ${
-                              p.ativo ? "bg-primary" : "bg-muted-foreground"
-                            }`}
-                          />
-                          {p.ativo ? "Ativo" : "Inativo"}
-                        </span>
+                        <StatusPill ativo={p.ativo} />
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center justify-end gap-1">
-                          <Button variant="ghost" size="icon" asChild title="Visualizar no site">
-                            <Link to={`/imovel/${slug}-${p.id}`} target="_blank">
-                              <ExternalLink className="w-4 h-4" />
-                            </Link>
-                          </Button>
-                          <Button variant="ghost" size="icon" asChild title="Editar">
-                            <Link to={`/admin/imoveis/editar/${p.id}`}>
-                              <Pencil className="w-4 h-4" />
-                            </Link>
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={busyId === p.id}
-                            onClick={() => handleToggleActive(p.id, p.ativo)}
-                            title={p.ativo ? "Desativar" : "Ativar"}
-                          >
-                            <Power
-                              className={`w-4 h-4 ${p.ativo ? "text-primary" : "text-muted-foreground"}`}
-                            />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={busyId === p.id}
-                            onClick={() => setDeleteId(p.id)}
-                            title="Excluir"
-                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                          <RowActions p={p} slug={slug} />
                         </div>
                       </TableCell>
                     </TableRow>
@@ -386,6 +374,43 @@ const AdminCorretorImoveis = () => {
                 })}
               </TableBody>
             </Table>
+
+            {/* Mobile: cards */}
+            <div className="md:hidden divide-y divide-border">
+              {properties.map((p) => {
+                const cover = coverUrl(p.fotos);
+                const slug = slugify(p.tituloImovel || p.codigoImovel);
+                return (
+                  <div key={p.id} className="p-4 space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden flex-shrink-0">
+                        {cover ? (
+                          <img src={cover} alt={p.tituloImovel} className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Building2 className="w-5 h-5 text-muted-foreground/40" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-foreground text-sm truncate">{p.tituloImovel}</p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {p.bairro ? `${p.bairro}, ` : ""}{p.cidade}/{p.estado}
+                        </p>
+                        <p className="text-xs font-mono text-muted-foreground">{p.codigoImovel}</p>
+                      </div>
+                      <StatusPill ativo={p.ativo} />
+                    </div>
+                    <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
+                      <span className="text-sm font-semibold text-primary whitespace-nowrap">{priceLabel(p)}</span>
+                      <div className="flex items-center gap-1">
+                        <RowActions p={p} slug={slug} />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
             {totalPages > 1 && (
               <div className="px-6 py-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">

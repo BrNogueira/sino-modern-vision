@@ -446,10 +446,21 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
+
+        {/* Favoritos — mobile only, in normal flow (no fragile pixel offsets) */}
+        <div className="md:hidden flex justify-center px-4 pb-10 -mt-2">
+          <Link
+            to="/favoritos"
+            className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"
+          >
+            <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+            <span className="font-bold text-xl">Favoritos</span>
+          </Link>
+        </div>
       </div>
 
-      {/* Favoritos link below search bar */}
-      <div className="hero-favorites z-[8] flex justify-center w-full absolute md:top-[770px] top-[1150px] mb-8" style={{ height: "35px" }}>
+      {/* Favoritos link below search bar — desktop only (absolute positioned) */}
+      <div className="hero-favorites z-[8] hidden md:flex justify-center w-full absolute md:top-[770px] top-[1150px] mb-8" style={{ height: "35px" }}>
         <Link
           to="/favoritos"
           className="flex items-center gap-2 text-foreground hover:opacity-70 transition-colors"

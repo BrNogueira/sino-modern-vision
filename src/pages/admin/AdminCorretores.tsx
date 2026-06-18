@@ -56,7 +56,9 @@ const AdminCorretores = () => {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
       ) : (
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <>
+        {/* Desktop: table */}
+        <div className="hidden md:block bg-card border border-border rounded-xl overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -94,6 +96,39 @@ const AdminCorretores = () => {
             </TableBody>
           </Table>
         </div>
+
+        {/* Mobile: cards */}
+        <div className="md:hidden space-y-3">
+          {corretores.length === 0 ? (
+            <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
+              Nenhum corretor cadastrado.
+            </div>
+          ) : (
+            corretores.map(c => (
+              <div key={c.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground truncate">{c.full_name}</p>
+                    {c.creci && <p className="text-xs text-muted-foreground">CRECI: {c.creci}</p>}
+                  </div>
+                  <Badge variant="default" className="text-xs shrink-0">Ativo</Badge>
+                </div>
+                {(c.phone || c.email) && (
+                  <div className="space-y-1">
+                    {c.phone && <p className="text-sm flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />{c.phone}</p>}
+                    {c.email && <p className="text-sm flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" /><span className="truncate">{c.email}</span></p>}
+                  </div>
+                )}
+                {c.roles.length > 0 && (
+                  <div className="flex gap-1 flex-wrap border-t border-border pt-3">
+                    {c.roles.map(r => <Badge key={r} variant="secondary" className="text-xs">{ROLE_LABELS[r] || r}</Badge>)}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+        </>
       )}
     </div>
   );

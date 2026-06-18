@@ -41,7 +41,7 @@ const generateSlug = (title: string) =>
   title
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
@@ -170,6 +170,69 @@ const AdminProperties = () => {
   const rangeEnd = Math.min(safePage * ADMIN_IMOVEIS_PAGE_SIZE, totalItems);
   const headerTotal = debouncedSearch ? totalItems : portfolioTotal || totalItems;
 
+  const priceLabel = (p: ZapImovel) =>
+    p.precoVenda
+      ? `R$ ${p.precoVenda.toLocaleString("pt-BR")}`
+      : p.precoAluguel
+      ? `R$ ${p.precoAluguel.toLocaleString("pt-BR")}/mês`
+      : "—";
+
+  // Shared between desktop table and mobile cards (avoids duplicated logic)
+  const StatusButton = ({ p }: { p: ZapImovel }) => (
+    <button
+      onClick={() => toggleAtivo(p.id, p.ativo)}
+      className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full transition-colors ${
+        p.ativo
+          ? "bg-primary/10 text-primary hover:bg-primary/20"
+          : "bg-muted text-muted-foreground hover:bg-muted/80"
+      }`}
+    >
+      {p.ativo ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+      {p.ativo ? "Ativo" : "Inativo"}
+    </button>
+  );
+
+  const ActionButtons = ({ p }: { p: ZapImovel }) => (
+    <>
+      <Button variant="ghost" size="icon" asChild title="Visualizar imóvel">
+        <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
+          <Eye className="w-4 h-4" />
+        </Link>
+      </Button>
+      <Button variant="ghost" size="icon" asChild title="Editar na página">
+        <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
+          <ExternalLink className="w-4 h-4" />
+        </Link>
+      </Button>
+      <Button variant="ghost" size="icon" asChild title="Editar no formulário">
+        <Link to={`/admin/imoveis/editar/${p.id}`}>
+          <Pencil className="w-4 h-4" />
+        </Link>
+      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir imóvel?</AlertDialogTitle>
+            <AlertDialogDescription>
+              O imóvel "{p.tituloImovel}" será removido permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={() => handleDelete(p.id, p.tituloImovel)}>
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -210,18 +273,16 @@ const AdminProperties = () => {
                 : `Exibindo ${rangeStart}–${rangeEnd} de ${totalItems} imóveis`}
           </span>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* Desktop: table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/30">
                 <th className="text-left px-4 py-3 text-muted-foreground font-medium">Código</th>
                 <th className="text-left px-4 py-3 text-muted-foreground font-medium">Título</th>
-                <th className="text-left px-4 py-3 text-muted-foreground font-medium hidden md:table-cell">
-                  Tipo
-                </th>
-                <th className="text-left px-4 py-3 text-muted-foreground font-medium hidden md:table-cell">
-                  Cidade
-                </th>
+                <th className="text-left px-4 py-3 text-muted-foreground font-medium hidden md:table-cell">Tipo</th>
+                <th className="text-left px-4 py-3 text-muted-foreground font-medium hidden md:table-cell">Cidade</th>
                 <th className="text-left px-4 py-3 text-muted-foreground font-medium">Preço</th>
                 <th className="text-center px-4 py-3 text-muted-foreground font-medium">Status</th>
                 <th className="text-right px-4 py-3 text-muted-foreground font-medium">Ações</th>
@@ -242,84 +303,18 @@ const AdminProperties = () => {
                 </tr>
               ) : (
                 properties.map((p) => (
-                  <tr
-                    key={p.id}
-                    className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors"
-                  >
-                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                      {p.codigoImovel}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-foreground max-w-[200px] truncate">
-                      {p.tituloImovel}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
-                      {p.tipoImovel}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
-                      {p.cidade}
-                    </td>
-                    <td className="px-4 py-3 font-semibold text-primary">
-                      {p.precoVenda
-                        ? `R$ ${p.precoVenda.toLocaleString("pt-BR")}`
-                        : p.precoAluguel
-                          ? `R$ ${p.precoAluguel.toLocaleString("pt-BR")}/mês`
-                          : "—"}
-                    </td>
+                  <tr key={p.id} className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{p.codigoImovel}</td>
+                    <td className="px-4 py-3 font-medium text-foreground max-w-[200px] truncate">{p.tituloImovel}</td>
+                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{p.tipoImovel}</td>
+                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{p.cidade}</td>
+                    <td className="px-4 py-3 font-semibold text-primary">{priceLabel(p)}</td>
                     <td className="px-4 py-3 text-center">
-                      <button
-                        onClick={() => toggleAtivo(p.id, p.ativo)}
-                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full transition-colors ${
-                          p.ativo
-                            ? "bg-primary/10 text-primary hover:bg-primary/20"
-                            : "bg-muted text-muted-foreground hover:bg-muted/80"
-                        }`}
-                      >
-                        {p.ativo ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                        {p.ativo ? "Ativo" : "Inativo"}
-                      </button>
+                      <StatusButton p={p} />
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" asChild title="Visualizar imóvel">
-                          <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" asChild title="Editar na página">
-                          <Link to={`/imovel/${generateSlug(p.tituloImovel)}`}>
-                            <ExternalLink className="w-4 h-4" />
-                          </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" asChild title="Editar no formulário">
-                          <Link to={`/admin/imoveis/editar/${p.id}`}>
-                            <Pencil className="w-4 h-4" />
-                          </Link>
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Excluir imóvel?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                O imóvel &quot;{p.tituloImovel}&quot; será removido permanentemente.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(p.id, p.tituloImovel)}>
-                                Excluir
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                        <ActionButtons p={p} />
                       </div>
                     </td>
                   </tr>
@@ -327,6 +322,38 @@ const AdminProperties = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile: cards */}
+        <div className="md:hidden divide-y divide-border">
+          {loading ? (
+            <div className="text-center py-10 text-muted-foreground text-sm">Carregando imóveis…</div>
+          ) : properties.length === 0 ? (
+            <div className="text-center py-10 text-muted-foreground text-sm">Nenhum imóvel encontrado.</div>
+          ) : (
+            properties.map((p) => (
+              <div key={p.id} className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-mono text-xs text-muted-foreground">{p.codigoImovel}</p>
+                    <p className="font-medium text-foreground truncate">{p.tituloImovel}</p>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {[p.tipoImovel, p.cidade].filter(Boolean).join(" · ") || "—"}
+                    </p>
+                  </div>
+                  <div className="shrink-0">
+                    <StatusButton p={p} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
+                  <span className="font-semibold text-primary">{priceLabel(p)}</span>
+                  <div className="flex items-center gap-1">
+                    <ActionButtons p={p} />
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {!loading && totalPages > 1 && (

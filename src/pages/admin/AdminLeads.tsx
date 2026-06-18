@@ -175,7 +175,9 @@ const AdminLeads = () => {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
       ) : (
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <>
+        {/* Desktop: table */}
+        <div className="hidden md:block bg-card border border-border rounded-xl overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -227,6 +229,62 @@ const AdminLeads = () => {
             </TableBody>
           </Table>
         </div>
+
+        {/* Mobile: cards */}
+        <div className="md:hidden space-y-3">
+          {filtered.length === 0 ? (
+            <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
+              Nenhum lead encontrado.
+            </div>
+          ) : (
+            filtered.map(item => (
+              <div key={item.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground truncate">{item.nome}</p>
+                    <p className="text-xs text-muted-foreground capitalize">
+                      {item.origem} · {new Date(item.created_at).toLocaleDateString("pt-BR")}
+                    </p>
+                  </div>
+                  <Select value={item.status} onValueChange={v => handleStatusChange(item.id, v)}>
+                    <SelectTrigger className="h-7 text-xs w-auto border-0 p-0 shrink-0">
+                      <SelectValue>{getStatusBadge(item.status)}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUS_OPTIONS.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {(item.telefone || item.email || item.interesse) && (
+                  <div className="space-y-1">
+                    {item.telefone && (
+                      <p className="text-sm flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />{item.telefone}</p>
+                    )}
+                    {item.email && (
+                      <p className="text-sm flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" /><span className="truncate">{item.email}</span></p>
+                    )}
+                    {item.interesse && <p className="text-sm text-muted-foreground">{item.interesse}</p>}
+                  </div>
+                )}
+                {(canEdit("leads") || canDelete("leads")) && (
+                  <div className="flex gap-2 border-t border-border pt-3">
+                    {canEdit("leads") && (
+                      <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => handleEdit(item)}>
+                        <Pencil className="w-3.5 h-3.5" /> Editar
+                      </Button>
+                    )}
+                    {canDelete("leads") && (
+                      <Button size="sm" variant="outline" className="flex-1 gap-1 text-destructive" onClick={() => handleDelete(item.id)}>
+                        <Trash2 className="w-3.5 h-3.5" /> Excluir
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+        </>
       )}
 
       {/* Dialog */}

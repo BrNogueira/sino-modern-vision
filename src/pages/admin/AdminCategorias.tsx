@@ -341,7 +341,9 @@ const AdminCategorias = () => {
             </Button>
           </div>
         ) : (
-          <Table>
+          <>
+          {/* Desktop: table */}
+          <Table className="hidden md:table">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-16">Ordem</TableHead>
@@ -440,6 +442,62 @@ const AdminCategorias = () => {
               ))}
             </TableBody>
           </Table>
+
+          {/* Mobile: cards */}
+          <div className="md:hidden divide-y divide-border">
+            {categorias.map((c, i) => (
+              <div key={c.id} className="p-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden flex-shrink-0">
+                    {c.fotoUrl ? (
+                      <img src={c.fotoUrl} alt={c.nome} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="w-5 h-5 text-muted-foreground/40" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-foreground text-sm">{c.nome}</p>
+                    {c.descricao && (
+                      <p className="text-xs text-muted-foreground line-clamp-2">{c.descricao}</p>
+                    )}
+                    <p className="text-xs font-mono text-muted-foreground mt-0.5">{c.slug}</p>
+                  </div>
+                  <span
+                    className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full shrink-0 ${
+                      c.ativo ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${c.ativo ? "bg-primary" : "bg-muted-foreground"}`} />
+                    {c.ativo ? "Ativa" : "Inativa"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 text-xs rounded-full bg-primary/10 text-primary font-medium">
+                      {countByCategoria(c.id)}
+                    </span>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" disabled={i === 0} onClick={() => move(i, -1)}>
+                      <ArrowUp className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" disabled={i === categorias.length - 1} onClick={() => move(i, 1)}>
+                      <ArrowDown className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="icon" onClick={() => openEdit(c)} title="Editar">
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => setDeleteId(c.id)} title="Excluir" className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          </>
         )}
       </div>
 

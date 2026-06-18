@@ -163,7 +163,9 @@ const AdminCondominios = () => {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
       ) : (
-        <div className="bg-card border border-border rounded-xl overflow-x-auto">
+        <>
+        {/* Desktop: table */}
+        <div className="hidden md:block bg-card border border-border rounded-xl overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -205,6 +207,60 @@ const AdminCondominios = () => {
             </TableBody>
           </Table>
         </div>
+
+        {/* Mobile: cards */}
+        <div className="md:hidden space-y-3">
+          {filtered.length === 0 ? (
+            <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
+              Nenhum condomínio encontrado.
+            </div>
+          ) : (
+            filtered.map(item => (
+              <div key={item.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground truncate">{item.nome}</p>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {item.bairro}{item.cidade ? `, ${item.cidade}` : ""}
+                    </p>
+                  </div>
+                  <Badge variant={item.ativo ? "default" : "outline"} className="text-xs shrink-0">
+                    {item.ativo ? "Ativo" : "Inativo"}
+                  </Badge>
+                </div>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between gap-2">
+                    <span className="text-muted-foreground">Síndico</span>
+                    <span className="text-foreground truncate">{item.sindico || "—"}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-muted-foreground">Unidades</span>
+                    <span className="text-foreground">{item.qtd_unidades}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-muted-foreground">Valor</span>
+                    <span className="text-foreground">R$ {Number(item.valor_condominio || 0).toLocaleString("pt-BR")}</span>
+                  </div>
+                </div>
+                {(canEdit("condominios") || canDelete("condominios")) && (
+                  <div className="flex gap-2 border-t border-border pt-3">
+                    {canEdit("condominios") && (
+                      <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => handleEdit(item)}>
+                        <Pencil className="w-3.5 h-3.5" /> Editar
+                      </Button>
+                    )}
+                    {canDelete("condominios") && (
+                      <Button size="sm" variant="outline" className="flex-1 gap-1 text-destructive" onClick={() => handleDelete(item.id)}>
+                        <Trash2 className="w-3.5 h-3.5" /> Excluir
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+        </>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

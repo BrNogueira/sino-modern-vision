@@ -3,11 +3,14 @@ import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 import SearchBar from "./SearchBar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isMobile = useIsMobile();
 
   const navLinks = [
     { label: "Início", href: "/" },
@@ -16,6 +19,7 @@ const Header = () => {
     { label: "Contato", href: "/contato" },
   ];
 
+  // Desktop overlay menu (unchanged behavior)
   const renderNavLinks = () => (
     <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
       {navLinks.map((link) => (
@@ -31,14 +35,34 @@ const Header = () => {
     </nav>
   );
 
-  const menuButton = (
-    <button
-      className="p-2 text-primary-foreground"
-      onClick={() => setIsMenuOpen(!isMenuOpen)}
-      aria-label="Menu"
-    >
-      {isMenuOpen ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
-    </button>
+  // Mobile drawer menu (Sheet) — slides in from the right, no fragile pixel offsets
+  const mobileMenu = (
+    <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+      <SheetContent
+        side="right"
+        className="w-[82vw] max-w-sm bg-primary text-primary-foreground border-0 p-0"
+      >
+        <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
+        <div className="flex items-center gap-3 px-5 py-5 border-b border-white/15">
+          <img src={logoSinos} alt="Sinos Imóveis" className="h-12 w-auto" />
+          <span className="text-sm font-medium text-primary-foreground/90 leading-tight">
+            <strong>15 anos</strong> realizando sonhos
+          </span>
+        </div>
+        <nav className="flex flex-col px-3 py-4 gap-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              to={link.href}
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center min-h-[52px] px-4 rounded-lg text-lg font-medium text-primary-foreground hover:bg-white/10 active:bg-white/15 transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </SheetContent>
+    </Sheet>
   );
 
   // ===== HOME HEADER =====
@@ -57,11 +81,21 @@ const Header = () => {
           </Link>
 
           <div className="flex items-center gap-6">
-            {menuButton}
+            <button
+              className="p-2 text-primary-foreground"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menu"
+            >
+              {isMenuOpen && !isMobile ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
+            </button>
           </div>
         </div>
 
-        {isMenuOpen && (
+        {/* Mobile: drawer */}
+        {isMobile && mobileMenu}
+
+        {/* Desktop: overlay (unchanged) */}
+        {!isMobile && isMenuOpen && (
           <div className="fixed inset-x-0 top-[180px] md:top-[400px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
             {renderNavLinks()}
           </div>
@@ -96,7 +130,7 @@ const Header = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
-            {isMenuOpen ? <X className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} /> : <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} />}
+            {isMenuOpen && !isMobile ? <X className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} /> : <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} />}
           </button>
         </div>
       </div>
@@ -106,7 +140,11 @@ const Header = () => {
         <SearchBar />
       </div>
 
-      {isMenuOpen && (
+      {/* Mobile: drawer */}
+      {isMobile && mobileMenu}
+
+      {/* Desktop: overlay (unchanged) */}
+      {!isMobile && isMenuOpen && (
         <div className="fixed inset-x-0 top-[220px] lg:top-[160px] bottom-0 bg-primary/95 z-[100] overflow-y-auto backdrop-blur-sm">
           {renderNavLinks()}
         </div>

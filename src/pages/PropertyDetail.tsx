@@ -373,11 +373,11 @@ const PropertyDetail = () => {
             {/* Description */}
             {property.description && (
               <div className="rounded-xl border border-border bg-card p-5">
-                <h3 className="font-bold text-foreground mb-2 text-3xl">
+                <h3 className="font-bold text-foreground mb-2 text-xl md:text-3xl">
                   Descrição do Imóvel
                 </h3>
                 <InlineEditField value={property.description || ""} field="Descrição" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("description", v)} type="textarea">
-                  <p className="text-muted-foreground leading-relaxed text-3xl">{property.description}</p>
+                  <p className="text-muted-foreground leading-relaxed text-base md:text-3xl">{property.description}</p>
                 </InlineEditField>
               </div>
             )}
@@ -385,8 +385,8 @@ const PropertyDetail = () => {
             {/* Fotos de Área de Uso Comum — max 4 thumbnails, own lightbox */}
             {hasFotosAreaComum && (
               <div>
-                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg text-3xl">
-                  <h3 className="font-bold uppercase tracking-wide text-3xl">Fotos de Área de Uso Comum</h3>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg text-lg md:text-3xl">
+                  <h3 className="font-bold uppercase tracking-wide text-lg md:text-3xl">Fotos de Área de Uso Comum</h3>
                 </div>
                 <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card">
                   <div className="flex gap-2">
@@ -405,7 +405,7 @@ const PropertyDetail = () => {
             {property.latitude && property.longitude && (hasRole("admin") || hasRole("corretor")) && (
               <div>
                 <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
-                  <h3 className="font-bold uppercase tracking-wide text-3xl">Localização no Mapa</h3>
+                  <h3 className="font-bold uppercase tracking-wide text-lg md:text-3xl">Localização no Mapa</h3>
                 </div>
                 <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
                   <PropertyMap properties={properties} highlightCode={property.code} className="h-[400px] w-full" />
@@ -424,17 +424,17 @@ const PropertyDetail = () => {
                 <div className="flex flex-col gap-4 bg-background p-[15px]">
                   {property.areaTerreno && (
                     <InlineEditField value={String(property.areaTerreno)} field="Área Terreno" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaTerreno", v)} type="number">
-                      <div className="w-full flex items-center justify-start text-3xl">
-                        <span className="flex items-center gap-2.5 min-w-[120px] text-3xl text-black font-normal"><LandPlot className="w-[18px] h-[18px] text-primary" /> terreno:</span>
-                        <span className="font-bold text-primary ml-auto text-3xl">{property.areaTerreno} m<sup className="text-[0.7em]">2</sup></span>
+                      <div className="w-full flex items-center justify-start text-base md:text-3xl">
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><LandPlot className="w-[18px] h-[18px] text-primary" /> terreno:</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaTerreno} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.areaConstruida && (
                     <InlineEditField value={String(property.areaConstruida)} field="Área Construída" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("areaConstruida", v)} type="number">
                       <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 min-w-[120px] text-3xl text-black font-normal"><Home className="w-[18px] h-[18px] text-primary" /> casa:</span>
-                        <span className="font-bold text-primary ml-auto text-3xl">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Home className="w-[18px] h-[18px] text-primary" /> casa:</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
@@ -454,58 +454,58 @@ const PropertyDetail = () => {
             {characteristics.length > 0 && (
               <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Características</h3>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 bg-background p-[15px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 bg-background p-[15px]">
                   {property.bedrooms != null && (
                     <InlineEditField value={String(property.bedrooms)} field="Quartos" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("bedrooms", v)} type="number">
-                      <div className="flex items-center gap-2 py-0.5 text-3xl">
+                      <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
                         <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         <Bed className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-3xl">{property.bedrooms} {property.suites ? `quartos (${property.suites} suíte${(property.suites ?? 0) > 1 ? "s" : ""})` : "quartos"}</span>
+                        <span className="text-foreground text-base md:text-3xl">{property.bedrooms} {property.suites ? `quartos (${property.suites} suíte${(property.suites ?? 0) > 1 ? "s" : ""})` : "quartos"}</span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.suites != null && (
                     <InlineEditField value={String(property.suites)} field="Suítes" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("suites", v)} type="number">
-                      <div className="flex items-center gap-2 py-0.5 text-3xl">
+                      <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
                         <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         <Bed className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-3xl">{property.suites} suítes</span>
+                        <span className="text-foreground text-base md:text-3xl">{property.suites} suítes</span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.salas != null && (
                     <InlineEditField value={String(property.salas)} field="Salas" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("salas", v)} type="number">
-                      <div className="flex items-center gap-2 py-0.5 text-3xl">
+                      <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
                         <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         <Sofa className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-3xl">{property.salas} {(property.salas ?? 0) > 1 ? "salas" : "sala"}</span>
+                        <span className="text-foreground text-base md:text-3xl">{property.salas} {(property.salas ?? 0) > 1 ? "salas" : "sala"}</span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.bathrooms != null && (
                     <InlineEditField value={String(property.bathrooms)} field="Banheiros" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("bathrooms", v)} type="number">
-                      <div className="flex items-center gap-2 py-0.5 text-3xl">
+                      <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
                         <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         <Bath className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-3xl">{property.bathrooms} banheiros</span>
+                        <span className="text-foreground text-base md:text-3xl">{property.bathrooms} banheiros</span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.parking != null && (
                     <InlineEditField value={String(property.parking)} field="Garagem" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("parking", v)} type="number">
-                      <div className="flex items-center gap-2 py-0.5 text-3xl">
+                      <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
                         <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         <Car className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-3xl">{property.parking} garagem</span>
+                        <span className="text-foreground text-base md:text-3xl">{property.parking} garagem</span>
                       </div>
                     </InlineEditField>
                   )}
                   {property.lavabos != null && (
                     <InlineEditField value={String(property.lavabos)} field="Lavabos" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("lavabos", v)} type="number">
-                      <div className="flex items-center gap-2 py-0.5 text-3xl">
+                      <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
                         <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         <Droplets className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-3xl">{property.lavabos} {(property.lavabos ?? 0) > 1 ? "lavabos" : "lavabo"}</span>
+                        <span className="text-foreground text-base md:text-3xl">{property.lavabos} {(property.lavabos ?? 0) > 1 ? "lavabos" : "lavabo"}</span>
                       </div>
                     </InlineEditField>
                   )}
@@ -522,8 +522,8 @@ const PropertyDetail = () => {
                     <div className="flex flex-col gap-1.5">
                       {property.acabamentos!.map((item, i) => (
                         <div key={i} className="flex items-start gap-2">
-                          <span className="text-primary mt-0.5 font-bold text-3xl">—</span>
-                          <span className="text-foreground text-3xl">{item}</span>
+                          <span className="text-primary mt-0.5 font-bold text-base md:text-3xl">—</span>
+                          <span className="text-foreground text-base md:text-3xl">{item}</span>
                         </div>
                       ))}
                     </div>
@@ -538,11 +538,11 @@ const PropertyDetail = () => {
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Áreas de Uso Comum</h3>
                 <div className="bg-background p-[15px]">
                   <InlineEditField value={(property.amenidades || []).join(", ")} field="Amenidades" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("amenidades", v)} type="textarea">
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
                       {property.amenidades!.map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm">
                           <AmenidadeIcon name={item} />
-                          <span className="text-foreground text-3xl">{item}</span>
+                          <span className="text-foreground text-base md:text-3xl">{item}</span>
                         </div>
                       ))}
                     </div>
@@ -555,16 +555,16 @@ const PropertyDetail = () => {
             {property.aceitaFinanciamento && (
               <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="font-medium text-foreground text-3xl">Apta a financiamento bancário</span>
+                <span className="font-medium text-foreground text-base md:text-3xl">Apta a financiamento bancário</span>
               </div>
             )}
 
             {/* Valor de Venda */}
             {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5">
-                <p className="text-muted-foreground uppercase font-semibold mb-1 text-3xl">Valor de Venda</p>
+                <p className="text-muted-foreground uppercase font-semibold mb-1 text-base md:text-3xl">Valor de Venda</p>
                 <InlineEditField value={property.priceFormatted} field="Preço Venda" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("priceFormatted", v)}>
-                  <span className="font-bold text-primary text-3xl">{property.priceFormatted}</span>
+                  <span className="font-bold text-primary text-2xl md:text-3xl">{property.priceFormatted}</span>
                 </InlineEditField>
               </div>
             )}
@@ -572,15 +572,15 @@ const PropertyDetail = () => {
             {/* Bloco de Locação */}
             {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5 space-y-3">
-                <p className="text-3xl text-muted-foreground uppercase font-semibold">Valores de Locação</p>
+                <p className="text-base md:text-3xl text-muted-foreground uppercase font-semibold">Valores de Locação</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-3xl text-muted-foreground">Aluguel:</span>
-                  <span className="text-3xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
+                  <span className="text-base md:text-3xl text-muted-foreground">Aluguel:</span>
+                  <span className="text-xl md:text-3xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
                 </div>
                 {hasTaxas && property.taxasAdicionais!.map((taxa, i) => (
                   <div key={i} className="flex justify-between items-center border-t border-border pt-2">
-                    <span className="text-3xl text-muted-foreground">{taxa.nome}:</span>
-                    <span className="text-3xl font-semibold text-foreground">{taxa.valor}</span>
+                    <span className="text-base md:text-3xl text-muted-foreground">{taxa.nome}:</span>
+                    <span className="text-base md:text-3xl font-semibold text-foreground">{taxa.valor}</span>
                   </div>
                 ))}
               </div>
@@ -591,10 +591,10 @@ const PropertyDetail = () => {
               <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
                 {isAluguel ? (
-                  <span className="text-3xl font-medium text-muted-foreground italic">Valores sujeito a alterações</span>
+                  <span className="text-base md:text-3xl font-medium text-muted-foreground italic">Valores sujeito a alterações</span>
                 ) : (
                   <InlineEditField value={property.condicoesPagamento || "consulte"} field="Condições Pagamento" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("condicoesPagamento", v)}>
-                    <span className="font-medium text-foreground text-3xl">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
+                    <span className="font-medium text-foreground text-base md:text-3xl">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
                   </InlineEditField>
                 )}
               </div>
@@ -615,7 +615,7 @@ const PropertyDetail = () => {
 
             {/* CTAs — stack on mobile, side by side on sm+ */}
             <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 font-bold uppercase w-full text-2xl">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 font-bold uppercase w-full text-base md:text-2xl">
                 <a href={property.linkWhatsapp || "https://wa.me/555198765432"} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
@@ -651,12 +651,12 @@ const PropertyDetail = () => {
                 href={property.linkWhatsapp || "https://wa.me/555198765432"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-primary font-bold hover:underline text-2xl"
+                className="flex items-center justify-center gap-2 text-primary font-bold hover:underline text-base md:text-2xl"
               >
                 <MessageCircle className="w-5 h-5" />
                 Mais Informações via WhatsApp
               </a>
-              <p className="text-muted-foreground leading-relaxed text-center text-2xl">
+              <p className="text-muted-foreground leading-relaxed text-center text-xs md:text-2xl">
                 Os preços, disponibilidades e condições de pagamento poderão ser alterados sem prévia comunicação.
               </p>
               <div className="flex items-center justify-center gap-3 pt-1">
@@ -709,14 +709,14 @@ const PropertyDetail = () => {
               {/* Corretor */}
             {property.corretor && (
               <div className="rounded-xl border border-border bg-card p-4 mt-2">
-                <p className="text-muted-foreground mb-2 text-2xl">Corretor responsável</p>
+                <p className="text-muted-foreground mb-2 text-base md:text-2xl">Corretor responsável</p>
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-full bg-primary/15 flex items-center justify-center">
-                    <span className="font-bold text-primary text-2xl">{property.corretor.nome.split(" ").map(n => n[0]).join("")}</span>
+                    <span className="font-bold text-primary text-lg md:text-2xl">{property.corretor.nome.split(" ").map(n => n[0]).join("")}</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground text-3xl">{property.corretor.nome}</p>
-                    <p className="text-muted-foreground text-2xl">{property.corretor.creci}</p>
+                    <p className="font-semibold text-foreground text-base md:text-3xl">{property.corretor.nome}</p>
+                    <p className="text-muted-foreground text-base md:text-2xl">{property.corretor.creci}</p>
                   </div>
                 </div>
               </div>
@@ -732,7 +732,7 @@ const PropertyDetail = () => {
             <h2 className="text-xl font-bold text-foreground text-center mb-16 uppercase tracking-wide md:text-3xl">
               Imóveis Semelhantes
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-[70px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 md:mt-[70px]">
               {similarProperties.map((p) => (
                 <PropertyCard key={p.code} property={p} />
               ))}

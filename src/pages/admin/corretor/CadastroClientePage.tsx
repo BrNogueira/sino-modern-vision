@@ -23,7 +23,7 @@ const CadastroClientePage = () => {
         <h1 className="text-2xl font-semibold text-foreground">Cadastrar Cliente</h1>
         <p className="text-sm text-muted-foreground">Registre um novo cliente interessado</p>
       </div>
-      <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5"><Label>Nome Completo</Label><Input value={nome} onChange={(e) => setNome(e.target.value)} /></div>
           <div className="space-y-1.5"><Label>CPF</Label><Input value={cpf} onChange={(e) => setCpf(e.target.value)} /></div>
@@ -31,7 +31,7 @@ const CadastroClientePage = () => {
           <div className="space-y-1.5"><Label>E-mail</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
           <div className="md:col-span-2 space-y-1.5"><Label>Interesse</Label><Input value={interesse} onChange={(e) => setInteresse(e.target.value)} placeholder="Ex: Casa 3 quartos em São Leopoldo" /></div>
         </div>
-        <Button onClick={handleSave}><Save className="w-4 h-4 mr-2" />Salvar</Button>
+        <Button onClick={handleSave} className="w-full sm:w-auto"><Save className="w-4 h-4 mr-2" />Salvar</Button>
       </div>
     </div>
   );

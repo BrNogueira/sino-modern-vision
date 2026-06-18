@@ -42,7 +42,7 @@ const CadastroProprietarioPage = () => {
         <p className="text-sm text-muted-foreground">Registre um novo proprietário e vincule a imóveis existentes</p>
       </div>
 
-      <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6 space-y-4">
         <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">👤 Dados do Proprietário</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
@@ -65,7 +65,7 @@ const CadastroProprietarioPage = () => {
       </div>
 
       {/* Vincular imóveis */}
-      <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6 space-y-4">
         <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
           <Home className="inline w-5 h-5 mr-1 -mt-0.5" />
           Vincular Imóveis
@@ -107,7 +107,7 @@ const CadastroProprietarioPage = () => {
       </div>
 
       <div className="flex justify-end">
-        <Button onClick={handleSave}>
+        <Button onClick={handleSave} className="w-full sm:w-auto">
           <Save className="w-4 h-4 mr-2" />Salvar Proprietário
         </Button>
       </div>

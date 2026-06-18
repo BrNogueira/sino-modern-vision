@@ -77,11 +77,11 @@ const AdminRelatorios = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-card rounded-xl border border-border p-5">
           <p className="text-sm text-muted-foreground mb-1">Preço Médio de Venda</p>
-          <p className="text-3xl font-bold text-primary">R$ {avgPrecoVenda.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}</p>
+          <p className="text-2xl md:text-3xl font-bold text-primary">R$ {avgPrecoVenda.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}</p>
         </div>
         <div className="bg-card rounded-xl border border-border p-5">
           <p className="text-sm text-muted-foreground mb-1">Aluguel Médio</p>
-          <p className="text-3xl font-bold text-primary">R$ {avgPrecoAluguel.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}/mês</p>
+          <p className="text-2xl md:text-3xl font-bold text-primary">R$ {avgPrecoAluguel.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}/mês</p>
         </div>
       </div>
 
