@@ -142,6 +142,8 @@ function connConfig(): mysql.ConnectionOptions {
     user: process.env.MYSQL_USER ?? "root",
     password: process.env.MYSQL_PASSWORD ?? "",
     database: process.env.MYSQL_DATABASE ?? "sino",
+    // MySQL/MariaDB socket-only (sem TCP 3306) — usado em produção
+    ...(process.env.MYSQL_SOCKET ? { socketPath: process.env.MYSQL_SOCKET } : {}),
     charset: "utf8mb4",
   };
 }
