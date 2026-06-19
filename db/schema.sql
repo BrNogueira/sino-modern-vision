@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS imoveis (
   proprietario_telefone  VARCHAR(40)  NULL,
   proprietario_email     VARCHAR(160) NULL,
   proprietario_documento VARCHAR(40)  NULL,
+  proprietario_id        CHAR(36)     NULL,  -- → clientes.id (sem FK rígida; enforce no app)
 
   -- Flags
   ativo      TINYINT(1) NOT NULL DEFAULT 1,
@@ -149,6 +150,7 @@ CREATE TABLE IF NOT EXISTS imoveis (
   KEY idx_imoveis_tipo (tipo_imovel),
   KEY idx_imoveis_categoria (categoria_id),
   KEY idx_imoveis_preco_venda (preco_venda),
+  KEY idx_imoveis_proprietario (proprietario_id),
   CONSTRAINT fk_imoveis_categoria FOREIGN KEY (categoria_id)
     REFERENCES categorias (id) ON DELETE SET NULL,
   FULLTEXT KEY ft_imoveis (titulo_imovel, descricao_curta, bairro, cidade, observacao)
@@ -157,6 +159,7 @@ CREATE TABLE IF NOT EXISTS imoveis (
 -- ── leads ───────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS leads (
   id                  CHAR(36)     NOT NULL DEFAULT (UUID()),
+  legacy_id           INT          NULL,
   nome                VARCHAR(200) NOT NULL,
   email               VARCHAR(160) NULL,
   telefone            VARCHAR(40)  NULL,
@@ -174,8 +177,37 @@ CREATE TABLE IF NOT EXISTS leads (
   created_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uq_leads_legacy (legacy_id),
   KEY idx_leads_status (status),
   KEY idx_leads_corretor (corretor_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ── clientes (proprietários de imóveis + clientes/fornecedores do legado) ───
+--   Migrados de `clientes` do dump ArtWeb. `legacy_id` = id antigo (de-para p/
+--   vincular imoveis.proprietario_id). `tipo` derivado: quem é referenciado por
+--   algum produto.dados_proprietario vira 'proprietario'; tipo=1 → 'fornecedor'.
+CREATE TABLE IF NOT EXISTS clientes (
+  id           CHAR(36)     NOT NULL DEFAULT (UUID()),
+  legacy_id    INT          NULL,
+  nome         VARCHAR(200) NOT NULL,
+  email        VARCHAR(160) NULL,
+  telefone     VARCHAR(120) NULL,                       -- 1º número normalizado
+  telefone_obs TEXT         NULL,                       -- texto bruto original (ex.: "ligar à tarde")
+  endereco     VARCHAR(255) NULL,
+  cidade       VARCHAR(160) NULL,
+  estado       VARCHAR(60)  NULL DEFAULT 'Rio Grande do Sul',
+  cep          VARCHAR(20)  NULL,
+  tipo         ENUM('proprietario','cliente','fornecedor') NOT NULL DEFAULT 'cliente',
+  corretor_id  CHAR(36)     NULL,                       -- responsável (de-para corretor legado)
+  observacoes  TEXT         NULL,
+  ativo        TINYINT(1)   NOT NULL DEFAULT 1,
+  created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_clientes_legacy (legacy_id),
+  KEY idx_clientes_nome (nome),
+  KEY idx_clientes_email (email),
+  KEY idx_clientes_tipo (tipo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ── profiles (espelho do usuário Better-auth; id = user.id) ─────────────────

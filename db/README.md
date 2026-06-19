@@ -11,6 +11,9 @@ Fonte da verdade do schema: `db/schema.sql` (derivado do schema VIVO em
 | `db/schema.sql` | Tabelas do app (imoveis, categorias, leads, profiles, user_roles, …). Auto-carregado no 1º boot do container. |
 | `db/views.sql` | Views de compatibilidade Model A (`imoveis_completo`, `imoveis_imagens`) que o site público consome. Read-only. Auto-carregado após o schema. |
 | `scripts/import-imoveis-mysql.ts` | ETL: dump legado `sinos7596_maya.sql` → tabela `imoveis`. Idempotente por `codigo_imovel`. |
+| `scripts/import-pessoas-mysql.ts` | ETL: `clientes` → tabela `clientes` (proprietários/clientes) + vínculo `imoveis.proprietario_id` + `contatos` → `leads`. Idempotente por `legacy_id`. |
+| `server/src/scripts/import-usuarios.ts` | ETL: `corretores` (ativos) + `usuarios` (admin) → Better-auth + `profiles` + `user_roles`. Senha aleatória → reset depois. |
+| `db/migrations/2026-06-19-clientes-proprietarios.sql` | Migração para bancos JÁ existentes: cria `clientes`, `imoveis.proprietario_id`, `leads.legacy_id`. |
 | `server/src/scripts/auth-migrate.ts` | Cria as tabelas do Better-auth (`user`, `account`, `session`, `verification`). |
 | `server/src/scripts/seed-admin.ts` | Cria o admin (Better-auth + `profiles` + papel em `user_roles`). |
 
@@ -37,6 +40,29 @@ npx tsx scripts/import-imoveis-mysql.ts
 > **Imagens:** o ETL reconstrói as URLs das fotos como
 > `${LEGACY_IMG_BASE}/<pasta>/<arquivo>`. Defina `LEGACY_IMG_BASE` no `.env` raiz
 > apontando para os uploads do site antigo; sem ela as URLs ficam relativas.
+
+### Pessoas (proprietários, clientes, usuários, leads)
+
+Rode **após** os imóveis (o vínculo proprietário→imóvel casa por `codigo_imovel`).
+
+```bash
+# 0. (banco já existente) aplica a migração de clientes/proprietários
+docker exec -i sino-mysql mysql -uroot -psino_root sino < db/migrations/2026-06-19-clientes-proprietarios.sql
+
+# 1. usuários: corretores ATIVOS → corretor · usuarios nível 1 → admin
+#    (senha aleatória; lista p/ reset sai em /tmp/usuarios-import.csv)
+cd server && npx tsx --env-file=.env src/scripts/import-usuarios.ts --dry-run
+npx tsx --env-file=.env src/scripts/import-usuarios.ts && cd ..
+
+# 2. clientes/proprietários + vínculo nos imóveis + leads (rodar depois do passo 1
+#    para resolver corretor_id pelos e-mails)
+npx tsx scripts/import-pessoas-mysql.ts --dry-run
+npx tsx scripts/import-pessoas-mysql.ts
+```
+
+> **Senhas:** os hashes SHA1 do legado não migram (Better-auth usa scrypt). Cada
+> usuário entra com senha aleatória — dispare o **reset de senha** na plataforma
+> usando a lista em `/tmp/usuarios-import.csv`.
 
 ## Reaplicar o schema
 
