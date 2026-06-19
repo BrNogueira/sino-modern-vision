@@ -11,9 +11,11 @@ import {
   Power,
   ChevronLeft,
   ChevronRight,
+  Search,
 } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -91,7 +93,7 @@ async function fetchCounts(): Promise<Counts> {
   return { total, ativos, inativos };
 }
 
-async function fetchPage(page: number): Promise<{ items: ZapImovel[]; total: number }> {
+async function fetchPage(page: number, search?: string): Promise<{ items: ZapImovel[]; total: number }> {
   const offset = (page - 1) * ITEMS_PER_PAGE;
   const qs = new URLSearchParams({
     select: LIST_SELECT,
@@ -100,6 +102,8 @@ async function fetchPage(page: number): Promise<{ items: ZapImovel[]; total: num
     offset: String(offset),
     count: "exact",
   });
+  const term = search?.trim();
+  if (term) qs.set("q", term);
   const res = await api.get<PagedResponse>(`/api/data/imoveis?${qs}`);
   return {
     items: (res.data ?? []).map(fromRow),
@@ -113,11 +117,14 @@ const AdminCorretorImoveis = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageFromUrl = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+  const searchFromUrl = searchParams.get("q") || "";
 
   const [properties, setProperties] = useState<ZapImovel[]>([]);
   const [counts, setCounts] = useState<Counts>({ total: 0, ativos: 0, inativos: 0 });
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(pageFromUrl);
+  const [search, setSearch] = useState(searchFromUrl);
+  const [debouncedSearch, setDebouncedSearch] = useState(searchFromUrl);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -126,11 +133,26 @@ const AdminCorretorImoveis = () => {
   const safePage = Math.min(currentPage, totalPages);
   const visiblePages = pageWindow(safePage, totalPages);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 350);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const syncUrl = useCallback(
+    (page: number, q: string) => {
+      const next = new URLSearchParams();
+      if (page > 1) next.set("page", String(page));
+      if (q) next.set("q", q);
+      setSearchParams(next, { replace: true });
+    },
+    [setSearchParams],
+  );
+
   const loadPage = useCallback(
-    async (page: number) => {
+    async (page: number, q: string) => {
       setLoading(true);
       try {
-        const [{ items, total }, stats] = await Promise.all([fetchPage(page), fetchCounts()]);
+        const [{ items, total }, stats] = await Promise.all([fetchPage(page, q), fetchCounts()]);
         setProperties(items);
         setTotalItems(total);
         setCounts(stats);
@@ -138,7 +160,7 @@ const AdminCorretorImoveis = () => {
         const resolved = Math.min(Math.max(1, page), maxPage);
         if (resolved !== page) {
           setCurrentPage(resolved);
-          setSearchParams(resolved === 1 ? {} : { page: String(resolved) }, { replace: true });
+          syncUrl(resolved, q);
         }
       } catch (e) {
         console.error("Failed to load imoveis page:", e);
@@ -152,18 +174,29 @@ const AdminCorretorImoveis = () => {
         setLoading(false);
       }
     },
-    [setSearchParams],
+    [syncUrl],
   );
 
   useEffect(() => {
     setCurrentPage(pageFromUrl);
-    void loadPage(pageFromUrl);
-  }, [pageFromUrl, loadPage]);
+    setSearch(searchFromUrl);
+    setDebouncedSearch(searchFromUrl);
+  }, [pageFromUrl, searchFromUrl]);
+
+  useEffect(() => {
+    const q = debouncedSearch;
+    const page = q !== searchFromUrl ? 1 : pageFromUrl;
+    if (q !== searchFromUrl) {
+      setCurrentPage(1);
+      syncUrl(1, q);
+    }
+    void loadPage(page, q);
+  }, [debouncedSearch, pageFromUrl, searchFromUrl, loadPage, syncUrl]);
 
   const goToPage = (page: number) => {
     const next = Math.min(Math.max(1, page), totalPages);
     setCurrentPage(next);
-    setSearchParams(next === 1 ? {} : { page: String(next) });
+    syncUrl(next, debouncedSearch);
   };
 
   const handleToggleActive = async (id: string, ativo: boolean) => {
@@ -176,7 +209,7 @@ const AdminCorretorImoveis = () => {
           ? "O imóvel não aparecerá mais no site público."
           : "O imóvel agora está visível no site público.",
       });
-      await loadPage(safePage);
+      await loadPage(safePage, debouncedSearch);
     } catch {
       toast({ title: "Erro", description: "Não foi possível atualizar.", variant: "destructive" });
     } finally {
@@ -193,7 +226,7 @@ const AdminCorretorImoveis = () => {
       setDeleteId(null);
       const nextPage = properties.length === 1 && safePage > 1 ? safePage - 1 : safePage;
       goToPage(nextPage);
-      await loadPage(nextPage);
+      await loadPage(nextPage, debouncedSearch);
     } catch {
       toast({ title: "Erro", description: "Não foi possível excluir.", variant: "destructive" });
     } finally {
@@ -282,6 +315,17 @@ const AdminCorretorImoveis = () => {
             <p className="text-xs text-muted-foreground">Inativos</p>
           </div>
         </div>
+      </div>
+
+      <div className="relative max-w-md">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Input
+          placeholder="Buscar por título, código, cidade..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-10"
+          maxLength={100}
+        />
       </div>
 
       <div className="bg-card border border-border rounded-xl overflow-hidden">

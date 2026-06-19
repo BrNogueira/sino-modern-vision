@@ -9,12 +9,13 @@ import { Save, Home } from "lucide-react";
 
 const CadastroProprietarioPage = () => {
   const { toast } = useToast();
-  const { properties } = useAdminProperties();
+  const { properties, updateProperty } = useAdminProperties();
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
   const [selectedPropertyIds, setSelectedPropertyIds] = useState<string[]>([]);
+  const [saving, setSaving] = useState(false);
 
   const toggleProperty = (id: string) => {
     setSelectedPropertyIds((prev) =>
@@ -22,17 +23,51 @@ const CadastroProprietarioPage = () => {
     );
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!nome.trim()) {
       toast({ title: "Erro", description: "Nome é obrigatório.", variant: "destructive" });
       return;
     }
+    if (selectedPropertyIds.length === 0) {
+      toast({
+        title: "Selecione imóveis",
+        description: "Vincule o proprietário a pelo menos um imóvel.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Update linked properties with owner data
-    toast({
-      title: "Proprietário cadastrado",
-      description: `${nome} vinculado a ${selectedPropertyIds.length} imóvel(is).`,
-    });
+    setSaving(true);
+    try {
+      // Grava os dados do proprietário em cada imóvel vinculado.
+      await Promise.all(
+        selectedPropertyIds.map((id) =>
+          updateProperty(id, {
+            proprietarioNome: nome.trim(),
+            proprietarioDocumento: cpf.trim(),
+            proprietarioTelefone: telefone.trim(),
+            proprietarioEmail: email.trim(),
+          }),
+        ),
+      );
+      toast({
+        title: "Proprietário cadastrado",
+        description: `${nome} vinculado a ${selectedPropertyIds.length} imóvel(is).`,
+      });
+      setNome("");
+      setCpf("");
+      setTelefone("");
+      setEmail("");
+      setSelectedPropertyIds([]);
+    } catch (err: unknown) {
+      toast({
+        title: "Erro ao salvar",
+        description: err instanceof Error ? err.message : "Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -107,8 +142,8 @@ const CadastroProprietarioPage = () => {
       </div>
 
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="w-full sm:w-auto">
-          <Save className="w-4 h-4 mr-2" />Salvar Proprietário
+        <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
+          <Save className="w-4 h-4 mr-2" />{saving ? "Salvando…" : "Salvar Proprietário"}
         </Button>
       </div>
     </div>
