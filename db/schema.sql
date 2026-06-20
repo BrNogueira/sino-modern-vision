@@ -210,6 +210,37 @@ CREATE TABLE IF NOT EXISTS clientes (
   KEY idx_clientes_tipo (tipo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ── agenda_eventos (calendário de visitas/compromissos dos corretores) ──────
+-- Vínculos guardam FK + snapshot denormalizado p/ a grade carregar sem joins.
+CREATE TABLE IF NOT EXISTS agenda_eventos (
+  id              CHAR(36)     NOT NULL DEFAULT (UUID()),
+  tipo            ENUM('visita','reuniao','ligacao','avaliacao') NOT NULL DEFAULT 'visita',
+  titulo          VARCHAR(200) NOT NULL,
+  descricao       TEXT         NULL,
+  data_inicio     DATETIME     NOT NULL,
+  data_fim        DATETIME     NULL,
+  status          ENUM('agendado','confirmado','realizado','cancelado','nao_compareceu')
+                               NOT NULL DEFAULT 'agendado',
+  local           VARCHAR(255) NULL,
+  imovel_id       CHAR(36)     NULL,
+  imovel_label    VARCHAR(255) NULL,
+  contato_tipo    ENUM('lead','cliente') NULL,
+  contato_id      CHAR(36)     NULL,
+  contato_nome    VARCHAR(200) NULL,
+  contato_telefone VARCHAR(120) NULL,
+  corretor_id     CHAR(36)     NULL,
+  corretor_nome   VARCHAR(200) NULL,
+  created_by      CHAR(36)     NULL,
+  created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_agenda_data (data_inicio),
+  KEY idx_agenda_corretor (corretor_id),
+  KEY idx_agenda_imovel (imovel_id),
+  KEY idx_agenda_status (status),
+  KEY idx_agenda_tipo (tipo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ── profiles (espelho do usuário Better-auth; id = user.id) ─────────────────
 CREATE TABLE IF NOT EXISTS profiles (
   id          CHAR(36)     NOT NULL,

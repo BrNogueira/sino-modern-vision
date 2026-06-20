@@ -32,7 +32,29 @@ const RESOURCES: ResourceConfig[] = [
   { table: "site_settings", pk: "key", publicRead: true, writeRoles: ["admin"] },
 
   // Leads: criados pelo formulário público; geridos pela equipe (leitura autenticada).
-  { table: "leads", publicInsert: true, writeRoles: STAFF, defaultOrder: "created_at.desc" },
+  {
+    table: "leads",
+    publicInsert: true,
+    writeRoles: STAFF,
+    defaultOrder: "created_at.desc",
+    searchColumns: ["nome", "email", "telefone"],
+  },
+
+  // Clientes/proprietários (CRM interno; leitura autenticada).
+  {
+    table: "clientes",
+    writeRoles: STAFF,
+    defaultOrder: "nome.asc",
+    searchColumns: ["nome", "email", "telefone"],
+  },
+
+  // Agenda/calendário de visitas e compromissos (leitura autenticada).
+  {
+    table: "agenda_eventos",
+    writeRoles: STAFF,
+    defaultOrder: "data_inicio.asc",
+    searchColumns: ["titulo", "local", "contato_nome", "imovel_label"],
+  },
 
   // Internos (exigem login; escrita restrita).
   { table: "profiles", writeRoles: ["admin"] },

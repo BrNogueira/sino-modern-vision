@@ -29,6 +29,7 @@ import AdminCategorias from "./pages/admin/AdminCategorias";
 import AdminLeads from "./pages/admin/AdminLeads";
 import AdminRelatorios from "./pages/admin/AdminRelatorios";
 import AdminCorretores from "./pages/admin/AdminCorretores";
+import AdminAgenda from "./pages/admin/AdminAgenda";
 import AdminConfiguracoes from "./pages/admin/AdminConfiguracoes";
 import AgenciamentosPage from "./pages/admin/corretor/AgenciamentosPage";
 import PreCadastrosPage from "./pages/admin/corretor/PreCadastrosPage";
@@ -78,6 +79,7 @@ const App = () => (
                   <Route path="condominios" element={<AdminCondominios />} />
                   <Route path="categorias" element={<AdminCategorias />} />
                   <Route path="leads" element={<AdminLeads />} />
+                  <Route path="agenda" element={<AdminAgenda />} />
                   <Route path="relatorios" element={<AdminRelatorios />} />
                   <Route path="corretores" element={<AdminCorretores />} />
                   <Route path="configuracoes" element={<AdminConfiguracoes />} />
