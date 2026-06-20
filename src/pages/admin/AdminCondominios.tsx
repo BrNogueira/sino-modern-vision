@@ -14,8 +14,13 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import { Building, Plus, Pencil, Trash2, Loader2, Save, Search, Upload, X, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/components/admin/PageHeader";
+import { SortableHead } from "@/components/admin/SortableHead";
+import { useTableSort, type SortAccessors } from "@/hooks/useTableSort";
 
 interface Condominio {
   id: string;
@@ -50,6 +55,15 @@ const emptyCondominio: Omit<Condominio, "id"> = {
   tem_academia: false, observacoes: "", ativo: true, fotos: [],
 };
 
+type CondoSortKey = "nome" | "cidade" | "qtd_unidades" | "valor_condominio" | "ativo";
+const CONDO_SORT: SortAccessors<Condominio, CondoSortKey> = {
+  nome: (c) => c.nome?.toLowerCase(),
+  cidade: (c) => `${c.bairro || ""} ${c.cidade || ""}`.trim().toLowerCase(),
+  qtd_unidades: (c) => Number(c.qtd_unidades || 0),
+  valor_condominio: (c) => Number(c.valor_condominio || 0),
+  ativo: (c) => c.ativo,
+};
+
 const AdminCondominios = () => {
   const { canEdit, canDelete } = useAdminAuth();
   const { toast } = useToast();
@@ -58,6 +72,7 @@ const AdminCondominios = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState<Omit<Condominio, "id"> & { id?: string }>(emptyCondominio);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
 
   const handleUploadFotos = async (files: FileList | null) => {
@@ -135,11 +150,18 @@ const AdminCondominios = () => {
 
   const updateField = (field: string, value: any) => setForm(prev => ({ ...prev, [field]: value }));
 
-  const filtered = items.filter(i =>
-    i.nome.toLowerCase().includes(search.toLowerCase()) ||
-    i.bairro.toLowerCase().includes(search.toLowerCase()) ||
-    i.cidade.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = items.filter(i => {
+    const matchSearch =
+      i.nome.toLowerCase().includes(search.toLowerCase()) ||
+      i.bairro.toLowerCase().includes(search.toLowerCase()) ||
+      i.cidade.toLowerCase().includes(search.toLowerCase());
+    const matchStatus =
+      statusFilter === "all" ||
+      (statusFilter === "ativo" ? i.ativo : !i.ativo);
+    return matchSearch && matchStatus;
+  });
+
+  const { sort, toggle, sorted } = useTableSort(filtered, CONDO_SORT, { key: "nome", dir: "asc" });
 
   return (
     <div className="space-y-6">
@@ -153,6 +175,14 @@ const AdminCondominios = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 w-full md:w-56" />
             </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-36"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos status</SelectItem>
+                <SelectItem value="ativo">Ativos</SelectItem>
+                <SelectItem value="inativo">Inativos</SelectItem>
+              </SelectContent>
+            </Select>
             {canEdit("condominios") && (
               <Button size="lg" className="gap-2" onClick={handleNew}><Plus className="w-4 h-4" />Novo</Button>
             )}
@@ -169,17 +199,17 @@ const AdminCondominios = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Bairro/Cidade</TableHead>
+                <SortableHead label="Nome" sortKey="nome" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="Bairro/Cidade" sortKey="cidade" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead>Síndico</TableHead>
-                <TableHead>Unidades</TableHead>
-                <TableHead>Valor</TableHead>
-                <TableHead>Status</TableHead>
+                <SortableHead label="Unidades" sortKey="qtd_unidades" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="Valor" sortKey="valor_condominio" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="Status" sortKey="ativo" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map(item => (
+              {sorted.map(item => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">{item.nome}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{item.bairro}{item.cidade ? `, ${item.cidade}` : ""}</TableCell>
@@ -201,7 +231,7 @@ const AdminCondominios = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {filtered.length === 0 && (
+              {sorted.length === 0 && (
                 <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">Nenhum condomínio encontrado.</TableCell></TableRow>
               )}
             </TableBody>
@@ -210,12 +240,12 @@ const AdminCondominios = () => {
 
         {/* Mobile: cards */}
         <div className="md:hidden space-y-3">
-          {filtered.length === 0 ? (
+          {sorted.length === 0 ? (
             <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
               Nenhum condomínio encontrado.
             </div>
           ) : (
-            filtered.map(item => (
+            sorted.map(item => (
               <div key={item.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">

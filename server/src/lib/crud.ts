@@ -83,19 +83,25 @@ function buildWhere(filters: Filter[], allowed: Set<string>) {
   return { clauses, params };
 }
 
-function parseQueryFilters(query: Record<string, string>, allowed: Set<string>): Filter[] {
+const RESERVED_PARAMS = new Set(["select", "order", "limit", "offset", "single", "count", "q"]);
+
+// Aceita múltiplos valores por coluna (ex.: ?preco_venda=gte.100&preco_venda=lte.500),
+// permitindo filtros de faixa. Cada valor vira um Filter (combinados via AND).
+function parseQueryFilters(query: Record<string, string[]>, allowed: Set<string>): Filter[] {
   const out: Filter[] = [];
-  for (const [key, raw] of Object.entries(query)) {
-    if (["select", "order", "limit", "offset", "single", "count", "q"].includes(key)) continue;
+  for (const [key, vals] of Object.entries(query)) {
+    if (RESERVED_PARAMS.has(key)) continue;
     if (!allowed.has(key)) continue;
-    const m = /^(eq|neq|gt|gte|lt|lte|like|ilike|in|is)\.(.*)$/s.exec(raw);
-    if (m) {
-      const op = m[1]!;
-      const rest = m[2] ?? "";
-      const val = op === "in" ? rest.replace(/^\(|\)$/g, "").split(",") : rest;
-      out.push({ col: key, op, value: val });
-    } else {
-      out.push({ col: key, op: "eq", value: raw });
+    for (const raw of vals) {
+      const m = /^(eq|neq|gt|gte|lt|lte|like|ilike|in|is)\.(.*)$/s.exec(raw);
+      if (m) {
+        const op = m[1]!;
+        const rest = m[2] ?? "";
+        const val = op === "in" ? rest.replace(/^\(|\)$/g, "").split(",") : rest;
+        out.push({ col: key, op, value: val });
+      } else {
+        out.push({ col: key, op: "eq", value: raw });
+      }
     }
   }
   return out;
@@ -147,7 +153,7 @@ export function makeCrudRouter(cfg: ResourceConfig): Hono {
       const { anon } = await readGuard(c);
       const allowed = await loadColumns(cfg.table);
       const q = c.req.query();
-      const filters = parseQueryFilters(q, allowed);
+      const filters = parseQueryFilters(c.req.queries(), allowed);
       if (anon && cfg.anonReadFilter && allowed.has(cfg.anonReadFilter.col))
         filters.push({ col: cfg.anonReadFilter.col, op: "eq", value: cfg.anonReadFilter.value });
 

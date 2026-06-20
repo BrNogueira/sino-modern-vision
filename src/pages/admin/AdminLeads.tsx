@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,10 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { TrendingUp, Plus, Pencil, Trash2, Loader2, Save, Search, Phone, Mail } from "lucide-react";
+import { TrendingUp, Plus, Pencil, Trash2, Loader2, Save, Search, Phone, Mail, Copy } from "lucide-react";
 import { PageHeader } from "@/components/admin/PageHeader";
+import { SortableHead } from "@/components/admin/SortableHead";
+import { useTableSort, type SortAccessors } from "@/hooks/useTableSort";
 
 interface Lead {
   id: string;
@@ -47,11 +49,46 @@ const STATUS_OPTIONS = [
 
 const ORIGEM_OPTIONS = ["site", "telefone", "indicacao", "portal", "redes_sociais", "presencial", "outro"];
 
+type LeadSortKey = "nome" | "interesse" | "origem" | "status" | "created_at";
+const LEAD_SORT: SortAccessors<Lead, LeadSortKey> = {
+  nome: (l) => l.nome?.toLowerCase(),
+  interesse: (l) => l.interesse?.toLowerCase(),
+  origem: (l) => l.origem?.toLowerCase(),
+  status: (l) => STATUS_OPTIONS.findIndex((o) => o.value === l.status),
+  created_at: (l) => l.created_at, // ISO → ordena cronologicamente
+};
+
 const emptyLead = {
   nome: "", email: "", telefone: "", origem: "site", interesse: "",
   tipo_interesse: "compra", faixa_preco_min: 0, faixa_preco_max: 0,
   bairros_interesse: "", observacoes: "", status: "novo", corretor_id: null as string | null,
 };
+
+const normEmail = (s?: string | null) => (s || "").trim().toLowerCase();
+const normPhone = (s?: string | null) => (s || "").replace(/\D/g, "");
+
+// Agrupa leads que compartilham e-mail ou telefone (transitivo via union-find).
+// Telefones com < 8 dígitos são ignorados para evitar falsos positivos.
+function findDuplicateGroups(leads: Lead[]): Lead[][] {
+  const parent = leads.map((_, i) => i);
+  const find = (x: number): number => (parent[x] === x ? x : (parent[x] = find(parent[x])));
+  const union = (a: number, b: number) => { parent[find(a)] = find(b); };
+  const byEmail = new Map<string, number>();
+  const byPhone = new Map<string, number>();
+  leads.forEach((l, i) => {
+    const e = normEmail(l.email);
+    if (e) { const j = byEmail.get(e); if (j !== undefined) union(i, j); else byEmail.set(e, i); }
+    const p = normPhone(l.telefone);
+    if (p.length >= 8) { const j = byPhone.get(p); if (j !== undefined) union(i, j); else byPhone.set(p, i); }
+  });
+  const groups = new Map<number, Lead[]>();
+  leads.forEach((l, i) => {
+    const r = find(i);
+    const g = groups.get(r);
+    if (g) g.push(l); else groups.set(r, [l]);
+  });
+  return [...groups.values()].filter(g => g.length > 1).sort((a, b) => b.length - a.length);
+}
 
 const AdminLeads = () => {
   const { canEdit, canDelete, user } = useAdminAuth();
@@ -62,6 +99,11 @@ const AdminLeads = () => {
   const [form, setForm] = useState<typeof emptyLead & { id?: string }>(emptyLead);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [origemFilter, setOrigemFilter] = useState("all");
+  const [dupOpen, setDupOpen] = useState(false);
+
+  const duplicateGroups = useMemo(() => findDuplicateGroups(items), [items]);
+  const duplicateCount = duplicateGroups.reduce((n, g) => n + g.length, 0);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -113,8 +155,11 @@ const AdminLeads = () => {
       i.email.toLowerCase().includes(search.toLowerCase()) ||
       i.telefone.includes(search);
     const matchStatus = statusFilter === "all" || i.status === statusFilter;
-    return matchSearch && matchStatus;
+    const matchOrigem = origemFilter === "all" || i.origem === origemFilter;
+    return matchSearch && matchStatus && matchOrigem;
   });
+
+  const { sort, toggle, sorted } = useTableSort(filtered, LEAD_SORT, { key: "created_at", dir: "desc" });
 
   const getStatusBadge = (status: string) => {
     const s = STATUS_OPTIONS.find(o => o.value === status);
@@ -166,10 +211,24 @@ const AdminLeads = () => {
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-44"><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos</SelectItem>
+            <SelectItem value="all">Todos status</SelectItem>
             {STATUS_OPTIONS.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={origemFilter} onValueChange={setOrigemFilter}>
+          <SelectTrigger className="w-40"><SelectValue placeholder="Origem" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas origens</SelectItem>
+            {ORIGEM_OPTIONS.map(o => <SelectItem key={o} value={o} className="capitalize">{o.replace("_", " ")}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Button variant="outline" className="gap-2" onClick={() => setDupOpen(true)}>
+          <Copy className="w-4 h-4" />
+          Verificar Duplicados
+          {duplicateGroups.length > 0 && (
+            <Badge variant="secondary" className="ml-1">{duplicateGroups.length}</Badge>
+          )}
+        </Button>
       </div>
 
       {loading ? (
@@ -181,17 +240,17 @@ const AdminLeads = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome</TableHead>
+                <SortableHead label="Nome" sortKey="nome" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead>Contato</TableHead>
-                <TableHead>Interesse</TableHead>
-                <TableHead>Origem</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Data</TableHead>
+                <SortableHead label="Interesse" sortKey="interesse" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="Origem" sortKey="origem" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="Status" sortKey="status" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="Data" sortKey="created_at" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map(item => (
+              {sorted.map(item => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">{item.nome}</TableCell>
                   <TableCell>
@@ -223,7 +282,7 @@ const AdminLeads = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {filtered.length === 0 && (
+              {sorted.length === 0 && (
                 <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">Nenhum lead encontrado.</TableCell></TableRow>
               )}
             </TableBody>
@@ -232,12 +291,12 @@ const AdminLeads = () => {
 
         {/* Mobile: cards */}
         <div className="md:hidden space-y-3">
-          {filtered.length === 0 ? (
+          {sorted.length === 0 ? (
             <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
               Nenhum lead encontrado.
             </div>
           ) : (
-            filtered.map(item => (
+            sorted.map(item => (
               <div key={item.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -337,6 +396,61 @@ const AdminLeads = () => {
               <Save className="w-4 h-4 mr-2" />{form.id ? "Salvar" : "Cadastrar Lead"}
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: leads duplicados */}
+      <Dialog open={dupOpen} onOpenChange={setDupOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Leads duplicados</DialogTitle>
+          </DialogHeader>
+          {duplicateGroups.length === 0 ? (
+            <div className="text-center text-muted-foreground py-8">
+              Nenhuma duplicidade encontrada — nenhum lead compartilha e-mail ou telefone.
+            </div>
+          ) : (
+            <div className="space-y-4 pt-2">
+              <p className="text-sm text-muted-foreground">
+                {duplicateGroups.length} grupo(s) · {duplicateCount} cadastros com e-mail ou telefone repetidos.
+              </p>
+              {duplicateGroups.map((group, gi) => (
+                <div key={gi} className="border border-border rounded-lg overflow-hidden">
+                  <div className="bg-muted/50 px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                    {group.length} cadastros
+                  </div>
+                  <div className="divide-y divide-border">
+                    {group.map(lead => (
+                      <div key={lead.id} className="flex items-center justify-between gap-3 p-3">
+                        <div className="min-w-0 space-y-1">
+                          <p className="font-medium truncate flex items-center gap-2">
+                            {lead.nome}{getStatusBadge(lead.status)}
+                          </p>
+                          <div className="text-xs text-muted-foreground space-y-0.5">
+                            {lead.telefone && <p className="flex items-center gap-1"><Phone className="w-3 h-3" />{lead.telefone}</p>}
+                            {lead.email && <p className="flex items-center gap-1"><Mail className="w-3 h-3" /><span className="truncate">{lead.email}</span></p>}
+                            <p className="capitalize">{lead.origem} · {new Date(lead.created_at).toLocaleDateString("pt-BR")}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-1 shrink-0">
+                          {canEdit("leads") && (
+                            <Button size="sm" variant="ghost" onClick={() => { setDupOpen(false); handleEdit(lead); }}>
+                              <Pencil className="w-3.5 h-3.5" />
+                            </Button>
+                          )}
+                          {canDelete("leads") && (
+                            <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDelete(lead.id)}>
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

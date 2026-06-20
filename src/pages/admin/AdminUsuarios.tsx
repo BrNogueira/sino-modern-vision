@@ -14,8 +14,13 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Shield, UserPlus, Pencil, Trash2, Loader2 } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { Shield, UserPlus, Pencil, Trash2, Loader2, Search } from "lucide-react";
 import { PageHeader } from "@/components/admin/PageHeader";
+import { SortableHead } from "@/components/admin/SortableHead";
+import { useTableSort, type SortAccessors } from "@/hooks/useTableSort";
 
 interface UserWithRoles {
   id: string;
@@ -34,6 +39,13 @@ const ROLE_LABELS: Record<string, string> = {
   financeiro: "Financeiro",
 };
 
+type UserSortKey = "full_name" | "email" | "active";
+const USER_SORT: SortAccessors<UserWithRoles, UserSortKey> = {
+  full_name: (u) => (u.full_name || "").toLowerCase(),
+  email: (u) => (u.email || "").toLowerCase(),
+  active: (u) => u.active,
+};
+
 const AdminUsuarios = () => {
   const { hasRole } = useAdminAuth();
   const navigate = useNavigate();
@@ -43,6 +55,9 @@ const AdminUsuarios = () => {
   const [editUser, setEditUser] = useState<UserWithRoles | null>(null);
   const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [roleFilter, setRoleFilter] = useState("all");
 
 
   const fetchUsers = async () => {
@@ -101,6 +116,18 @@ const AdminUsuarios = () => {
     setList(list.includes(role) ? list.filter(r => r !== role) : [...list, role]);
   };
 
+  const filtered = users.filter((u) => {
+    const t = search.toLowerCase();
+    const matchSearch =
+      (u.full_name || "").toLowerCase().includes(t) ||
+      (u.email || "").toLowerCase().includes(t);
+    const matchStatus =
+      statusFilter === "all" || (statusFilter === "ativo" ? u.active : !u.active);
+    const matchRole = roleFilter === "all" || u.roles.includes(roleFilter as AppRole);
+    return matchSearch && matchStatus && matchRole;
+  });
+  const { sort, toggle, sorted } = useTableSort(filtered, USER_SORT, { key: "full_name", dir: "asc" });
+
   if (!hasRole("admin")) {
     return (
       <div className="text-center py-12">
@@ -125,6 +152,36 @@ const AdminUsuarios = () => {
         }
       />
 
+      {/* Busca + filtros */}
+      <div className="flex flex-wrap gap-2 items-center">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar por nome ou e-mail..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Select value={roleFilter} onValueChange={setRoleFilter}>
+          <SelectTrigger className="w-44"><SelectValue placeholder="Perfil" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os perfis</SelectItem>
+            {ALL_ROLES.map((r) => (
+              <SelectItem key={r} value={r}>{ROLE_LABELS[r]}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-36"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos status</SelectItem>
+            <SelectItem value="ativo">Ativos</SelectItem>
+            <SelectItem value="inativo">Inativos</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {loading ? (
         <div className="flex justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -136,15 +193,15 @@ const AdminUsuarios = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>E-mail</TableHead>
+                <SortableHead label="Nome" sortKey="full_name" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <SortableHead label="E-mail" sortKey="email" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead>Perfis</TableHead>
-                <TableHead>Status</TableHead>
+                <SortableHead label="Status" sortKey="active" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.map(user => (
+              {sorted.map(user => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.full_name || "—"}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
@@ -176,10 +233,10 @@ const AdminUsuarios = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {users.length === 0 && (
+              {sorted.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                    Nenhum usuário cadastrado.
+                    Nenhum usuário encontrado.
                   </TableCell>
                 </TableRow>
               )}
@@ -189,12 +246,12 @@ const AdminUsuarios = () => {
 
         {/* Mobile: cards */}
         <div className="md:hidden space-y-3">
-          {users.length === 0 ? (
+          {sorted.length === 0 ? (
             <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
-              Nenhum usuário cadastrado.
+              Nenhum usuário encontrado.
             </div>
           ) : (
-            users.map(user => (
+            sorted.map(user => (
               <div key={user.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">

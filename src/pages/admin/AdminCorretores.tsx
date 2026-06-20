@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { Users, Loader2, Phone, Mail } from "lucide-react";
+import { Users, Loader2, Phone, Mail, Search } from "lucide-react";
 import { PageHeader } from "@/components/admin/PageHeader";
+import { SortableHead } from "@/components/admin/SortableHead";
+import { useTableSort, type SortAccessors } from "@/hooks/useTableSort";
 
 interface CorretorInfo {
   id: string;
@@ -21,10 +24,18 @@ const ROLE_LABELS: Record<string, string> = {
   admin: "Administrador", gerente: "Gerente", corretor: "Corretor", financeiro: "Financeiro",
 };
 
+type CorretorRow = CorretorInfo & { roles: string[] };
+type CorretorSortKey = "full_name" | "creci";
+const CORRETOR_SORT: SortAccessors<CorretorRow, CorretorSortKey> = {
+  full_name: (c) => c.full_name?.toLowerCase(),
+  creci: (c) => c.creci?.toLowerCase(),
+};
+
 const AdminCorretores = () => {
   const { hasRole } = useAdminAuth();
-  const [corretores, setCorretores] = useState<(CorretorInfo & { roles: string[] })[]>([]);
+  const [corretores, setCorretores] = useState<CorretorRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetch = async () => {
@@ -45,12 +56,33 @@ const AdminCorretores = () => {
     fetch();
   }, []);
 
+  const filtered = corretores.filter((c) => {
+    const t = search.toLowerCase();
+    return (
+      (c.full_name || "").toLowerCase().includes(t) ||
+      (c.email || "").toLowerCase().includes(t) ||
+      (c.creci || "").toLowerCase().includes(t)
+    );
+  });
+  const { sort, toggle, sorted } = useTableSort(filtered, CORRETOR_SORT, { key: "full_name", dir: "asc" });
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Corretores"
         description={`${corretores.length} ${corretores.length === 1 ? "profissional ativo" : "profissionais ativos"} na equipe`}
         icon={Users}
+        actions={
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar por nome, e-mail ou CRECI..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 w-full md:w-72"
+            />
+          </div>
+        }
       />
 
       {loading ? (
@@ -62,15 +94,15 @@ const AdminCorretores = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome</TableHead>
+                <SortableHead label="Nome" sortKey="full_name" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead>Contato</TableHead>
-                <TableHead>CRECI</TableHead>
+                <SortableHead label="CRECI" sortKey="creci" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead>Perfis</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {corretores.map(c => (
+              {sorted.map(c => (
                 <TableRow key={c.id}>
                   <TableCell className="font-medium">{c.full_name}</TableCell>
                   <TableCell>
@@ -90,8 +122,8 @@ const AdminCorretores = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {corretores.length === 0 && (
-                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">Nenhum corretor cadastrado.</TableCell></TableRow>
+              {sorted.length === 0 && (
+                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">Nenhum corretor encontrado.</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
@@ -99,12 +131,12 @@ const AdminCorretores = () => {
 
         {/* Mobile: cards */}
         <div className="md:hidden space-y-3">
-          {corretores.length === 0 ? (
+          {sorted.length === 0 ? (
             <div className="bg-card border border-border rounded-xl text-center text-muted-foreground py-8">
-              Nenhum corretor cadastrado.
+              Nenhum corretor encontrado.
             </div>
           ) : (
-            corretores.map(c => (
+            sorted.map(c => (
               <div key={c.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">

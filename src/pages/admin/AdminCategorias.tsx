@@ -26,7 +26,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LayoutGrid, Plus, Pencil, Trash2, GripVertical, Upload, ImageIcon, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { LayoutGrid, Plus, Pencil, Trash2, GripVertical, Upload, ImageIcon, ArrowUp, ArrowDown, Search } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { Categoria } from "@/types/zapImoveis";
 
@@ -58,6 +61,8 @@ const AdminCategorias = () => {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Hero Banner State
@@ -223,6 +228,19 @@ const AdminCategorias = () => {
     await reorderCategorias(ids);
   };
 
+  // Busca + filtro de status. A ordenação é manual (mover ↑↓), então as setas
+  // são desabilitadas quando há filtro ativo (índices da subview seriam ambíguos).
+  const filterActive = search.trim() !== "" || statusFilter !== "all";
+  const visible = categorias.filter((c) => {
+    const t = search.toLowerCase();
+    const matchSearch =
+      (c.nome || "").toLowerCase().includes(t) ||
+      (c.slug || "").toLowerCase().includes(t);
+    const matchStatus =
+      statusFilter === "all" || (statusFilter === "ativo" ? c.ativo : !c.ativo);
+    return matchSearch && matchStatus;
+  });
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -324,11 +342,33 @@ const AdminCategorias = () => {
 
 
       <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Listagem</h2>
-          <span className="text-xs text-muted-foreground">
-            {categorias.length} {categorias.length === 1 ? "categoria" : "categorias"}
-          </span>
+        <div className="px-6 py-4 border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-semibold text-foreground">Listagem</h2>
+            <span className="text-xs text-muted-foreground">
+              {filterActive ? `${visible.length} de ${categorias.length}` : categorias.length}{" "}
+              {categorias.length === 1 ? "categoria" : "categorias"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 w-full sm:w-48"
+              />
+            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-32"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas</SelectItem>
+                <SelectItem value="ativo">Ativas</SelectItem>
+                <SelectItem value="inativo">Inativas</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {categorias.length === 0 ? (
@@ -355,7 +395,16 @@ const AdminCategorias = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categorias.map((c, i) => (
+              {visible.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                    Nenhuma categoria encontrada.
+                  </TableCell>
+                </TableRow>
+              )}
+              {visible.map((c) => {
+                const i = categorias.findIndex((x) => x.id === c.id);
+                return (
                 <TableRow key={c.id}>
                   <TableCell>
                     <div className="flex items-center gap-1">
@@ -363,7 +412,8 @@ const AdminCategorias = () => {
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7"
-                        disabled={i === 0}
+                        disabled={filterActive || i === 0}
+                        title={filterActive ? "Limpe os filtros para reordenar" : undefined}
                         onClick={() => move(i, -1)}
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
@@ -372,7 +422,8 @@ const AdminCategorias = () => {
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7"
-                        disabled={i === categorias.length - 1}
+                        disabled={filterActive || i === categorias.length - 1}
+                        title={filterActive ? "Limpe os filtros para reordenar" : undefined}
                         onClick={() => move(i, 1)}
                       >
                         <ArrowDown className="w-3.5 h-3.5" />
@@ -439,13 +490,21 @@ const AdminCategorias = () => {
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
             </TableBody>
           </Table>
 
           {/* Mobile: cards */}
           <div className="md:hidden divide-y divide-border">
-            {categorias.map((c, i) => (
+            {visible.length === 0 && (
+              <div className="text-center text-muted-foreground text-sm py-8">
+                Nenhuma categoria encontrada.
+              </div>
+            )}
+            {visible.map((c) => {
+              const i = categorias.findIndex((x) => x.id === c.id);
+              return (
               <div key={c.id} className="p-4 space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden flex-shrink-0">
@@ -478,10 +537,10 @@ const AdminCategorias = () => {
                     <span className="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 text-xs rounded-full bg-primary/10 text-primary font-medium">
                       {countByCategoria(c.id)}
                     </span>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" disabled={i === 0} onClick={() => move(i, -1)}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" disabled={filterActive || i === 0} onClick={() => move(i, -1)}>
                       <ArrowUp className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" disabled={i === categorias.length - 1} onClick={() => move(i, 1)}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" disabled={filterActive || i === categorias.length - 1} onClick={() => move(i, 1)}>
                       <ArrowDown className="w-4 h-4" />
                     </Button>
                   </div>
@@ -495,7 +554,8 @@ const AdminCategorias = () => {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
           </>
         )}
