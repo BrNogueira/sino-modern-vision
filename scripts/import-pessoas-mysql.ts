@@ -292,18 +292,30 @@ async function main() {
   }
   console.log(`  ✔ ${done} clientes gravados                       `);
 
-  // 2) vínculo imoveis.proprietario_id (legacy_id → clientes.id → codigo_imovel)
-  const [cliIdRows] = await conn.query<any[]>("SELECT id, legacy_id FROM clientes WHERE legacy_id IS NOT NULL");
-  const cliIdByLegacy: Record<number, string> = {};
-  for (const row of cliIdRows) cliIdByLegacy[row.legacy_id] = row.id;
+  // 2) vínculo imoveis.proprietario_id + colunas inline (legacy_id → clientes → codigo_imovel)
+  //    O admin (AdminPropertiesContext/PropertyForm) lê/edita os campos DENORMALIZADOS
+  //    proprietario_nome/telefone/email — não o FK. Por isso espelhamos os dados do
+  //    cliente nessas colunas (só onde o nome inline está vazio, p/ não sobrescrever
+  //    edição manual). proprietario_documento não tem origem no legado.
+  const [cliIdRows] = await conn.query<any[]>(
+    "SELECT id, legacy_id, nome, telefone, email FROM clientes WHERE legacy_id IS NOT NULL");
+  const cliByLegacy: Record<number, { id: string; nome: string; telefone: string | null; email: string | null }> = {};
+  for (const row of cliIdRows) cliByLegacy[row.legacy_id] = row;
   let vinc = 0;
   for (let i = 0; i < imovelProp.length; i += BATCH) {
     const batch = imovelProp.slice(i, i + BATCH);
     for (const x of batch) {
-      const cid = cliIdByLegacy[x.propLegacy];
-      if (!cid) continue;
+      const c = cliByLegacy[x.propLegacy];
+      if (!c) continue;
       const [res]: any = await conn.query(
-        "UPDATE imoveis SET proprietario_id=? WHERE codigo_imovel=?", [cid, x.codigo]);
+        `UPDATE imoveis SET
+           proprietario_id = ?,
+           proprietario_nome = ?,
+           proprietario_telefone = COALESCE(NULLIF(?, ''), proprietario_telefone),
+           proprietario_email = COALESCE(NULLIF(?, ''), proprietario_email)
+         WHERE codigo_imovel = ?
+           AND (proprietario_nome IS NULL OR proprietario_nome = '' OR proprietario_id = ?)`,
+        [c.id, c.nome, c.telefone ?? "", c.email ?? "", x.codigo, c.id]);
       vinc += res.affectedRows ? 1 : 0;
     }
     process.stdout.write(`  ✔ vínculos ${Math.min(i + BATCH, imovelProp.length)}/${imovelProp.length}\r`);
