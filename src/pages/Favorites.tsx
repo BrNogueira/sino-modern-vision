@@ -6,14 +6,24 @@ import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { useFavorites } from "@/contexts/FavoritesContext";
-import { properties } from "@/data/properties";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { zapToProperty } from "@/lib/zapToProperty";
+import { properties as staticProperties } from "@/data/properties";
 
 const Favorites = () => {
   const { favorites } = useFavorites();
+  const { properties: dbProperties, loading } = useAdminProperties();
+
+  // Mesma fonte usada na listagem e no detalhe: imóveis reais do banco,
+  // com fallback para os estáticos quando o banco está vazio.
+  const allProperties = useMemo(() => {
+    const fromDb = dbProperties.filter((p) => p.ativo).map(zapToProperty);
+    return fromDb.length > 0 ? fromDb : staticProperties;
+  }, [dbProperties]);
 
   const favoriteProperties = useMemo(
-    () => properties.filter((p) => favorites.includes(p.code)),
-    [favorites]
+    () => allProperties.filter((p) => favorites.includes(p.code)),
+    [allProperties, favorites]
   );
 
   return (
@@ -42,6 +52,11 @@ const Favorites = () => {
             {favoriteProperties.map((property) => (
               <PropertyCard key={property.code} property={property} />
             ))}
+          </div>
+        ) : loading && favorites.length > 0 ? (
+          <div className="text-center py-20">
+            <Star className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4 animate-pulse" />
+            <p className="text-xl text-muted-foreground">Carregando seus favoritos...</p>
           </div>
         ) : (
           <div className="text-center py-20">
