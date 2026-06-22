@@ -107,7 +107,7 @@ const PropertyMap = ({ properties, highlightCode, className = "h-[70vh] w-full" 
   }, [properties, highlightCode, navigate]);
 
   return (
-    <div className={`rounded-xl overflow-hidden border border-border ${className}`}>
+    <div className={`relative z-0 isolate rounded-xl overflow-hidden border border-border ${className}`}>
       <style>{`@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-6px); } }`}</style>
       <div ref={mapRef} className="w-full h-full" />
     </div>
