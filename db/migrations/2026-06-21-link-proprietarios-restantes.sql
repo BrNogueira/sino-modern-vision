@@ -1,0 +1,16 @@
+SET NAMES utf8mb4;
+UPDATE imoveis SET proprietario_nome='VTR Construções', proprietario_telefone='51 99830.0430 Vinicius @vtrconstrucoes' WHERE codigo_imovel='6321' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Kellen Gamarra', proprietario_telefone='51 99796.9738' WHERE codigo_imovel='6322' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Gabriel Rocha Dutra', proprietario_telefone='51 98569-3983' WHERE codigo_imovel='6313' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Laércio Muller', proprietario_telefone='51 99388-4792' WHERE codigo_imovel='6310' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Luciano Antunes', proprietario_telefone='51 99287-4682' WHERE codigo_imovel='6314' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Guilherme Orlandini Heurich', proprietario_telefone='51 99648-4744 (Francisco PAI)' WHERE codigo_imovel='6319' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Laércio Muller', proprietario_telefone='51 99388-4792' WHERE codigo_imovel='6309' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Afonso Celso Cardoso', proprietario_telefone='51 99988-2301' WHERE codigo_imovel='6326' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Maicon Nilles', proprietario_telefone='51 99738-9246' WHERE codigo_imovel='6316' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Izabel Cristina da Silva', proprietario_telefone='51 99674-7219' WHERE codigo_imovel='6320' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='VTR Construções', proprietario_telefone='51 99830.0430 Vinicius @vtrconstrucoes' WHERE codigo_imovel='6318' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Daiane Drummer', proprietario_telefone='51 99168-2053' WHERE codigo_imovel='6305' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Brent Construtora', proprietario_telefone='51 993123050 - Rochele' WHERE codigo_imovel='6315' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='VANESSA BERGEL LIPP', proprietario_telefone='51 98101-5957' WHERE codigo_imovel='6325' AND (proprietario_nome IS NULL OR proprietario_nome='');
+UPDATE imoveis SET proprietario_nome='Izabel Cristina da Silva', proprietario_telefone='51 99674-7219' WHERE codigo_imovel='6323' AND (proprietario_nome IS NULL OR proprietario_nome='');
