@@ -67,23 +67,34 @@ const PropertyMap = ({ properties, highlightCode, className = "h-[70vh] w-full" 
 
     geoProperties.forEach((property) => {
       const isHighlighted = property.code === highlightCode;
+      const slug = generateSlug(property.title);
       const marker = L.marker([property.latitude!, property.longitude!], {
         icon: createIcon(property.type, isHighlighted),
         zIndexOffset: isHighlighted ? 999 : 0,
       }).addTo(map);
 
       marker.bindPopup(`
-        <div style="max-width:220px;font-family:sans-serif;">
+        <div class="pm-popup" data-slug="${slug}" style="max-width:220px;font-family:sans-serif;cursor:pointer;">
           <strong style="font-size:14px;">${property.title}</strong>
           <p style="margin:4px 0;color:#666;font-size:12px;">${property.type} • CÓD: ${property.code}</p>
           <p style="margin:4px 0;font-size:13px;font-weight:600;color:#0a6936;">${property.priceFormatted}</p>
           <p style="margin:2px 0;color:#888;font-size:11px;">${property.location}</p>
+          <span style="display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:#0a6936;">Ver imóvel →</span>
         </div>
       `);
 
       marker.on("dblclick", () => {
-        navigate(`/imovel/${generateSlug(property.title)}`);
+        navigate(`/imovel/${slug}`);
       });
+    });
+
+    // Clicar nas informações do popup abre a página do imóvel (navegação SPA).
+    map.on("popupopen", (e: L.PopupEvent) => {
+      const node = e.popup.getElement()?.querySelector<HTMLElement>(".pm-popup");
+      const slug = node?.dataset.slug;
+      if (node && slug) {
+        node.onclick = () => navigate(`/imovel/${slug}`);
+      }
     });
 
     // Force a resize after mount
