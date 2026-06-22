@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logoSinos from "@/assets/logo-sinos-imoveis.png";
 import SearchBar from "./SearchBar";
@@ -8,6 +8,8 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // No mobile a busca começa recolhida (oculta) e é expandida por um botão.
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isMobile = useIsMobile();
@@ -124,7 +126,19 @@ const Header = () => {
         </div>
 
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          {/* Mobile: botão para expandir/recolher a busca */}
+          {isMobile && (
+            <button
+              className="flex items-center gap-1 p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+              onClick={() => setIsSearchOpen((v) => !v)}
+              aria-label={isSearchOpen ? "Recolher busca" : "Expandir busca"}
+              aria-expanded={isSearchOpen}
+            >
+              <Search className="w-7 h-7" strokeWidth={2.5} />
+              {isSearchOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            </button>
+          )}
           <button
             className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -135,10 +149,12 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Search bar for mobile/tablet */}
-      <div className="lg:hidden px-4 pb-6">
-        <SearchBar />
-      </div>
+      {/* Search bar for mobile/tablet — no mobile, oculta até expandir */}
+      {(!isMobile || isSearchOpen) && (
+        <div className="lg:hidden px-4 pb-6">
+          <SearchBar />
+        </div>
+      )}
 
       {/* Mobile: drawer */}
       {isMobile && mobileMenu}
