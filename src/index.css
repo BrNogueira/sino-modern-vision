@@ -183,6 +183,19 @@
     left: 0;
   }
 
+  /* Mobile: banner ocupa todo o container sem deslocamento/altura fixa
+     (desktop permanece inalterado). */
+  @media (max-width: 767px) {
+    .hero-banner {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: auto;
+      background-position: center;
+    }
+  }
+
   /* Specific overrides for logo height and hero banner requested by user */
   @media (min-width: 768px) {
     .md\:h-\[23rem\] {
