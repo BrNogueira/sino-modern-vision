@@ -67,7 +67,7 @@ const PropertyMap = ({ properties, highlightCode, className = "h-[70vh] w-full" 
 
     geoProperties.forEach((property) => {
       const isHighlighted = property.code === highlightCode;
-      const slug = generateSlug(property.title);
+      const slug = `${generateSlug(property.title)}-${property.code}`;
       const marker = L.marker([property.latitude!, property.longitude!], {
         icon: createIcon(property.type, isHighlighted),
         zIndexOffset: isHighlighted ? 999 : 0,

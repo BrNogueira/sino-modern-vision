@@ -14,11 +14,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const favorited = isFavorite(property.code);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slug = property.title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "-");
+  const slug =
+    property.title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") + `-${property.code}`;
 
   const images = [property.image, ...(property.gallery || [])];
   const totalSlides = images.length;

@@ -169,7 +169,15 @@ const PropertyDetail = () => {
     () => [...dbProperties.filter((p) => p.ativo).map(zapToProperty), ...staticProperties],
     [dbProperties],
   );
-  const baseProperty = properties.find((p) => generateSlug(p.title) === slug) || properties[0];
+  // O slug das URLs públicas termina no código do imóvel (único): "titulo-do-imovel-6325".
+  // Casamos primeiro por esse código para nunca confundir imóveis de título igual;
+  // depois por id (links do admin) e, por compatibilidade, pelo slug do título.
+  const trailingId = slug?.split("-").pop();
+  const baseProperty =
+    (trailingId && properties.find((p) => String(p.code) === trailingId)) ||
+    (trailingId && properties.find((p) => p.id != null && String(p.id) === trailingId)) ||
+    properties.find((p) => generateSlug(p.title) === slug) ||
+    properties[0];
   const { hasRole } = useAdminAuth();
 
   // Editable state for inline editing
