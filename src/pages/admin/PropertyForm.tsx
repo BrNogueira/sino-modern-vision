@@ -34,6 +34,7 @@ import {
 } from "@/types/zapImoveis";
 import { safeSelectValue } from "@/lib/imovelNormalize";
 import { fromRow } from "@/lib/imovelMapper";
+import { resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
 
 type FormData = Omit<ZapImovel, "id" | "createdAt" | "updatedAt">;
 
@@ -220,7 +221,7 @@ const PhotoUploadSection = ({
       {photos.length > 0 && (
         <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
           <img
-            src={photos[carouselIndex].url}
+            src={resolvePhotoUrl(photos[carouselIndex].url)}
             alt={`Foto ${carouselIndex + 1}`}
             className="w-full h-full object-contain bg-muted"
           />
@@ -279,7 +280,7 @@ const PhotoUploadSection = ({
                     : "border-transparent hover:border-muted-foreground/30"
                 }`}
               >
-                <img src={photo.url} alt={`Foto ${index + 1}`} className="w-full h-full object-cover" />
+                <img src={resolvePhotoUrl(photo.url)} alt={`Foto ${index + 1}`} className="w-full h-full object-cover" />
                 {index === 0 && (
                   <span className="absolute top-0.5 left-0.5 bg-primary text-primary-foreground text-[9px] font-bold px-1 rounded">
                     CAPA

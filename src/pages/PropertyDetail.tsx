@@ -449,8 +449,8 @@ const PropertyDetail = () => {
                   {property.area && !property.areaConstruida && !property.areaTerreno && (
                     <InlineEditField value={String(property.area)} field="Área" propertyCode={property.code} propertyTitle={property.title} onSave={(v) => updateField("area", v)} type="number">
                       <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 text-primary-foreground/85 text-[0.95rem] min-w-[120px]"><Square className="w-[18px] h-[18px] text-primary-foreground/90" /> área:</span>
-                        <span className="font-bold text-primary-foreground text-[1.15rem] ml-auto">{property.area} m<sup className="text-[0.7em]">2</sup></span>
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> área:</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.area} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                     </InlineEditField>
                   )}
