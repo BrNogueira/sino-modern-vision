@@ -1,6 +1,6 @@
 import { Phone, MapPin, Mail, Clock, Facebook, Instagram, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
-import logoSinos from "@/assets/logo-sinos-imoveis.png";
+import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 
 const Footer = () => {
   return (

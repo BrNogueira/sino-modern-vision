@@ -173,7 +173,7 @@
 
 @layer components {
   .hero-banner {
-    background-image: url("./assets/hero-banner.png");
+    background-image: url("./assets/hero-banner.webp");
     background-repeat: no-repeat;
     background-size: cover;
     position: absolute;

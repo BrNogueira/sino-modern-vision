@@ -4,7 +4,7 @@ import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import logoSinos from "@/assets/logo-sinos-imoveis.png";
+import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 import { Lock, Mail, AlertCircle, LogIn } from "lucide-react";
 
 const AdminLogin = () => {

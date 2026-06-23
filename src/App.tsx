@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,39 +10,44 @@ import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 import { AdminPropertiesProvider } from "@/contexts/AdminPropertiesContext";
 import { CategoriasProvider } from "@/contexts/CategoriasContext";
 import { ChangeLogProvider } from "@/contexts/ChangeLogContext";
+import CookieConsent from "./components/CookieConsent";
+
+// Funil público principal — eager (carrega no bundle inicial).
 import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
 import Listing from "./pages/Listing";
-import Favorites from "./pages/Favorites";
-import NotFound from "./pages/NotFound";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminLayout from "./pages/admin/AdminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminProperties from "./pages/admin/AdminProperties";
-import PropertyForm from "./pages/admin/PropertyForm";
-import AdminCorretorProfile from "./pages/admin/AdminCorretorProfile";
-import AdminCorretorImoveis from "./pages/admin/AdminCorretorImoveis";
-import AdminUsuarios from "./pages/admin/AdminUsuarios";
-import AdminUserCreate from "./pages/admin/AdminUserCreate";
-import AdminPermissoes from "./pages/admin/AdminPermissoes";
-import AdminCondominios from "./pages/admin/AdminCondominios";
-import AdminCategorias from "./pages/admin/AdminCategorias";
-import AdminLeads from "./pages/admin/AdminLeads";
-import AdminRelatorios from "./pages/admin/AdminRelatorios";
-import AdminCorretores from "./pages/admin/AdminCorretores";
-import AdminAgenda from "./pages/admin/AdminAgenda";
-import AdminConfiguracoes from "./pages/admin/AdminConfiguracoes";
-import AgenciamentosPage from "./pages/admin/corretor/AgenciamentosPage";
-import PreCadastrosPage from "./pages/admin/corretor/PreCadastrosPage";
-import MapaPage from "./pages/admin/corretor/MapaPage";
-import PesquisarPage from "./pages/admin/corretor/PesquisarPage";
-import AgendaPage from "./pages/admin/corretor/AgendaPage";
-import CadastroProprietarioPage from "./pages/admin/corretor/CadastroProprietarioPage";
-import CadastroClientePage from "./pages/admin/corretor/CadastroClientePage";
-import CanalProPage from "./pages/admin/CanalProPage";
-import Contato from "./pages/Contato";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import CookieConsent from "./components/CookieConsent";
+
+// Páginas secundárias e todo o painel admin — code-split (chunks sob demanda),
+// para que visitantes públicos não baixem o admin no bundle inicial.
+const Favorites = lazy(() => import("./pages/Favorites"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Contato = lazy(() => import("./pages/Contato"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminProperties = lazy(() => import("./pages/admin/AdminProperties"));
+const PropertyForm = lazy(() => import("./pages/admin/PropertyForm"));
+const AdminCorretorProfile = lazy(() => import("./pages/admin/AdminCorretorProfile"));
+const AdminCorretorImoveis = lazy(() => import("./pages/admin/AdminCorretorImoveis"));
+const AdminUsuarios = lazy(() => import("./pages/admin/AdminUsuarios"));
+const AdminUserCreate = lazy(() => import("./pages/admin/AdminUserCreate"));
+const AdminPermissoes = lazy(() => import("./pages/admin/AdminPermissoes"));
+const AdminCondominios = lazy(() => import("./pages/admin/AdminCondominios"));
+const AdminCategorias = lazy(() => import("./pages/admin/AdminCategorias"));
+const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
+const AdminRelatorios = lazy(() => import("./pages/admin/AdminRelatorios"));
+const AdminCorretores = lazy(() => import("./pages/admin/AdminCorretores"));
+const AdminAgenda = lazy(() => import("./pages/admin/AdminAgenda"));
+const AdminConfiguracoes = lazy(() => import("./pages/admin/AdminConfiguracoes"));
+const AgenciamentosPage = lazy(() => import("./pages/admin/corretor/AgenciamentosPage"));
+const PreCadastrosPage = lazy(() => import("./pages/admin/corretor/PreCadastrosPage"));
+const MapaPage = lazy(() => import("./pages/admin/corretor/MapaPage"));
+const PesquisarPage = lazy(() => import("./pages/admin/corretor/PesquisarPage"));
+const AgendaPage = lazy(() => import("./pages/admin/corretor/AgendaPage"));
+const CadastroProprietarioPage = lazy(() => import("./pages/admin/corretor/CadastroProprietarioPage"));
+const CadastroClientePage = lazy(() => import("./pages/admin/corretor/CadastroClientePage"));
+const CanalProPage = lazy(() => import("./pages/admin/CanalProPage"));
 
 const queryClient = new QueryClient();
 
@@ -58,6 +64,7 @@ const App = () => (
             <BrowserRouter>
               <ScrollToTop />
               <CookieConsent />
+              <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/imoveis" element={<Listing />} />
@@ -98,6 +105,7 @@ const App = () => (
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              </Suspense>
             </BrowserRouter>
           </ChangeLogProvider>
           </CategoriasProvider>

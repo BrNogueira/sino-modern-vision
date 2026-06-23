@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import logoSinos from "@/assets/logo-sinos-imoveis.png";
+import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 import SearchBar from "./SearchBar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";

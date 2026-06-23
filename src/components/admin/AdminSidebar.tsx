@@ -34,7 +34,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import logoSinos from "@/assets/logo-sinos-imoveis.png";
+import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 import { Badge } from "@/components/ui/badge";
 
 interface NavItem {
