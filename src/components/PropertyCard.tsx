@@ -47,7 +47,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
   return (
     <div className="group/card relative h-full min-h-[560px]">
-      <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-full mt-[25px]">
+      <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-[690px] mt-[25px]">
         {/* Image area - flush with card edges */}
         <div className="relative h-[240px] md:h-[300px] shrink-0">
           {/* Property Code Badge - Green pill overlapping the top of the photo */}
