@@ -221,8 +221,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
       {/* Hover popup below card - desktop only */}
       {property.description && (
-        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full mt-1 z-40 w-[92%] bg-card border border-border rounded-lg shadow-lg p-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <p className="text-foreground text-center text-xs leading-relaxed">
+        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full mt-1 z-40 w-[92%] bg-black rounded-lg shadow-lg p-4 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <p className="text-white text-center text-base leading-relaxed">
             {property.description}
           </p>
         </div>
