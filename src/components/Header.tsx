@@ -108,7 +108,7 @@ const Header = () => {
 
   // ===== INTERNAL PAGES HEADER =====
   return (
-    <header className="bg-primary shadow-md mb-8 sticky top-0 z-40 transition-all duration-300">
+    <header className="bg-primary shadow-md mb-8 top-0 z-40 transition-all duration-300">
       <div className="container mx-auto px-4 flex items-center justify-between py-4 gap-8">
         <Link to="/" className="flex flex-col items-start flex-shrink-0 hover:opacity-90 transition-opacity">
           <img src={logoSinos} alt="Sinos Imóveis" className="w-auto h-[6rem] md:h-[10rem] drop-shadow-sm" />
