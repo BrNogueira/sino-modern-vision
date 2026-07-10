@@ -144,7 +144,15 @@
       "Bash(ls -la src/assets/*.webp src/assets/*.png)",
       "Bash(git commit -q -m 'perf: webp nos assets, code-split do admin e lazy nas imagens *)",
       "Bash(git commit -q -m 'fix: fotos do PropertyForm via resolvePhotoUrl e ajuste do campo area *)",
-      "Bash(git commit -q -m 'chore: atualiza permissoes locais do claude *)"
+      "Bash(git commit -q -m 'chore: atualiza permissoes locais do claude *)",
+      "Bash(curl -s \"https://sinos.gen3.dev.br/\")",
+      "Bash(curl -sI \"https://sinos.gen3.dev.br/admin/login\")",
+      "Bash(curl -s -o /dev/null -w \"imoveis -> http=%{http_code} bytes=%{size_download}\\\\n\" \"https://sinos.gen3.dev.br/api/data/imoveis?select=id,codigo_imovel&limit=5\")",
+      "Bash(curl -s \"https://sinos.gen3.dev.br/api/data/imoveis?select=id,codigo_imovel,titulo_imovel&limit=3\")",
+      "Bash(curl -s -o /dev/null -w \"http=%{http_code} bytes=%{size_download}\\\\n\" \"https://sinos.gen3.dev.br/api/data/imoveis?select=id&limit=1000\")",
+      "Bash(curl -s \"https://sinos.gen3.dev.br/assets/index-CB7ULzKn.js\" -o /tmp/live-index.js)",
+      "Bash(break)",
+      "Bash(perl -i -pe 's/\\\\Q\\(s ?? \"\"\\).trim\\(\\).toLowerCase\\(\\).normalize\\(\"NFD\"\\).replace\\(\\\\E\\\\/\\\\[.*?\\\\]\\\\/g, \"\"\\\\\\);/\\(s ?? \"\"\\).trim\\(\\).toLowerCase\\(\\).normalize\\(\"NFD\"\\).replace\\(\\\\/[\\\\\\\\u0300-\\\\\\\\u036f]\\\\/g, \"\"\\);/' src/pages/Listing.tsx)"
     ]
   }
 }

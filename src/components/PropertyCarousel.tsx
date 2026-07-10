@@ -3,6 +3,13 @@ import PropertyCard from "./PropertyCard";
 import { properties as staticProperties } from "@/data/properties";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { zapToProperty } from "@/lib/zapToProperty";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 
 const MAX_HOME = 9;
 
@@ -22,6 +29,8 @@ const PropertyCarousel = () => {
     return [...fromDb, ...fromStatic];
   }, [dbProperties]);
 
+  if (featured.length === 0) return null;
+
   return (
     <section id="imoveis" className="py-16 bg-background">
       <div className="container mx-auto px-4">
@@ -32,11 +41,24 @@ const PropertyCarousel = () => {
           <div className="w-20 h-0.5 bg-primary mx-auto mt-4" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 md:mt-[70px]">
-          {featured.map((property) => (
-            <PropertyCard key={property.code} property={property} />
-          ))}
-        </div>
+        {/* Carrossel exibindo 3 imóveis por vez no desktop (2 em tablet, 1 no mobile). */}
+        <Carousel
+          opts={{ align: "start", loop: featured.length > 3 }}
+          className="w-full px-0 md:px-12 mt-8 md:mt-[70px]"
+        >
+          <CarouselContent className="-ml-8">
+            {featured.map((property) => (
+              <CarouselItem
+                key={property.code}
+                className="pl-8 basis-full sm:basis-1/2 lg:basis-1/3"
+              >
+                <PropertyCard property={property} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
+        </Carousel>
       </div>
     </section>
   );

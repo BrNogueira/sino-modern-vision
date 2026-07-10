@@ -1,9 +1,34 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Search, ChevronDown, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+
+// Estados atendidos com nome completo + sigla. O valor gravado é a UF (sigla),
+// que é o que o Listing usa para filtrar (aceita nome completo ou sigla).
+const STATE_OPTIONS = [
+  { value: "RS", label: "Rio Grande do Sul (RS)" },
+  { value: "SC", label: "Santa Catarina (SC)" },
+  { value: "PR", label: "Paraná (PR)" },
+];
+
+const UF_BY_NAME: Record<string, string> = {
+  "rio grande do sul": "RS",
+  "santa catarina": "SC",
+  parana: "PR",
+};
+
+const norm = (s?: string) =>
+  (s ?? "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const toUf = (s?: string) => {
+  const n = norm(s);
+  if (!n) return "";
+  return n.length === 2 ? n.toUpperCase() : UF_BY_NAME[n] ?? n.toUpperCase();
+};
 
 const SearchBar = () => {
   const navigate = useNavigate();
+  const { properties } = useAdminProperties();
   const [searchText, setSearchText] = useState("");
   const [modalidade, setModalidade] = useState<string[]>([]);
   const [modalidadeOpen, setModalidadeOpen] = useState(false);
@@ -34,6 +59,52 @@ const SearchBar = () => {
     { value: "500000-1000000", label: "R$ 500mil - 1M" },
     { value: "1000000+", label: "Acima de R$ 1M" },
   ];
+
+  // Localizações reais dos imóveis ativos, base da cascata Estado → Cidade → Bairro.
+  const locData = useMemo(
+    () =>
+      properties
+        .filter((p) => p.ativo)
+        .map((p) => ({
+          uf: toUf(p.estado),
+          city: (p.cidade ?? "").trim(),
+          neighborhood: (p.bairro ?? "").trim(),
+        }))
+        .filter((x) => x.city),
+    [properties]
+  );
+
+  // Cidades disponíveis para os estados selecionados (todas se nenhum estado).
+  const cityOptions = useMemo(() => {
+    const set = new Set<string>();
+    locData.forEach((x) => {
+      if (filters.state.length && !filters.state.includes(x.uf)) return;
+      set.add(x.city);
+    });
+    return [...set].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [locData, filters.state]);
+
+  // Bairros disponíveis para os estados + cidades selecionados.
+  const neighborhoodOptions = useMemo(() => {
+    const set = new Set<string>();
+    const cityNorms = filters.city.map(norm);
+    locData.forEach((x) => {
+      if (filters.state.length && !filters.state.includes(x.uf)) return;
+      if (filters.city.length && !cityNorms.includes(norm(x.city))) return;
+      if (x.neighborhood) set.add(x.neighborhood);
+    });
+    return [...set].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [locData, filters.state, filters.city]);
+
+  // Ao mudar um filtro pai, remove seleções filhas que deixaram de ser válidas.
+  useEffect(() => {
+    setFilters((prev) => {
+      const city = prev.city.filter((c) => cityOptions.includes(c));
+      const neighborhood = prev.neighborhood.filter((n) => neighborhoodOptions.includes(n));
+      if (city.length === prev.city.length && neighborhood.length === prev.neighborhood.length) return prev;
+      return { ...prev, city, neighborhood };
+    });
+  }, [cityOptions, neighborhoodOptions]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -82,6 +153,8 @@ const SearchBar = () => {
     if (values.length === 1) return values[0];
     return `${values.length} selecionados`;
   };
+
+  const stateLabel = (v: string) => STATE_OPTIONS.find((s) => s.value === v)?.label ?? v;
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -154,24 +227,30 @@ const SearchBar = () => {
           <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m" />
         </div>
         <div className="relative search-bar__field" ref={stateRef}>
-          <button type="button" onClick={() => setStateOpen(!stateOpen)} className="search-bar__select-button text-m">{formatSelection("Estado", filters.state)}</button>
+          <button type="button" onClick={() => setStateOpen(!stateOpen)} className="search-bar__select-button text-m">
+            {filters.state.length === 0
+              ? "Estado"
+              : filters.state.length === 1
+              ? stateLabel(filters.state[0])
+              : `${filters.state.length} selecionados`}
+          </button>
           <ChevronDown className="search-bar__chevron" />
           {stateOpen && (
             <div className="search-bar__dropdown search-bar__dropdown--left">
               <button
                 type="button"
-                onClick={() => toggleAllMulti("state", ["RS", "SC", "PR"])}
+                onClick={() => toggleAllMulti("state", STATE_OPTIONS.map((s) => s.value))}
                 className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
               >
-                <span className={`search-bar__check ${filters.state.length === 3 ? "search-bar__check--active" : ""}`}>
-                  {filters.state.length === 3 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                <span className={`search-bar__check ${filters.state.length === STATE_OPTIONS.length ? "search-bar__check--active" : ""}`}>
+                  {filters.state.length === STATE_OPTIONS.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
                 </span>
                 Selecionar todos
               </button>
-              {["RS", "SC", "PR"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("state", opt)} className="search-bar__dropdown-item text-m">
-                  <span className={`search-bar__check ${filters.state.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.state.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
-                  {opt}
+              {STATE_OPTIONS.map((opt) => (
+                <button key={opt.value} type="button" onClick={() => toggleMulti("state", opt.value)} className="search-bar__dropdown-item text-m">
+                  <span className={`search-bar__check ${filters.state.includes(opt.value) ? "search-bar__check--active" : ""}`}>{filters.state.includes(opt.value) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
+                  {opt.label}
                 </button>
               ))}
             </div>
@@ -181,23 +260,29 @@ const SearchBar = () => {
           <button type="button" onClick={() => setCityOpen(!cityOpen)} className="search-bar__select-button text-m">{formatSelection("Cidade", filters.city)}</button>
           <ChevronDown className="search-bar__chevron" />
           {cityOpen && (
-            <div className="search-bar__dropdown search-bar__dropdown--left">
-              <button
-                type="button"
-                onClick={() => toggleAllMulti("city", ["Novo Hamburgo", "São Leopoldo", "Campo Bom"])}
-                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
-              >
-                <span className={`search-bar__check ${filters.city.length === 3 ? "search-bar__check--active" : ""}`}>
-                  {filters.city.length === 3 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
-                </span>
-                Selecionar todos
-              </button>
-              {["Novo Hamburgo", "São Leopoldo", "Campo Bom"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m">
-                  <span className={`search-bar__check ${filters.city.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.city.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
-                  {opt}
-                </button>
-              ))}
+            <div className="search-bar__dropdown search-bar__dropdown--left" style={{ maxHeight: 288, overflowY: "auto" }}>
+              {cityOptions.length === 0 ? (
+                <div className="search-bar__dropdown-item text-m text-muted-foreground">Nenhuma cidade</div>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => toggleAllMulti("city", cityOptions)}
+                    className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                  >
+                    <span className={`search-bar__check ${filters.city.length === cityOptions.length ? "search-bar__check--active" : ""}`}>
+                      {filters.city.length === cityOptions.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                    </span>
+                    Selecionar todos
+                  </button>
+                  {cityOptions.map((opt) => (
+                    <button key={opt} type="button" onClick={() => toggleMulti("city", opt)} className="search-bar__dropdown-item text-m">
+                      <span className={`search-bar__check ${filters.city.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.city.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
+                      {opt}
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>
@@ -205,23 +290,29 @@ const SearchBar = () => {
           <button type="button" onClick={() => setNeighborhoodOpen(!neighborhoodOpen)} className="search-bar__select-button text-m">{formatSelection("Bairro", filters.neighborhood)}</button>
           <ChevronDown className="search-bar__chevron" />
           {neighborhoodOpen && (
-            <div className="search-bar__dropdown search-bar__dropdown--left">
-              <button
-                type="button"
-                onClick={() => toggleAllMulti("neighborhood", ["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"])}
-                className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
-              >
-                <span className={`search-bar__check ${filters.neighborhood.length === 4 ? "search-bar__check--active" : ""}`}>
-                  {filters.neighborhood.length === 4 && <Check className="w-3 h-3 text-[#2F2F2F]" />}
-                </span>
-                Selecionar todos
-              </button>
-              {["Centro", "Lomba Grande", "Colina do Sol", "Rondônia"].map((opt) => (
-                <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m">
-                  <span className={`search-bar__check ${filters.neighborhood.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.neighborhood.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
-                  {opt}
-                </button>
-              ))}
+            <div className="search-bar__dropdown search-bar__dropdown--left" style={{ maxHeight: 288, overflowY: "auto" }}>
+              {neighborhoodOptions.length === 0 ? (
+                <div className="search-bar__dropdown-item text-m text-muted-foreground">Nenhum bairro</div>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => toggleAllMulti("neighborhood", neighborhoodOptions)}
+                    className="search-bar__dropdown-item text-m font-bold border-b border-border mb-1 pb-2"
+                  >
+                    <span className={`search-bar__check ${filters.neighborhood.length === neighborhoodOptions.length ? "search-bar__check--active" : ""}`}>
+                      {filters.neighborhood.length === neighborhoodOptions.length && <Check className="w-3 h-3 text-[#2F2F2F]" />}
+                    </span>
+                    Selecionar todos
+                  </button>
+                  {neighborhoodOptions.map((opt) => (
+                    <button key={opt} type="button" onClick={() => toggleMulti("neighborhood", opt)} className="search-bar__dropdown-item text-m">
+                      <span className={`search-bar__check ${filters.neighborhood.includes(opt) ? "search-bar__check--active" : ""}`}>{filters.neighborhood.includes(opt) && <Check className="w-3 h-3 text-[#2F2F2F]" />}</span>
+                      {opt}
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>

@@ -5,7 +5,7 @@ import { propertyPlaceholder, resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
 
 const formatBRL = (n?: number) =>
   typeof n === "number" && !isNaN(n)
-    ? `R$ ${n.toLocaleString("pt-BR")}`
+    ? n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
     : "Sob consulta";
 
 const transactionTypeFromOferta = (

@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS imoveis (
   sub_tipo_imovel        VARCHAR(120)  NOT NULL,
   categoria_imovel       VARCHAR(120)  NOT NULL DEFAULT 'Padrão',
   categoria_id           CHAR(36)      NULL,
+  condominio_id          CHAR(36)      NULL,  -- → condominios.id (sem FK rígida; enforce no app)
   tipo_oferta            INT           NOT NULL DEFAULT 1,
   modalidade             JSON          NOT NULL DEFAULT (JSON_ARRAY()),
 
@@ -149,6 +150,7 @@ CREATE TABLE IF NOT EXISTS imoveis (
   KEY idx_imoveis_cidade_bairro (cidade, bairro),
   KEY idx_imoveis_tipo (tipo_imovel),
   KEY idx_imoveis_categoria (categoria_id),
+  KEY idx_imoveis_condominio (condominio_id),
   KEY idx_imoveis_preco_venda (preco_venda),
   KEY idx_imoveis_proprietario (proprietario_id),
   CONSTRAINT fk_imoveis_categoria FOREIGN KEY (categoria_id)

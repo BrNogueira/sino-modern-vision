@@ -62,17 +62,18 @@ SELECT
   i.video_url                                                AS video_url,
   NULL                                                       AS pdf_src,
   i.created_by                                               AS corretor_id,
-  NULL                                                       AS condominio_id,        -- imoveis (Model B) não tem vínculo de condomínio
+  i.condominio_id                                            AS condominio_id,
   i.created_at                                               AS created_at,
   i.updated_at                                               AS updated_at,
   p.full_name                                                AS corretor_nome,
   p.phone                                                    AS corretor_telefone,
   p.creci                                                    AS corretor_creci,
   p.avatar_url                                               AS corretor_avatar,
-  NULL                                                       AS condominio_nome,
+  cond.nome                                                  AS condominio_nome,
   JSON_UNQUOTE(JSON_EXTRACT(i.fotos, '$[0].url'))            AS imagem_thumb
 FROM imoveis i
-LEFT JOIN profiles p ON p.id = i.created_by;
+LEFT JOIN profiles p ON p.id = i.created_by
+LEFT JOIN condominios cond ON cond.id = i.condominio_id;
 
 -- ── imoveis_imagens: explode imoveis.fotos (JSON) em 1 linha por foto ────────
 -- O front (useImovelImagens) ordena por `posicao` asc; a ordem do array já vem

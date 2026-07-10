@@ -361,6 +361,9 @@ export interface ZapImovel {
   // Categoria customizada (vínculo com tabela categorias)
   categoriaId?: string | null;
 
+  // Condomínio vinculado (tabela condominios) — traz fotos de áreas comuns
+  condominioId?: string | null;
+
   // Controle interno
   ativo: boolean;
   destaque: boolean;

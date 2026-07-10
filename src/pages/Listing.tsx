@@ -50,26 +50,53 @@ const Listing = () => {
   const filtered = useMemo(() => {
     let result = [...allProperties];
 
-    const transacao = searchParams.get("transacao");
-    if (transacao) result = result.filter((p) => p.transactionType === transacao);
+    const splitParam = (key: string): string[] =>
+      searchParams.get(key)?.split(",").map((s) => s.trim()).filter(Boolean) ?? [];
+
+    const norm = (s?: string) =>
+      (s ?? "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // Comparação case-insensitive: qualquer valor selecionado bate com o campo do imóvel.
+    const matchesAny = (selected: string[], value?: string) =>
+      selected.some((sel) => norm(sel) === norm(value));
+
+    // Estados podem estar gravados como nome completo ("Rio Grande do Sul") ou
+    // sigla ("RS"). Normaliza ambos para a sigla (UF) para o filtro funcionar
+    // independentemente de como veio da barra de busca.
+    const UF_BY_NAME: Record<string, string> = {
+      "rio grande do sul": "RS", "santa catarina": "SC", "parana": "PR",
+    };
+    const toUf = (s?: string) => {
+      const n = norm(s);
+      if (!n) return "";
+      return n.length === 2 ? n.toUpperCase() : (UF_BY_NAME[n] ?? n.toUpperCase());
+    };
+
+    // Modalidade da barra de busca ("Venda"/"Aluguel") mapeada para transactionType
+    // (que pode ser "venda", "aluguel" ou "venda/aluguel"). Aceita também o
+    // parâmetro legado "transacao".
+    const modalidades = [...splitParam("modalidade"), ...splitParam("transacao")];
+    if (modalidades.length) {
+      const wanted = modalidades.map(norm);
+      result = result.filter((p) => wanted.some((w) => p.transactionType.includes(w)));
+    }
 
     const codigo = searchParams.get("codigo");
     if (codigo) result = result.filter((p) => p.code.includes(codigo));
 
-    const splitParam = (key: string): string[] =>
-      searchParams.get(key)?.split(",").map((s) => s.trim()).filter(Boolean) ?? [];
-
     const estados = splitParam("estado");
-    if (estados.length) result = result.filter((p) => estados.includes(p.state));
+    if (estados.length) {
+      const wantedUf = estados.map(toUf);
+      result = result.filter((p) => wantedUf.includes(toUf(p.state)));
+    }
 
     const cidades = splitParam("cidade");
-    if (cidades.length) result = result.filter((p) => cidades.includes(p.city));
+    if (cidades.length) result = result.filter((p) => matchesAny(cidades, p.city));
 
     const bairros = splitParam("bairro");
-    if (bairros.length) result = result.filter((p) => bairros.includes(p.neighborhood));
+    if (bairros.length) result = result.filter((p) => matchesAny(bairros, p.neighborhood));
 
     const tipos = splitParam("tipo");
-    if (tipos.length) result = result.filter((p) => tipos.includes(p.type));
+    if (tipos.length) result = result.filter((p) => matchesAny(tipos, p.type));
 
     const valores = splitParam("valor");
     if (valores.length) {
@@ -89,7 +116,10 @@ const Listing = () => {
         (p) =>
           p.title.toLowerCase().includes(query) ||
           p.type.toLowerCase().includes(query) ||
-          p.location.toLowerCase().includes(query)
+          p.location.toLowerCase().includes(query) ||
+          p.city.toLowerCase().includes(query) ||
+          (p.state ?? "").toLowerCase().includes(query) ||
+          toUf(p.state).toLowerCase() === query
       );
     }
 

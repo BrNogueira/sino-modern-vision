@@ -79,6 +79,7 @@ const emptyForm: FormData = {
   proprietarioEmail: "",
   proprietarioDocumento: "",
   modalidade: [],
+  condominioId: null,
   ativo: true,
   destaque: false,
   exclusivo: false,
@@ -323,6 +324,37 @@ const PropertyForm = () => {
   const { categorias } = useCategorias();
   const { toast } = useToast();
   const [form, setForm] = useState<FormData>(emptyForm);
+  const [condominios, setCondominios] = useState<{ id: string; nome: string; fotos: string[] }[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("condominios").select("id,nome,fotos").order("nome");
+      if (cancelled) return;
+      const parseFotos = (f: unknown): string[] => {
+        if (Array.isArray(f)) return f as string[];
+        if (typeof f === "string") { try { const p = JSON.parse(f); return Array.isArray(p) ? p : []; } catch { return []; } }
+        return [];
+      };
+      setCondominios((data ?? []).map((c: any) => ({ id: c.id, nome: c.nome, fotos: parseFotos(c.fotos) })));
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const selectedCondo = condominios.find((c) => c.id === form.condominioId);
+  const condoFotosNovas = selectedCondo
+    ? selectedCondo.fotos.filter((url) => url && !form.fotos.some((f) => f.url === url))
+    : [];
+
+  const pullCondoFotos = () => {
+    if (condoFotosNovas.length === 0) {
+      toast({ title: "As fotos do condomínio já estão no imóvel." });
+      return;
+    }
+    const novas: ZapImovelPhoto[] = condoFotosNovas.map((url) => ({ url, principal: false }));
+    set("fotos", [...form.fotos, ...novas]);
+    toast({ title: `${novas.length} foto(s) do condomínio adicionada(s).` });
+  };
 
   useEffect(() => {
     if (!isEditing || !id) return;
@@ -528,6 +560,43 @@ const PropertyForm = () => {
             </Select>
             <p className="text-[11px] text-muted-foreground">
               Vincula este imóvel a uma categoria do carrossel da home. Gerencie em <span className="font-medium">Imóveis › Categorias</span>.
+            </p>
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-foreground text-sm">Condomínio</Label>
+            <Select
+              value={form.condominioId || "__none__"}
+              onValueChange={(v) => set("condominioId", v === "__none__" ? null : v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sem condomínio" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">Sem condomínio</SelectItem>
+                {condominios.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.nome}{c.fotos.length ? ` — ${c.fotos.length} foto(s)` : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {selectedCondo && selectedCondo.fotos.length > 0 && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={pullCondoFotos}
+                disabled={condoFotosNovas.length === 0}
+              >
+                <ImageIcon className="w-4 h-4" />
+                {condoFotosNovas.length > 0
+                  ? `Puxar ${condoFotosNovas.length} foto(s) do condomínio`
+                  : "Fotos do condomínio já adicionadas"}
+              </Button>
+            )}
+            <p className="text-[11px] text-muted-foreground">
+              Vincula o imóvel a um condomínio e permite trazer as fotos das áreas comuns. Gerencie em <span className="font-medium">Cadastros › Condomínios</span>.
             </p>
           </div>
         </section>
