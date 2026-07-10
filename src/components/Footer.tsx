@@ -6,7 +6,7 @@ const GREEN = "#0a6936";
 const YELLOW = "#f5c518";
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-3" style={{ color: YELLOW }}>
+  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-2" style={{ color: YELLOW }}>
     {children}
   </p>
 );
@@ -23,12 +23,12 @@ const Footer = () => {
       {/* fio de acento */}
       <div style={{ height: 2, backgroundColor: YELLOW }} />
 
-      <div className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Marca */}
-          <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
-            <img src={logoSinos} alt="Sinos Imóveis" className="h-16 w-auto" loading="lazy" />
+          <div className="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
+            <img src={logoSinos} alt="Sinos Imóveis" className="h-12 w-auto" loading="lazy" />
             <p className="text-white/70 text-sm">
               <strong className="font-semibold text-white">15 anos</strong> realizando sonhos
             </p>
@@ -40,7 +40,7 @@ const Footer = () => {
           {/* Contato */}
           <div>
             <SectionLabel>Contato</SectionLabel>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 shrink-0" style={{ color: YELLOW }} />
                 <span>(51) 3596-1446 · (51) 99595-1446</span>
@@ -89,7 +89,7 @@ const Footer = () => {
               href="https://www8.caixa.gov.br/siopiinternet-web/simulaOperacaoInternet.do?method=inicializarCasoUso"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white transition-colors"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white transition-colors"
             >
               Simulador Caixa
               <ExternalLink className="w-3.5 h-3.5" />
@@ -100,7 +100,7 @@ const Footer = () => {
 
       {/* Barra inferior */}
       <div className="border-t border-white/10">
-        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/50">
+        <div className="container mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/50">
           <p>© {new Date().getFullYear()} Sinos Imóveis. Todos os direitos reservados.</p>
           <Link to="/politica-de-privacidade" className="hover:text-white transition-colors">
             Política de Privacidade
