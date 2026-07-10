@@ -1,97 +1,110 @@
-import { Phone, MapPin, Mail, Clock, Facebook, Instagram, Youtube } from "lucide-react";
+import { Phone, MapPin, Mail, Clock, Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 
+const GREEN = "#0a6936";
+const YELLOW = "#f5c518";
+
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-3" style={{ color: YELLOW }}>
+    {children}
+  </p>
+);
+
+const socials = [
+  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
+  { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+  { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+];
+
 const Footer = () => {
   return (
-    <footer id="contato" className="text-white">
+    <footer id="contato" className="text-white" style={{ backgroundColor: GREEN }}>
+      {/* fio de acento */}
+      <div style={{ height: 2, backgroundColor: YELLOW }} />
 
-      {/* Main footer */}
-      <div style={{ backgroundColor: "#0a6936", borderTop: "4px solid #f5c518", borderBottom: "4px solid #f5c518" }}>
-        <div className="container mx-auto px-4 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
 
-            {/* Col 1: Logo + slogan */}
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <img src={logoSinos} alt="Sinos Imóveis" className="h-32 md:h-48 w-auto" />
-              <span className="text-white/80 mt-1 text-lg md:text-2xl">
-                <strong>15 anos</strong> realizando sonhos
-              </span>
-              <span className="text-white/60 mt-4 text-lg md:text-2xl">CRECI: 23250</span>
-            </div>
+          {/* Marca */}
+          <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
+            <img src={logoSinos} alt="Sinos Imóveis" className="h-16 w-auto" loading="lazy" />
+            <p className="text-white/70 text-sm">
+              <strong className="font-semibold text-white">15 anos</strong> realizando sonhos
+            </p>
+            <span className="inline-flex items-center rounded-full border border-white/20 px-3 py-0.5 text-[11px] tracking-wider text-white/70">
+              CRECI 23250
+            </span>
+          </div>
 
-            {/* Col 2: Contact info */}
-            <div className="flex flex-col gap-4 text-sm">
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 shrink-0" />
-                <span className="font-semibold text-base md:text-2xl">(51) 3596-1446 | (51) 99595-1446</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 shrink-0 mt-0.5" />
-                <span className="text-white/80 leading-relaxed text-base md:text-2xl">
-                  Rua João Aloisio Algayer, 1565 - Lomba Grande/NH
+          {/* Contato */}
+          <div>
+            <SectionLabel>Contato</SectionLabel>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 shrink-0" style={{ color: YELLOW }} />
+                <span>(51) 3596-1446 · (51) 99595-1446</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: YELLOW }} />
+                <span className="text-white/80 leading-relaxed">
+                  Rua João Aloisio Algayer, 1565 — Lomba Grande / NH
                 </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 shrink-0" />
-                <a href="mailto:atendimento@sinosimoveis.com.br" className="text-white/80 hover:text-white transition-colors break-all text-base md:text-2xl">
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-4 h-4 shrink-0" style={{ color: YELLOW }} />
+                <a href="mailto:atendimento@sinosimoveis.com.br" className="text-white/80 hover:text-white transition-colors break-all">
                   atendimento@sinosimoveis.com.br
                 </a>
-              </div>
-              <div className="flex items-start gap-3 mt-2">
-                <Clock className="w-5 h-5 shrink-0 mt-0.5" />
-                <div className="text-white/80 text-xs leading-relaxed">
-                  <p className="font-semibold text-white mb-1 text-base md:text-2xl">Horário de atendimento</p>
-                  <p className="text-base md:text-2xl">Seg à sexta: 8h30 às 12h e das 13h30 às 18h</p>
-                  <p className="text-base md:text-2xl">Sábados: 8h30 às 12h</p>
-                  <p className="mt-1 italic text-white/60 text-base md:text-2xl">
-                    Obs.: Demais horários e domingos atendemos com hora marcada.
-                  </p>
+              </li>
+              <li className="flex items-start gap-3">
+                <Clock className="w-4 h-4 shrink-0 mt-0.5" style={{ color: YELLOW }} />
+                <div className="text-white/70 leading-relaxed">
+                  <p>Seg a sex: 8h30–12h e 13h30–18h</p>
+                  <p>Sáb: 8h30–12h</p>
+                  <p className="text-white/50 text-xs mt-1 italic">Domingos e demais horários com hora marcada.</p>
                 </div>
-              </div>
-            </div>
+              </li>
+            </ul>
+          </div>
 
-            {/* Col 3: Social + Simulador */}
-            <div className="flex flex-col items-center md:items-end gap-5">
-              <div>
-                <p className="font-semibold mb-3 text-center md:text-right text-xl md:text-3xl">Redes Sociais</p>
-                <div className="flex items-center gap-4 justify-center md:justify-end">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#1877F2', color: '#fff' }}>
-                    <Facebook className="w-7 h-7 md:w-9 md:h-9" />
-                  </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', color: '#fff' }}>
-                    <Instagram className="w-7 h-7 md:w-9 md:h-9" />
-                  </a>
-                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ backgroundColor: '#FF0000', color: '#fff' }}>
-                    <Youtube className="w-7 h-7 md:w-9 md:h-9" />
-                  </a>
-                </div>
-              </div>
-              <a
-                href="https://www8.caixa.gov.br/siopiinternet-web/simulaOperacaoInternet.do?method=inicializarCasoUso"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white font-semibold hover:underline mt-2 text-lg md:text-2xl"
-              >
-                Simulador Caixa
-              </a>
+          {/* Social + simulador */}
+          <div className="flex flex-col items-center md:items-end">
+            <SectionLabel>Redes sociais</SectionLabel>
+            <div className="flex items-center gap-3">
+              {socials.map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-white/10 text-white transition-colors hover:bg-[#f5c518] hover:text-[#0a6936]"
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              ))}
             </div>
-
+            <a
+              href="https://www8.caixa.gov.br/siopiinternet-web/simulaOperacaoInternet.do?method=inicializarCasoUso"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white transition-colors"
+            >
+              Simulador Caixa
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
         </div>
+      </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-white/15">
-          <div className="container mx-auto px-4 py-4 text-center">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-              <p className="text-white/50 text-sm md:text-2xl">
-                © {new Date().getFullYear()} Sinos Imóveis. Todos os direitos reservados.
-              </p>
-              <Link to="/politica-de-privacidade" className="text-white/50 hover:text-white transition-colors text-sm md:text-2xl underline md:no-underline">
-                Política de Privacidade
-              </Link>
-            </div>
-          </div>
+      {/* Barra inferior */}
+      <div className="border-t border-white/10">
+        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/50">
+          <p>© {new Date().getFullYear()} Sinos Imóveis. Todos os direitos reservados.</p>
+          <Link to="/politica-de-privacidade" className="hover:text-white transition-colors">
+            Política de Privacidade
+          </Link>
         </div>
       </div>
     </footer>
