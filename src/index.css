@@ -215,6 +215,14 @@
     background-color: #89A0B7;
   }
 
+  /* Desktop: colapsa o espaço reservado da search bar (puxada com top negativo)
+     para as seções não ficarem tão distantes. Mobile mantém altura automática. */
+  @media (min-width: 768px) {
+    .hero-section__water {
+      height: 5px;
+    }
+  }
+
   .hero-section__transition {
     background: linear-gradient(to bottom, #89A0B7 0%, hsl(0 0% 96%) 100%);
   }
