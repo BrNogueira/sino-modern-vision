@@ -82,7 +82,7 @@ storageRouter.post("/:bucket", requireRole("admin", "gerente", "corretor"), asyn
   const rel = (typeof form["path"] === "string" && form["path"]) || `${Date.now()}-${file.name}`;
   const dest = safeJoin(bucket, rel);
   await fs.mkdir(path.dirname(dest), { recursive: true });
-  let data = Buffer.from(await file.arrayBuffer());
+  let data: Buffer = Buffer.from(await file.arrayBuffer());
   if (WATERMARK_BUCKETS.has(bucket)) data = await withWatermark(data, rel);
   await fs.writeFile(dest, data);
   return c.json({ path: rel });
