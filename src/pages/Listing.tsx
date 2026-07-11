@@ -202,7 +202,7 @@ const Listing = () => {
           <div
             className={
               viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 md:mt-[70px]"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 mt-8 md:mt-[70px]"
                 : "flex flex-col gap-4"
             }
           >
