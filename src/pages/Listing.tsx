@@ -203,11 +203,15 @@ const Listing = () => {
             className={
               viewMode === "grid"
                 ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 mt-8 md:mt-[70px]"
-                : "flex flex-col gap-4"
+                : "flex flex-col gap-4 mt-8 md:mt-[70px]"
             }
           >
             {paginated.map((property) => (
-              <PropertyCard key={property.id ?? property.code} property={property} />
+              <PropertyCard
+                key={property.id ?? property.code}
+                property={property}
+                layout={viewMode === "grid" ? "grid" : "list"}
+              />
             ))}
           </div>
         ) : (
