@@ -237,9 +237,9 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
   // ── Layout GRID (padrão): imagem em cima, conteúdo embaixo ───────────────
   return (
     <div className="group/card relative h-full min-h-[560px]">
-      <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-[710px] mt-[25px]">
+      <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-[620px] mt-[25px]">
         {/* Image area - flush with card edges */}
-        <div className="relative h-[300px] md:h-[360px] shrink-0">
+        <div className="relative h-[260px] md:h-[300px] shrink-0">
           {/* Property Code Badge - Green pill overlapping the top of the photo */}
           <div className="absolute left-1/2 -translate-x-1/2 -top-[20px] z-30">
             <span className="bg-emerald-600 text-white font-bold text-base px-2 py-1 rounded-md shadow-md whitespace-nowrap">
