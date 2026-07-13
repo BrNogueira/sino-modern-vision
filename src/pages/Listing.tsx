@@ -142,25 +142,6 @@ const Listing = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
-          <Link
-            to="/"
-            className="flex items-center gap-1 md:gap-2 text-primary font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
-          >
-            <Home className="w-4 h-4" />
-            Início
-          </Link>
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-1 md:gap-2 text-primary font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Voltar
-          </button>
-        </div>
-      </div>
-
       <div className="container mx-auto px-4 pt-8 pb-16">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3 gap-4">
           <div>
@@ -169,6 +150,26 @@ const Listing = () => {
             <p className="text-xs text-muted-foreground">
               {loading ? "Carregando imóveis..." : `Página ${safePage} de ${totalPages}`}
             </p>
+          </div>
+
+          {/* Início / Voltar — centralizados no bloco, em amarelo */}
+          <div className="order-last w-full flex items-center justify-center gap-6 md:order-none md:w-auto">
+            <Link
+              to="/"
+              className="flex items-center gap-1 md:gap-2 font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
+              style={{ color: "#F2C21A" }}
+            >
+              <Home className="w-4 h-4" />
+              Início
+            </Link>
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-1 md:gap-2 font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
+              style={{ color: "#F2C21A" }}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Voltar
+            </button>
           </div>
 
           <div className="flex items-center gap-3">

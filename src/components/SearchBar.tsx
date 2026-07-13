@@ -172,7 +172,7 @@ const SearchBar = () => {
   return (
     <div className="search-bar">
       {/* Row 1 */}
-      <div className="search-bar__row search-bar__row--top flex flex-col md:flex-row gap-2" style={{ padding: "10px" }}>
+      <div className="search-bar__row search-bar__row--top flex flex-col md:flex-row gap-2" style={{ padding: "5px" }}>
         <div className="search-bar__input-group">
           <Search className="search-bar__icon" />
           <input
@@ -222,7 +222,7 @@ const SearchBar = () => {
       </div>
 
       {/* Row 2 */}
-      <div className="search-bar__row search-bar__row--filters grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-row lg:flex-nowrap gap-2" style={{ padding: "10px" }}>
+      <div className="search-bar__row search-bar__row--filters grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-row lg:flex-nowrap gap-2" style={{ padding: "5px" }}>
         <div className="relative search-bar__field">
           <input type="text" placeholder="Código" value={filters.code} onChange={(e) => setFilters({ ...filters, code: e.target.value })} className="search-bar__field-input text-m" />
         </div>
