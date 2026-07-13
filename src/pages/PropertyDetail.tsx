@@ -501,10 +501,17 @@ const PropertyDetail = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 bg-background p-[15px]">
                   {property.bedrooms != null && (
-                    <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                    <div className="flex items-start gap-2 py-0.5 text-base md:text-3xl">
+                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2" />
                         <Bed className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl">{property.bedrooms} {property.suites ? `quartos (${property.suites} suíte${(property.suites ?? 0) > 1 ? "s" : ""})` : "quartos"}</span>
+                        <span className="text-foreground text-base md:text-3xl flex flex-col leading-tight">
+                          <span>{property.bedrooms} quartos</span>
+                          {property.suites ? (
+                            <span className="text-xs md:text-lg font-normal text-muted-foreground">
+                              ({property.suites} suíte{(property.suites ?? 0) > 1 ? "s" : ""})
+                            </span>
+                          ) : null}
+                        </span>
                       </div>
                   )}
                   {property.suites != null && (
