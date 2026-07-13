@@ -43,7 +43,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       : property.priceFormatted;
 
   const displayArea = property.area || (property as any).areaTotal || (property as any).areaUtil || property.areaTerreno || property.areaConstruida;
-  const displayDimensions = property.areaDimensions || (property as any).area_dimensions;
+  // Dimensão real é curta e sem HTML (ex.: "15x35"). Registros legados às vezes
+  // trazem uma descrição em HTML nesse campo — nesse caso, ignora para não quebrar o card.
+  const rawDimensions = property.areaDimensions || (property as any).area_dimensions;
+  const displayDimensions =
+    typeof rawDimensions === "string" && !/<[^>]+>/.test(rawDimensions) && rawDimensions.trim().length <= 30
+      ? rawDimensions.trim() || undefined
+      : undefined;
 
   return (
     <div className="group/card relative h-full min-h-[560px]">
