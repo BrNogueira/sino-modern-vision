@@ -49,10 +49,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <div className="group/card relative h-full min-h-[560px]">
       <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-[690px] mt-[25px]">
         {/* Image area - flush with card edges */}
-        <div className="relative h-[240px] md:h-[300px] shrink-0">
+        <div className="relative h-[320px] md:h-[400px] shrink-0">
           {/* Property Code Badge - Green pill overlapping the top of the photo */}
           <div className="absolute left-1/2 -translate-x-1/2 -top-[20px] z-30">
-            <span className="bg-emerald-600 text-white font-bold text-xl p-2 rounded-md shadow-md whitespace-nowrap">
+            <span className="bg-emerald-600 text-white font-bold text-base px-2 py-1 rounded-md shadow-md whitespace-nowrap">
               Cód: {property.code}
             </span>
           </div>
@@ -122,74 +122,74 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="px-6 pt-4 pb-4 flex flex-col flex-1 min-h-0">
+        <div className="px-5 pt-3 pb-3 flex flex-col flex-1 min-h-0">
           {/* Location */}
-          <div className="flex flex-col items-center gap-1 mb-2">
+          <div className="flex flex-col items-center gap-1 mb-1">
             <div className="flex items-center justify-center gap-2 text-foreground">
-              <span className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-primary" />
+              <span className="bg-primary/10 rounded-full p-1.5 flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-primary" />
               </span>
-              <span className="text-lg font-bold">{property.location}</span>
+              <span className="text-base font-bold">{property.location}</span>
             </div>
           </div>
 
           {/* Feature Icons */}
           {(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || displayArea) && (
-            <div className="flex items-start justify-center gap-3 my-4 flex-wrap">
+            <div className="flex items-start justify-center gap-2 my-2 flex-wrap">
               {property.bedrooms !== undefined && property.bedrooms > 0 && (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
-                    <Bed className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                  <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
+                    <Bed className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">{property.bedrooms}</span>
-                  <span className="text-sm font-bold text-muted-foreground">Quartos</span>
+                  <span className="text-sm font-bold text-foreground">{property.bedrooms}</span>
+                  <span className="text-xs font-bold text-muted-foreground">Quartos</span>
                 </div>
               )}
               {property.bathrooms !== undefined && property.bathrooms > 0 && (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
-                    <Bath className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                  <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
+                    <Bath className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">{property.bathrooms}</span>
-                  <span className="text-sm font-bold text-muted-foreground">Banheiros</span>
+                  <span className="text-sm font-bold text-foreground">{property.bathrooms}</span>
+                  <span className="text-xs font-bold text-muted-foreground">Banheiros</span>
                 </div>
               )}
               {property.suites !== undefined && property.suites > 0 && (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
-                    <Star className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                  <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">{property.suites}</span>
-                  <span className="text-sm font-bold text-muted-foreground">Suítes</span>
+                  <span className="text-sm font-bold text-foreground">{property.suites}</span>
+                  <span className="text-xs font-bold text-muted-foreground">Suítes</span>
                 </div>
               )}
               {property.parking !== undefined && property.parking > 0 && (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
-                    <Car className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                  <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
+                    <Car className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">{property.parking}</span>
-                  <span className="text-sm font-bold text-muted-foreground">Vagas</span>
+                  <span className="text-sm font-bold text-foreground">{property.parking}</span>
+                  <span className="text-xs font-bold text-muted-foreground">Vagas</span>
                 </div>
               )}
               {property.hasPool && (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
-                    <Waves className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                  <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
+                    <Waves className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
-                  <span className="text-base font-bold text-foreground">✓</span>
-                  <span className="text-sm font-bold text-muted-foreground">Piscina</span>
+                  <span className="text-sm font-bold text-foreground">✓</span>
+                  <span className="text-xs font-bold text-muted-foreground">Piscina</span>
                 </div>
               )}
               {displayArea && (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-muted rounded-full px-5 py-2.5 flex items-center justify-center">
-                    <GroupIcon className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                  <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
+                    <GroupIcon className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
-                  <span className="text-2xl font-bold text-foreground">
+                  <span className="text-lg font-bold text-foreground">
                     {displayArea}m² {displayDimensions && `(${displayDimensions})`}
                   </span>
-                  <span className="text-base font-bold text-muted-foreground">Área</span>
+                  <span className="text-xs font-bold text-muted-foreground">Área</span>
                 </div>
               )}
             </div>
@@ -199,19 +199,19 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <div className="flex-1" />
 
           {/* Divider */}
-          <div className="border-t border-border mb-4" />
+          <div className="border-t border-border mb-3" />
 
           {/* Price + CTA */}
           <div className="flex items-end justify-between gap-3">
             <div className="flex flex-col">
-              <span className="text-sm text-muted-foreground">Valor do imóvel</span>
-              <span className="text-2xl font-bold text-foreground whitespace-nowrap">
+              <span className="text-xs text-muted-foreground">Valor do imóvel</span>
+              <span className="text-xl font-bold text-foreground whitespace-nowrap">
                 {priceLabel}
               </span>
             </div>
             <Link
               to={`/imovel/${slug}`}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-md transition-colors whitespace-nowrap"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm px-4 py-2 rounded-md transition-colors whitespace-nowrap"
             >
               Ver Detalhes
             </Link>
