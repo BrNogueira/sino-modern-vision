@@ -78,7 +78,8 @@ export class SupaQuery implements PromiseLike<Result> {
       if (this.op === "select") {
         data = await api.get(`${base}${this.buildQuery(false)}`);
       } else if (this.op === "insert" || this.op === "upsert") {
-        data = await api.post(base, this.body);
+        // upsert → sinaliza ao backend p/ usar INSERT ... ON DUPLICATE KEY UPDATE.
+        data = await api.post(this.op === "upsert" ? `${base}?upsert=1` : base, this.body);
         if (this._single && Array.isArray(data)) data = data[0] ?? null;
       } else if (this.op === "update") {
         // update por id: usa o filtro eq.id se houver; senão PATCH por query.

@@ -89,8 +89,7 @@ const AdminCategorias = () => {
     try {
       const { error } = await supabase
         .from("site_settings")
-        .update({ value: url })
-        .eq("key", "hero_banner");
+        .upsert({ key: "hero_banner", value: url });
       if (error) throw error;
       setHeroBannerUrl(url);
       toast({ title: "Banner atualizado com sucesso" });

@@ -214,6 +214,7 @@ export function makeCrudRouter(cfg: ResourceConfig): Hono {
       const ctx = c.get("auth");
       if (!canWrite(ctx) && !cfg.publicInsert) throw new HttpError(ctx ? 403 : 401, ctx ? "forbidden" : "unauthorized");
       const allowed = await loadColumns(cfg.table);
+      const upsert = c.req.query("upsert") != null;
       const body = await c.req.json();
       const rows: Record<string, unknown>[] = Array.isArray(body) ? body : [body];
       const out: unknown[] = [];
@@ -227,9 +228,14 @@ export function makeCrudRouter(cfg: ResourceConfig): Hono {
           data[pk] = crypto.randomUUID();
         const keys = Object.keys(data);
         if (keys.length === 0) throw new HttpError(400, "sem_colunas_validas");
+        // upsert: em conflito de PK, atualiza as colunas não-PK (INSERT ou UPDATE).
+        const updateCols = keys.filter((k) => k !== pk);
+        const onDup = upsert && updateCols.length
+          ? ` ON DUPLICATE KEY UPDATE ${updateCols.map((k) => `${qIdent(k)} = VALUES(${qIdent(k)})`).join(", ")}`
+          : "";
         await pool.query(
           `INSERT INTO ${qIdent(cfg.table)} (${keys.map(qIdent).join(", ")})
-           VALUES (${keys.map(() => "?").join(", ")})`,
+           VALUES (${keys.map(() => "?").join(", ")})${onDup}`,
           keys.map((k) => data[k]),
         );
         const [sel] = await pool.query<RowDataPacket[]>(
