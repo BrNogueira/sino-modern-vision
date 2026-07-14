@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { generateVRSyncXml } from "@/lib/vrsyncXmlGenerator";
-import { supabase } from "@/integrations/supabase/client";
+import { apiUrl } from "@/integrations/api/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,10 +17,9 @@ const CanalProPage = () => {
 
   const activeProperties = properties.filter((p) => p.ativo);
 
-  const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID || "";
-  const feedUrl = projectId
-    ? `https://${projectId}.supabase.co/functions/v1/canal-pro-feed`
-    : "";
+  // Feed servido pela própria API (Hono): GET /api/feed/canal-pro (público, puxa do MySQL).
+  // URL sempre absoluta para colar no Canal Pro / Grupo ZAP.
+  const feedUrl = new URL(apiUrl("/api/feed/canal-pro"), window.location.origin).href;
 
   const handleGenerateXml = () => {
     setIsGenerating(true);
@@ -58,34 +57,28 @@ const CanalProPage = () => {
   };
 
   const handleCopyFeedUrl = () => {
-    if (feedUrl) {
-      navigator.clipboard.writeText(feedUrl);
-      toast({ title: "URL copiada!", description: "Cole no Canal Pro em Configurações > Integração de Anúncios." });
-    }
+    navigator.clipboard.writeText(feedUrl);
+    toast({ title: "URL copiada!", description: "Cole no Canal Pro em Configurações > Integração de Anúncios." });
   };
 
   const handleTestFeed = async () => {
     setIsGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("canal-pro-feed", {
-        body: { properties },
-      });
-      
-      if (error) throw error;
-      
-      // data will be the XML string
-      setXmlPreview(typeof data === "string" ? data : JSON.stringify(data, null, 2));
+      const res = await fetch(feedUrl, { headers: { Accept: "application/xml" } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const xml = await res.text();
+      const listings = (xml.match(/<Listing>/g) || []).length;
+      setXmlPreview(xml);
       setLastGenerated(new Date().toLocaleString("pt-BR"));
       toast({
-        title: "Feed testado com sucesso!",
-        description: "A edge function respondeu corretamente.",
+        title: "Feed online respondeu!",
+        description: `${listings} imóveis no XML (${(xml.length / 1024).toFixed(0)} KB).`,
       });
     } catch (error: any) {
-      // If edge function not deployed, generate locally
       handleGenerateXml();
       toast({
-        title: "Edge function não disponível",
-        description: "XML gerado localmente. Deploy a edge function para habilitar o feed online.",
+        title: "Feed online indisponível",
+        description: `${error?.message ?? "Erro"} — XML gerado localmente como fallback.`,
         variant: "destructive",
       });
     } finally {
@@ -160,22 +153,15 @@ const CanalProPage = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {feedUrl ? (
-            <div className="flex items-center gap-2">
-              <code className="flex-1 bg-muted px-3 py-2 rounded-md text-sm break-all">
-                {feedUrl}
-              </code>
-              <Button variant="outline" size="sm" onClick={handleCopyFeedUrl}>
-                <Copy className="h-4 w-4 mr-1" />
-                Copiar
-              </Button>
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              A URL do feed será gerada após o deploy da edge function. Configure o{" "}
-              <code>VITE_SUPABASE_PROJECT_ID</code> no projeto.
-            </p>
-          )}
+          <div className="flex items-center gap-2">
+            <code className="flex-1 bg-muted px-3 py-2 rounded-md text-sm break-all">
+              {feedUrl}
+            </code>
+            <Button variant="outline" size="sm" onClick={handleCopyFeedUrl}>
+              <Copy className="h-4 w-4 mr-1" />
+              Copiar
+            </Button>
+          </div>
           <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
             <Badge variant="outline" className="text-xs">VRSync</Badge>
             <span>Formato oficial recomendado pelo Grupo ZAP</span>
@@ -202,7 +188,7 @@ const CanalProPage = () => {
             </Button>
             <Button variant="outline" onClick={handleTestFeed} disabled={isGenerating}>
               <Globe className={`h-4 w-4 mr-2 ${isGenerating ? "animate-spin" : ""}`} />
-              Testar Edge Function
+              Testar Feed Online
             </Button>
             <Button variant="outline" onClick={handleDownloadXml}>
               <Download className="h-4 w-4 mr-2" />
