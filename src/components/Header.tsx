@@ -121,7 +121,7 @@ const Header = () => {
         </Link>
 
         {/* Search bar on the right for desktop */}
-        <div className="hidden lg:block flex-1 max-w-5xl header-search-container self-end">
+        <div className="hidden lg:block flex-1 max-w-5xl header-search-container self-end" style={{ marginBottom: "15px" }}>
           <SearchBar />
         </div>
 

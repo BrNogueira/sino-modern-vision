@@ -156,16 +156,16 @@ const Listing = () => {
           <div className="order-last w-full flex items-center justify-center gap-6 md:order-none md:w-auto">
             <Link
               to="/"
-              className="flex items-center gap-1 md:gap-2 font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
-              style={{ color: "#F2C21A" }}
+              className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity"
+              style={{ color: "#E7C205", fontSize: "1rem" }}
             >
               <Home className="w-4 h-4" />
               Início
             </Link>
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-1 md:gap-2 font-bold text-lg md:text-2xl uppercase hover:opacity-80 transition-opacity"
-              style={{ color: "#F2C21A" }}
+              className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity"
+              style={{ color: "#E7C205", fontSize: "1rem" }}
             >
               <ArrowLeft className="w-4 h-4" />
               Voltar
