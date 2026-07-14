@@ -247,6 +247,22 @@
     z-index: 10;
   }
 
+  /* HOME hero search bar: maior que a versao interna/compacta */
+  .search-bar--home {
+    max-width: 1100px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .search-bar--home .search-bar__input-group,
+  .search-bar--home .search-bar__button {
+    height: 64px;
+  }
+
+  .search-bar--home .search-bar__field .search-bar__select-button,
+  .search-bar--home .search-bar__field-input {
+    height: 56px;
+  }
+
   .search-bar .text-m {
     font-size: 1rem;
   }

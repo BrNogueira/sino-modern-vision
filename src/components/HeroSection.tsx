@@ -132,7 +132,7 @@ const HeroSection = () => {
       <div className="hero-section__water">
         <div className="relative flex items-start justify-center px-4">
           {/* Single search container */}
-            <div className="search-bar px-[15px] py-[15px] relative md:top-[-280px] top-[-30px]">
+            <div className="search-bar search-bar--home relative md:top-[-280px] top-[-30px]">
             {/* Row 1: Search input with Aluguel/Venda inline before Buscar */}
             <div className="search-bar__row search-bar__row--top flex flex-col md:flex-row gap-2" style={{ marginBottom: "5px" }}>
               <div className="search-bar__input-group">
