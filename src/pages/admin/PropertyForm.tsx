@@ -341,21 +341,6 @@ const PropertyForm = () => {
     return () => { cancelled = true; };
   }, []);
 
-  const selectedCondo = condominios.find((c) => c.id === form.condominioId);
-  const condoFotosNovas = selectedCondo
-    ? selectedCondo.fotos.filter((url) => url && !form.fotos.some((f) => f.url === url))
-    : [];
-
-  const pullCondoFotos = () => {
-    if (condoFotosNovas.length === 0) {
-      toast({ title: "As fotos do condomínio já estão no imóvel." });
-      return;
-    }
-    const novas: ZapImovelPhoto[] = condoFotosNovas.map((url) => ({ url, principal: false }));
-    set("fotos", [...form.fotos, ...novas]);
-    toast({ title: `${novas.length} foto(s) do condomínio adicionada(s).` });
-  };
-
   useEffect(() => {
     if (!isEditing || !id) return;
     let cancelled = false;
@@ -430,24 +415,19 @@ const PropertyForm = () => {
     e.preventDefault();
     if (submitting) return;
 
-    if (!form.codigoImovel.trim()) {
-      toast({ title: "Erro", description: "Código do imóvel é obrigatório.", variant: "destructive" });
-      return;
-    }
-    if (!form.tituloImovel.trim() || form.tituloImovel.trim().length < 10) {
-      toast({ title: "Erro", description: "Título deve ter pelo menos 10 caracteres.", variant: "destructive" });
-      return;
-    }
-    if (!form.observacao.trim()) {
-      toast({ title: "Erro", description: "Descrição é obrigatória.", variant: "destructive" });
-      return;
-    }
-    if (!form.precoVenda && !form.precoAluguel) {
-      toast({ title: "Erro", description: "Informe ao menos um preço (venda ou aluguel).", variant: "destructive" });
-      return;
-    }
-    if (!form.areaTotal && !form.areaUtil) {
-      toast({ title: "Erro", description: "Informe ao menos uma área (total ou útil).", variant: "destructive" });
+    const missing: string[] = [];
+    if (!form.codigoImovel.trim()) missing.push("Código do imóvel");
+    if (!form.tituloImovel.trim() || form.tituloImovel.trim().length < 10)
+      missing.push("Título (mínimo 10 caracteres)");
+    if (!form.observacao.trim()) missing.push("Descrição");
+    if (!form.precoVenda && !form.precoAluguel) missing.push("Preço (venda ou aluguel)");
+    if (!form.areaTotal && !form.areaUtil) missing.push("Área (total ou útil)");
+    if (missing.length > 0) {
+      toast({
+        title: `Faltam ${missing.length} campo(s) obrigatório(s)`,
+        description: missing.join(" • "),
+        variant: "destructive",
+      });
       return;
     }
 
@@ -580,23 +560,8 @@ const PropertyForm = () => {
                 ))}
               </SelectContent>
             </Select>
-            {selectedCondo && selectedCondo.fotos.length > 0 && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-2"
-                onClick={pullCondoFotos}
-                disabled={condoFotosNovas.length === 0}
-              >
-                <ImageIcon className="w-4 h-4" />
-                {condoFotosNovas.length > 0
-                  ? `Puxar ${condoFotosNovas.length} foto(s) do condomínio`
-                  : "Fotos do condomínio já adicionadas"}
-              </Button>
-            )}
             <p className="text-[11px] text-muted-foreground">
-              Vincula o imóvel a um condomínio e permite trazer as fotos das áreas comuns. Gerencie em <span className="font-medium">Cadastros › Condomínios</span>.
+              Vincula o imóvel a um condomínio; as fotos das áreas comuns aparecem automaticamente na página do imóvel. Gerencie em <span className="font-medium">Cadastros › Condomínios</span>.
             </p>
           </div>
         </section>

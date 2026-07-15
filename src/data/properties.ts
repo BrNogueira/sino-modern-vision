@@ -39,6 +39,8 @@ export interface Property {
   lavabos?: number;
   gallery?: string[];
   fotosAreaComum?: string[];
+  /** ID do condomínio vinculado (imóveis do admin/DB). Popula o carrossel de fotos do condomínio no detalhe. */
+  condominioId?: string | null;
   acabamentos?: string[];
   amenidades?: string[];
   aceitaFinanciamento?: boolean;

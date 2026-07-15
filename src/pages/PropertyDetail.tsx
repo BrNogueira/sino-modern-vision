@@ -57,6 +57,8 @@ import { properties as staticProperties, type Property } from "@/data/properties
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { zapToProperty } from "@/lib/zapToProperty";
+import { supabase } from "@/integrations/supabase/client";
+import { resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
 
 const generateSlug = (title: string) =>
   title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -218,6 +220,35 @@ const PropertyDetail = () => {
 
   const gallery = editableGallery || (property.gallery?.length ? property.gallery : [property.image]);
   const [currentImage, setCurrentImage] = useState(0);
+
+  // Fotos do condomínio vinculado — buscadas ao vivo, sempre em sincronia com o cadastro.
+  const condominioId = baseProperty.condominioId ?? null;
+  const [condo, setCondo] = useState<{ nome: string; fotos: string[] } | null>(null);
+  const [condoImage, setCondoImage] = useState(0);
+  useEffect(() => {
+    if (!condominioId) { setCondo(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("condominios").select("nome,fotos").eq("id", condominioId).single();
+      if (cancelled) return;
+      if (!data) { setCondo(null); return; }
+      const raw = Array.isArray(data.fotos)
+        ? data.fotos
+        : typeof data.fotos === "string"
+          ? (() => { try { const p = JSON.parse(data.fotos); return Array.isArray(p) ? p : []; } catch { return []; } })()
+          : [];
+      const fotos = raw
+        .map((f: any) => (typeof f === "string" ? f : f?.url))
+        .filter(Boolean)
+        .map((u: string) => resolvePhotoUrl(u));
+      setCondo({ nome: data.nome ?? "", fotos });
+      setCondoImage(0);
+    })();
+    return () => { cancelled = true; };
+  }, [condominioId]);
+  const condoFotos = condo?.fotos ?? [];
+  const nextCondoImage = useCallback(() => setCondoImage((i) => (i + 1) % condoFotos.length), [condoFotos.length]);
+  const prevCondoImage = useCallback(() => setCondoImage((i) => (i - 1 + condoFotos.length) % condoFotos.length), [condoFotos.length]);
   const [lightbox, setLightbox] = useState<{ open: boolean; index: number; images: string[] }>({ open: false, index: 0, images: [] });
   const [showTaxas, setShowTaxas] = useState(false);
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -381,6 +412,43 @@ const PropertyDetail = () => {
                 </div>
               )}
             </InlinePhotoEditor>
+
+            {/* Carrossel de fotos do condomínio vinculado */}
+            {condoFotos.length > 0 && (
+              <div>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
+                  <h3 className="font-bold uppercase tracking-wide text-lg md:text-3xl">
+                    Condomínio{condo?.nome ? ` ${condo.nome}` : ""}
+                  </h3>
+                </div>
+                <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card space-y-3">
+                  <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
+                    <img
+                      src={condoFotos[condoImage]}
+                      alt={`Condomínio ${condo?.nome ?? ""} — foto ${condoImage + 1}`}
+                      className="w-full h-full object-cover cursor-pointer"
+                      onClick={() => openLightbox(condoImage, condoFotos)}
+                    />
+                    {condoFotos.length > 1 && (
+                      <>
+                        <button onClick={prevCondoImage} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronLeft className="w-5 h-5" /></button>
+                        <button onClick={nextCondoImage} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronRight className="w-5 h-5" /></button>
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">{condoImage + 1} / {condoFotos.length}</div>
+                      </>
+                    )}
+                  </div>
+                  {condoFotos.length > 1 && (
+                    <div className="flex gap-2">
+                      {condoFotos.slice(0, 4).map((img, i) => (
+                        <button key={i} onClick={() => setCondoImage(i)} className={`flex-1 aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${condoImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
+                          <img src={img} alt={`Condomínio foto ${i + 1}`} className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Description */}
             {property.description && (

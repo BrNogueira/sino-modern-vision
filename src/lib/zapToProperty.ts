@@ -76,5 +76,6 @@ export const zapToProperty = (z: ZapImovel): Property => {
     description: z.descricaoCurta,
     latitude: z.latitude ? Number(z.latitude) : undefined,
     longitude: z.longitude ? Number(z.longitude) : undefined,
+    condominioId: z.condominioId ?? null,
   };
 };
