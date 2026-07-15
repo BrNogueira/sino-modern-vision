@@ -41,6 +41,12 @@ export interface Property {
   fotosAreaComum?: string[];
   /** ID do condomínio vinculado (imóveis do admin/DB). Popula o carrossel de fotos do condomínio no detalhe. */
   condominioId?: string | null;
+  /** Descrição completa (campo `observacao` do cadastro), preserva quebras de linha. */
+  descricaoCompleta?: string;
+  /** Features marcadas no cadastro, agrupadas por categoria para exibição. */
+  caracteristicas?: { title: string; items: string[] }[];
+  iptu?: number;
+  anoConstrucao?: number;
   acabamentos?: string[];
   amenidades?: string[];
   aceitaFinanciamento?: boolean;

@@ -1,7 +1,19 @@
 import type { Property } from "@/data/properties";
 import type { ZapImovel } from "@/types/zapImoveis";
 import { ensureStringArray } from "@/lib/imovelNormalize";
+import { featureCategories } from "@/types/zapImoveis";
 import { propertyPlaceholder, resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
+
+// Agrupa as features marcadas (true) por categoria, com emoji + label, para exibição.
+const buildCaracteristicas = (flags?: Record<string, boolean>) => {
+  if (!flags) return [];
+  return featureCategories
+    .map((cat) => ({
+      title: cat.title,
+      items: cat.items.filter((it) => flags[it.key]).map((it) => `${it.emoji} ${it.label}`),
+    }))
+    .filter((g) => g.items.length > 0);
+};
 
 const formatBRL = (n?: number) =>
   typeof n === "number" && !isNaN(n)
@@ -74,6 +86,11 @@ export const zapToProperty = (z: ZapImovel): Property => {
     exclusive: !!z.exclusivo,
     gallery,
     description: z.descricaoCurta,
+    descricaoCompleta: z.observacao || z.descricaoCurta || "",
+    caracteristicas: buildCaracteristicas(z.features),
+    aceitaFinanciamento: !!z.features?.apta_financiamento,
+    iptu: z.iptu ?? undefined,
+    anoConstrucao: z.anoConstrucao ?? undefined,
     latitude: z.latitude ? Number(z.latitude) : undefined,
     longitude: z.longitude ? Number(z.longitude) : undefined,
     condominioId: z.condominioId ?? null,

@@ -262,6 +262,11 @@ const PropertyDetail = () => {
   const lightboxNext = () => setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }));
 
   const characteristics = buildCharacteristics(property);
+  // Descrição principal = observacao (campo "Descrição completa" do cadastro), com edição inline respeitada.
+  const descricao = editableFields.observacao !== undefined
+    ? editableFields.observacao
+    : (baseProperty.descricaoCompleta || baseProperty.description || "");
+  const caracteristicas = property.caracteristicas ?? [];
   const hasAcabamentos = property.acabamentos && property.acabamentos.length > 0;
   const hasAmenidades = property.amenidades && property.amenidades.length > 0;
   const hasFotosAreaComum = property.fotosAreaComum && property.fotosAreaComum.length > 0;
@@ -451,7 +456,7 @@ const PropertyDetail = () => {
             )}
 
             {/* Description */}
-            {property.description && (
+            {descricao && (
               <div className="rounded-xl border border-border bg-card p-5">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <h3 className="font-bold text-foreground text-xl md:text-3xl">Descrição do Imóvel</h3>
@@ -460,12 +465,32 @@ const PropertyDetail = () => {
                       sectionTitle="Descrição"
                       propertyCode={property.code}
                       propertyTitle={property.title}
-                      fields={[{ key: "descricaoCurta", label: "Descrição", type: "textarea", value: property.description }]}
+                      fields={[{ key: "observacao", label: "Descrição completa", type: "textarea", value: descricao }]}
                       onSave={(u) => updateProperty(baseProperty.id!, u)}
                     />
                   )}
                 </div>
-                <p className="text-muted-foreground leading-relaxed text-base md:text-3xl">{property.description}</p>
+                <p className="text-muted-foreground leading-relaxed text-base md:text-3xl whitespace-pre-line">{descricao}</p>
+              </div>
+            )}
+
+            {/* Características do Imóvel — features marcadas no cadastro, agrupadas */}
+            {caracteristicas.length > 0 && (
+              <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+                <h3 className="font-bold text-foreground text-xl md:text-3xl">Características do Imóvel</h3>
+                {caracteristicas.map((grupo) => (
+                  <div key={grupo.title}>
+                    <h4 className="font-semibold text-foreground text-base md:text-2xl mb-1.5">{grupo.title}</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+                      {grupo.items.map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 text-muted-foreground text-base md:text-2xl">
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
 
@@ -541,6 +566,33 @@ const PropertyDetail = () => {
                         <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> área:</span>
                         <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.area} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Ficha Técnica — tipo, ano, IPTU */}
+            {(property.type || property.anoConstrucao || property.iptu) && (
+              <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
+                <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Ficha Técnica</h3>
+                <div className="flex flex-col gap-2 bg-background p-[15px]">
+                  {property.type && (
+                    <div className="flex items-center justify-between text-base md:text-2xl">
+                      <span className="text-black">Tipo:</span>
+                      <span className="font-bold text-primary">{property.type}</span>
+                    </div>
+                  )}
+                  {property.anoConstrucao && (
+                    <div className="flex items-center justify-between text-base md:text-2xl">
+                      <span className="text-black">Ano de construção:</span>
+                      <span className="font-bold text-primary">{property.anoConstrucao}</span>
+                    </div>
+                  )}
+                  {property.iptu && (
+                    <div className="flex items-center justify-between text-base md:text-2xl">
+                      <span className="text-black">IPTU:</span>
+                      <span className="font-bold text-primary">{property.iptu.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
+                    </div>
                   )}
                 </div>
               </div>
