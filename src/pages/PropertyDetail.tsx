@@ -749,55 +749,55 @@ const PropertyDetail = () => {
                     />
                   )}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 bg-background p-[15px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 bg-background p-[15px]">
                   {property.bedrooms != null && (
-                    <div className="flex items-start gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2" />
-                        <Bed className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl flex flex-col leading-tight">
-                          <span>{property.bedrooms} quartos</span>
-                          {property.suites ? (
-                            <span className="text-xs md:text-lg font-normal text-muted-foreground">
-                              ({property.suites} suíte{(property.suites ?? 0) > 1 ? "s" : ""})
-                            </span>
-                          ) : null}
-                        </span>
-                      </div>
+                    <div className="flex items-center gap-3 py-1 text-base md:text-2xl">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                      <Bed className="text-primary flex-shrink-0 w-6 h-6 md:w-7 md:h-7" strokeWidth={1.75} />
+                      <span className="text-foreground leading-tight">
+                        {property.bedrooms} quartos
+                        {property.suites ? (
+                          <span className="block text-xs md:text-base font-normal text-muted-foreground">
+                            ({property.suites} suíte{(property.suites ?? 0) > 1 ? "s" : ""})
+                          </span>
+                        ) : null}
+                      </span>
+                    </div>
                   )}
                   {property.suites != null && (
-                    <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                        <Bed className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl">{property.suites} suítes</span>
-                      </div>
+                    <div className="flex items-center gap-3 py-1 text-base md:text-2xl">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                      <Bed className="text-primary flex-shrink-0 w-6 h-6 md:w-7 md:h-7" strokeWidth={1.75} />
+                      <span className="text-foreground">{property.suites} suítes</span>
+                    </div>
                   )}
                   {property.salas != null && (
-                    <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                        <Sofa className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl">{property.salas} {(property.salas ?? 0) > 1 ? "salas" : "sala"}</span>
-                      </div>
+                    <div className="flex items-center gap-3 py-1 text-base md:text-2xl">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                      <Sofa className="text-primary flex-shrink-0 w-6 h-6 md:w-7 md:h-7" strokeWidth={1.75} />
+                      <span className="text-foreground">{property.salas} {(property.salas ?? 0) > 1 ? "salas" : "sala"}</span>
+                    </div>
                   )}
                   {property.bathrooms != null && (
-                    <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                        <Bath className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl">{property.bathrooms} banheiros</span>
-                      </div>
+                    <div className="flex items-center gap-3 py-1 text-base md:text-2xl">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                      <Bath className="text-primary flex-shrink-0 w-6 h-6 md:w-7 md:h-7" strokeWidth={1.75} />
+                      <span className="text-foreground">{property.bathrooms} banheiros</span>
+                    </div>
                   )}
                   {property.parking != null && (
-                    <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                        <Car className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl">{property.parking} garagem</span>
-                      </div>
+                    <div className="flex items-center gap-3 py-1 text-base md:text-2xl">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                      <Car className="text-primary flex-shrink-0 w-6 h-6 md:w-7 md:h-7" strokeWidth={1.75} />
+                      <span className="text-foreground">{property.parking} garagem</span>
+                    </div>
                   )}
                   {property.lavabos != null && (
-                    <div className="flex items-center gap-2 py-0.5 text-base md:text-3xl">
-                        <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                        <Droplets className="text-primary flex-shrink-0 w-[18px] h-[18px] text-3xl" />
-                        <span className="text-foreground text-base md:text-3xl">{property.lavabos} {(property.lavabos ?? 0) > 1 ? "lavabos" : "lavabo"}</span>
-                      </div>
+                    <div className="flex items-center gap-3 py-1 text-base md:text-2xl">
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                      <Droplets className="text-primary flex-shrink-0 w-6 h-6 md:w-7 md:h-7" strokeWidth={1.75} />
+                      <span className="text-foreground">{property.lavabos} {(property.lavabos ?? 0) > 1 ? "lavabos" : "lavabo"}</span>
+                    </div>
                   )}
                 </div>
               </div>
