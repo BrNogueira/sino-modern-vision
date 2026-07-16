@@ -15,7 +15,7 @@ const ROOT = path.resolve(env.UPLOADS_DIR);
 // Marca d'água Sinos: aplicada nas fotos de imóvel no momento do upload.
 const WATERMARK_PATH = fileURLToPath(new URL("../../assets/watermark.webp", import.meta.url));
 const WATERMARK_BUCKETS = new Set(["imoveis-fotos"]);
-const WATERMARKABLE = new Set([".jpg", ".jpeg", ".png", ".webp"]);
+const WATERMARKABLE = new Set([".jpg", ".jpeg", ".jfif", ".jpe", ".png", ".webp"]);
 
 /**
  * Compõe a marca d'água no canto inferior direito da imagem.
@@ -60,7 +60,8 @@ async function withWatermark(buf: Buffer, filename: string): Promise<Buffer> {
 }
 
 const MIME: Record<string, string> = {
-  ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp",
+  ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".jfif": "image/jpeg", ".jpe": "image/jpeg",
+  ".png": "image/png", ".webp": "image/webp", ".avif": "image/avif", ".bmp": "image/bmp",
   ".gif": "image/gif", ".svg": "image/svg+xml", ".pdf": "application/pdf", ".mp4": "video/mp4",
 };
 

@@ -18,6 +18,7 @@ import {
   Sofa,
   Droplets,
   LandPlot,
+  Ruler,
   Home,
   CheckCircle2,
   Banknote,
@@ -621,7 +622,7 @@ const PropertyDetail = () => {
                   )}
                   {property.areaUtil && (
                     <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> útil:</span>
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Home className="w-[18px] h-[18px] text-primary" /> útil:</span>
                         <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaUtil} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                   )}
@@ -633,7 +634,7 @@ const PropertyDetail = () => {
                   )}
                   {property.areaDimensions && (
                     <div className="flex items-center w-full">
-                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> dimensões:</span>
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Ruler className="w-[18px] h-[18px] text-primary" /> dimensões:</span>
                         <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaDimensions}</span>
                       </div>
                   )}
