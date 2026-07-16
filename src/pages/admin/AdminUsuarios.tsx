@@ -91,13 +91,21 @@ const AdminUsuarios = () => {
     if (!editUser) return;
 
     // Remove all current roles
-    await supabase.from("user_roles").delete().eq("user_id", editUser.id);
+    const { error: delError } = await supabase.from("user_roles").delete().eq("user_id", editUser.id);
+    if (delError) {
+      toast({ title: "Erro ao atualizar perfis", description: delError.message, variant: "destructive" });
+      return;
+    }
 
     // Add selected roles
     if (selectedRoles.length > 0) {
-      await supabase.from("user_roles").insert(
+      const { error: insError } = await supabase.from("user_roles").insert(
         selectedRoles.map(role => ({ user_id: editUser.id, role }))
       );
+      if (insError) {
+        toast({ title: "Erro ao atualizar perfis", description: insError.message, variant: "destructive" });
+        return;
+      }
     }
 
     toast({ title: "Perfis atualizados", description: `Perfis de ${editUser.full_name} atualizados.` });
@@ -106,7 +114,11 @@ const AdminUsuarios = () => {
   };
 
   const handleToggleActive = async (user: UserWithRoles) => {
-    await supabase.from("profiles").update({ active: !user.active }).eq("id", user.id);
+    const { error } = await supabase.from("profiles").update({ active: !user.active }).eq("id", user.id);
+    if (error) {
+      toast({ title: "Erro ao atualizar usuário", description: error.message, variant: "destructive" });
+      return;
+    }
     toast({ title: user.active ? "Usuário desativado" : "Usuário ativado" });
     fetchUsers();
   };

@@ -28,7 +28,7 @@ const RESOURCES: ResourceConfig[] = [
   { table: "imoveis_imagens", publicRead: true, anonReadFilter: { col: "ativo", value: 1 } },
 
   { table: "categorias", publicRead: true, writeRoles: ["admin", "gerente"], defaultOrder: "ordem.asc" },
-  { table: "condominios", publicRead: true, writeRoles: ["admin", "gerente"] },
+  { table: "condominios", publicRead: true, writeRoles: STAFF },
   { table: "site_settings", pk: "key", publicRead: true, writeRoles: ["admin"] },
 
   // Leads: criados pelo formulário público; geridos pela equipe (leitura autenticada).

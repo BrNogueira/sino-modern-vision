@@ -306,7 +306,7 @@ INSERT INTO role_permissions (id, role, module, can_view, can_edit, can_delete) 
   (UUID(),'gerente','canal_pro',1,1,0),(UUID(),'gerente','corretores',1,1,0),
   (UUID(),'gerente','financeiro',1,0,0),
   (UUID(),'corretor','dashboard',1,0,0),(UUID(),'corretor','imoveis',1,1,0),
-  (UUID(),'corretor','usuarios',0,0,0),(UUID(),'corretor','condominios',0,0,0),
+  (UUID(),'corretor','usuarios',0,0,0),(UUID(),'corretor','condominios',1,1,0),
   (UUID(),'corretor','leads',1,1,0),(UUID(),'corretor','agenda',1,1,1),
   (UUID(),'corretor','relatorios',0,0,0),(UUID(),'corretor','configuracoes',0,0,0),
   (UUID(),'corretor','canal_pro',0,0,0),(UUID(),'corretor','corretores',0,0,0),

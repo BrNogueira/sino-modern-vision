@@ -247,6 +247,31 @@ export function makeCrudRouter(cfg: ResourceConfig): Hono {
     } catch (e) { return errJson(c, e); }
   });
 
+  // PATCH / — update filtrado (?col=eq.val); exige ao menos um filtro.
+  router.patch("/", async (c) => {
+    try {
+      if (!canWrite(c.get("auth"))) throw new HttpError(c.get("auth") ? 403 : 401, "forbidden");
+      const allowed = await loadColumns(cfg.table);
+      const filters = parseQueryFilters(c.req.queries(), allowed);
+      if (filters.length === 0) throw new HttpError(400, "filtro_obrigatorio");
+      const body = (await c.req.json()) as Record<string, unknown>;
+      const set: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(body)) if (allowed.has(k) && k !== pk) set[k] = normalizeValue(v);
+      const setKeys = Object.keys(set);
+      if (setKeys.length === 0) throw new HttpError(400, "sem_colunas_validas");
+      const { clauses, params } = buildWhere(filters, allowed);
+      await pool.query(
+        `UPDATE ${qIdent(cfg.table)} SET ${setKeys.map((k) => `${qIdent(k)} = ?`).join(", ")}
+         WHERE ${clauses.join(" AND ")}`,
+        [...setKeys.map((k) => set[k]), ...params],
+      );
+      const [rows] = await pool.query<RowDataPacket[]>(
+        `SELECT * FROM ${qIdent(cfg.table)} WHERE ${clauses.join(" AND ")}`, params,
+      );
+      return c.json(rows);
+    } catch (e) { return errJson(c, e); }
+  });
+
   // PATCH /:id
   router.patch("/:id", async (c) => {
     try {
@@ -267,6 +292,19 @@ export function makeCrudRouter(cfg: ResourceConfig): Hono {
         `SELECT * FROM ${qIdent(cfg.table)} WHERE ${qIdent(pk)} = ? LIMIT 1`, [c.req.param("id")],
       );
       return c.json(rows[0] ?? null);
+    } catch (e) { return errJson(c, e); }
+  });
+
+  // DELETE / — delete filtrado (?col=eq.val); exige ao menos um filtro.
+  router.delete("/", async (c) => {
+    try {
+      if (!canWrite(c.get("auth"))) throw new HttpError(c.get("auth") ? 403 : 401, "forbidden");
+      const allowed = await loadColumns(cfg.table);
+      const filters = parseQueryFilters(c.req.queries(), allowed);
+      if (filters.length === 0) throw new HttpError(400, "filtro_obrigatorio");
+      const { clauses, params } = buildWhere(filters, allowed);
+      await pool.query(`DELETE FROM ${qIdent(cfg.table)} WHERE ${clauses.join(" AND ")}`, params);
+      return c.json({ ok: true });
     } catch (e) { return errJson(c, e); }
   });
 

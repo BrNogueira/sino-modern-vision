@@ -67,9 +67,9 @@ const AdminPermissoes = () => {
   const handleSave = async () => {
     setSaving(true);
     const rolePerms = permissions.filter(p => p.role === activeTab);
-    
+
     for (const perm of rolePerms) {
-      await supabase
+      const { error } = await supabase
         .from("role_permissions")
         .update({
           can_view: perm.can_view,
@@ -77,6 +77,11 @@ const AdminPermissoes = () => {
           can_delete: perm.can_delete,
         })
         .eq("id", perm.id);
+      if (error) {
+        toast({ title: "Erro ao salvar permissões", description: error.message, variant: "destructive" });
+        setSaving(false);
+        return;
+      }
     }
 
     toast({ title: "Permissões salvas", description: `Permissões do perfil ${ROLE_LABELS[activeTab]} atualizadas.` });
