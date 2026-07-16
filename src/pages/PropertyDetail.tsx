@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import SectionEditDialog from "@/components/SectionEditDialog";
-import InlineModalidadeEditor from "@/components/InlineModalidadeEditor";
 import InlinePhotoEditor from "@/components/InlinePhotoEditor";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { useChangeLog } from "@/contexts/ChangeLogContext";
@@ -351,29 +350,6 @@ const PropertyDetail = () => {
                 />
               )}
             </div>
-            {baseProperty.id && (
-              <div className="mt-1">
-                <InlineModalidadeEditor
-                  value={property.transactionType}
-                  propertyCode={property.code}
-                  propertyTitle={property.title}
-                  onSave={(modalidade, tipoOferta) =>
-                    updateProperty(baseProperty.id!, { modalidade, tipoOferta: tipoOferta as any })
-                  }
-                >
-                  <span className="text-xs text-muted-foreground">
-                    Modalidade:{" "}
-                    <span className="font-semibold text-foreground">
-                      {property.transactionType === "venda/aluguel"
-                        ? "Venda e Aluguel"
-                        : property.transactionType === "aluguel"
-                        ? "Aluguel"
-                        : "Venda"}
-                    </span>
-                  </span>
-                </InlineModalidadeEditor>
-              </div>
-            )}
             {property.city && property.neighborhood && (
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${property.neighborhood}, ${property.city} - ${property.state}`)}`}
