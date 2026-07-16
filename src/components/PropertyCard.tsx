@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, GroupIcon, Droplets } from "lucide-react";
+import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
 import { propertyPlaceholder } from "@/lib/resolvePhotoUrl";
-import { displayDimensions } from "@/lib/areaDimensions";
 
 interface PropertyCardProps {
   property: Property;
@@ -45,10 +44,56 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
       : property.priceFormatted;
 
   const displayArea = property.area || (property as any).areaTotal || (property as any).areaUtil || property.areaTerreno || property.areaConstruida;
-  const dimensions = displayDimensions(property.areaDimensions || (property as any).area_dimensions);
 
-  const hasFeatures =
-    !!(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || displayArea);
+  const metragens = [
+    property.areaTerreno ? { label: "Terreno", value: property.areaTerreno } : null,
+    (property as any).areaTotal ? { label: "Terreno", value: (property as any).areaTotal } : null,
+    property.areaConstruida ? { label: "Casa", value: property.areaConstruida } : null,
+    (property as any).areaUtil ? { label: "Útil", value: (property as any).areaUtil } : null,
+  ].filter(Boolean) as { label: string; value: number }[];
+  // Dedup por label (evita "Terreno" duas vezes quando areaTerreno e areaTotal coexistem).
+  const metragensUnicas = metragens.filter(
+    (m, i, arr) => arr.findIndex((x) => x.label === m.label) === i,
+  );
+  if (metragensUnicas.length === 0 && displayArea) {
+    metragensUnicas.push({ label: "Área", value: Number(displayArea) });
+  }
+
+  const pills = [
+    property.bedrooms ? { icon: Bed, label: `${property.bedrooms} quartos` } : null,
+    property.suites ? { icon: Star, label: `${property.suites} suíte${property.suites > 1 ? "s" : ""}` } : null,
+    property.bathrooms ? { icon: Bath, label: `${property.bathrooms} banheiros` } : null,
+    property.lavabos ? { icon: Droplets, label: `${property.lavabos} lavabo${property.lavabos > 1 ? "s" : ""}` } : null,
+    property.parking ? { icon: Car, label: `${property.parking} vagas` } : null,
+    property.hasPool ? { icon: Waves, label: "piscina" } : null,
+  ].filter(Boolean) as { icon: typeof Bed; label: string }[];
+
+  // Pílulas verdes de características (ícone + texto). Reutilizado nos dois layouts.
+  const pillsRow = (justify = "") =>
+    pills.length > 0 && (
+      <div className={`flex flex-wrap gap-2 ${justify}`}>
+        {pills.map((p, i) => (
+          <div key={i} className="flex flex-col items-center justify-center gap-0.5 bg-primary text-primary-foreground rounded-lg px-3 py-1.5 min-w-[62px]">
+            <p.icon className="w-4 h-4" strokeWidth={2} />
+            <span className="text-[10px] font-semibold leading-none whitespace-nowrap">{p.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+
+  // Metragens (Terreno/Casa/Útil com caixinha m²). Reutilizado nos dois layouts.
+  const metragensRow = (justify = "") =>
+    metragensUnicas.length > 0 && (
+      <div className={`flex items-start gap-5 md:gap-8 ${justify}`}>
+        {metragensUnicas.map((m) => (
+          <div key={m.label} className="flex flex-col items-center gap-1 text-center">
+            <span className="text-xs md:text-sm font-bold text-foreground">{m.label}</span>
+            <span className="w-7 h-6 border border-foreground/30 rounded flex items-center justify-center text-[9px] text-muted-foreground">m²</span>
+            <span className="text-sm md:text-base font-bold text-foreground whitespace-nowrap">{m.value}m²</span>
+          </div>
+        ))}
+      </div>
+    );
 
   // Slider de imagens + badges (venda/aluguel) + favorito. Reutilizado nos dois layouts.
   const imageSlider = (roundedClass: string) => (
@@ -115,93 +160,8 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
     </Link>
   );
 
-  // Ícones de características (quartos/banheiros/suítes/vagas/piscina/área). Reutilizado.
-  const featureItems = (
-    <>
-      {property.bedrooms !== undefined && property.bedrooms > 0 && (
-        <div className="flex flex-col items-center gap-1">
-          <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
-            <Bed className="w-5 h-5 text-primary" strokeWidth={1.5} />
-          </div>
-          <span className="text-sm font-bold text-foreground">{property.bedrooms}</span>
-          <span className="text-xs font-bold text-muted-foreground">Quartos</span>
-        </div>
-      )}
-      {property.bathrooms !== undefined && property.bathrooms > 0 && (
-        <div className="flex flex-col items-center gap-1">
-          <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
-            <Bath className="w-5 h-5 text-primary" strokeWidth={1.5} />
-          </div>
-          <span className="text-sm font-bold text-foreground">{property.bathrooms}</span>
-          <span className="text-xs font-bold text-muted-foreground">Banheiros</span>
-        </div>
-      )}
-      {property.suites !== undefined && property.suites > 0 && (
-        <div className="flex flex-col items-center gap-1">
-          <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
-            <Star className="w-5 h-5 text-primary" strokeWidth={1.5} />
-          </div>
-          <span className="text-sm font-bold text-foreground">{property.suites}</span>
-          <span className="text-xs font-bold text-muted-foreground">Suítes</span>
-        </div>
-      )}
-      {property.parking !== undefined && property.parking > 0 && (
-        <div className="flex flex-col items-center gap-1">
-          <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
-            <Car className="w-5 h-5 text-primary" strokeWidth={1.5} />
-          </div>
-          <span className="text-sm font-bold text-foreground">{property.parking}</span>
-          <span className="text-xs font-bold text-muted-foreground">Vagas</span>
-        </div>
-      )}
-      {property.hasPool && (
-        <div className="flex flex-col items-center gap-1">
-          <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
-            <Waves className="w-5 h-5 text-primary" strokeWidth={1.5} />
-          </div>
-          <span className="text-sm font-bold text-foreground">✓</span>
-          <span className="text-xs font-bold text-muted-foreground">Piscina</span>
-        </div>
-      )}
-      {displayArea && (
-        <div className="flex flex-col items-center gap-1">
-          <div className="bg-muted rounded-full px-3.5 py-2 flex items-center justify-center">
-            <GroupIcon className="w-5 h-5 text-primary" strokeWidth={1.5} />
-          </div>
-          <span className="text-lg font-bold text-foreground">
-            {displayArea}m² {dimensions && `(${dimensions})`}
-          </span>
-          <span className="text-xs font-bold text-muted-foreground">Área</span>
-        </div>
-      )}
-    </>
-  );
-
   // ── Layout LISTA: seguindo as proporções/posições da referência ─────────
   if (layout === "list") {
-    const metragens = [
-      property.areaTerreno ? { label: "Terreno", value: property.areaTerreno } : null,
-      (property as any).areaTotal ? { label: "Terreno", value: (property as any).areaTotal } : null,
-      property.areaConstruida ? { label: "Casa", value: property.areaConstruida } : null,
-      (property as any).areaUtil ? { label: "Útil", value: (property as any).areaUtil } : null,
-    ].filter(Boolean) as { label: string; value: number }[];
-    // Dedup por label (evita "Terreno" duas vezes quando areaTerreno e areaTotal coexistem).
-    const metragensUnicas = metragens.filter(
-      (m, i, arr) => arr.findIndex((x) => x.label === m.label) === i,
-    );
-    if (metragensUnicas.length === 0 && displayArea) {
-      metragensUnicas.push({ label: "Área", value: Number(displayArea) });
-    }
-
-    const pills = [
-      property.bedrooms ? { icon: Bed, label: `${property.bedrooms} quartos` } : null,
-      property.suites ? { icon: Star, label: `${property.suites} suíte${property.suites > 1 ? "s" : ""}` } : null,
-      property.bathrooms ? { icon: Bath, label: `${property.bathrooms} banheiros` } : null,
-      property.lavabos ? { icon: Droplets, label: `${property.lavabos} lavabo${property.lavabos > 1 ? "s" : ""}` } : null,
-      property.parking ? { icon: Car, label: `${property.parking} vagas` } : null,
-      property.hasPool ? { icon: Waves, label: "piscina" } : null,
-    ].filter(Boolean) as { icon: typeof Bed; label: string }[];
-
     return (
       <div className="group/card bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col md:flex-row overflow-hidden">
         {/* Imagem à esquerda (~40%) */}
@@ -227,30 +187,11 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
               <span className="text-sm md:text-base font-semibold truncate">{property.location}</span>
             </div>
 
-            {/* Metragens */}
-            {metragensUnicas.length > 0 && (
-              <div className="flex items-start gap-5 md:gap-8">
-                {metragensUnicas.map((m) => (
-                  <div key={m.label} className="flex flex-col items-center gap-1 text-center">
-                    <span className="text-xs md:text-sm font-bold text-foreground">{m.label}</span>
-                    <span className="w-7 h-6 border border-foreground/30 rounded flex items-center justify-center text-[9px] text-muted-foreground">m²</span>
-                    <span className="text-sm md:text-base font-bold text-foreground whitespace-nowrap">{m.value}m²</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
             {/* Pílulas de características (verde) */}
-            {pills.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {pills.map((p, i) => (
-                  <div key={i} className="flex flex-col items-center justify-center gap-0.5 bg-primary text-primary-foreground rounded-lg px-3 py-1.5 min-w-[62px]">
-                    <p.icon className="w-4 h-4" strokeWidth={2} />
-                    <span className="text-[10px] font-semibold leading-none whitespace-nowrap">{p.label}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            {pillsRow()}
+
+            {/* Metragens */}
+            {metragensRow()}
 
             {/* Preço + botão */}
             <div className="mt-auto flex items-center justify-between gap-3 pt-2">
@@ -306,12 +247,11 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
             </div>
           </div>
 
-          {/* Feature Icons */}
-          {hasFeatures && (
-            <div className="flex items-start justify-center gap-2 my-2 flex-wrap">
-              {featureItems}
-            </div>
-          )}
+          {/* Pílulas de características (verde) + metragens */}
+          <div className="flex flex-col items-center gap-2 my-2">
+            {pillsRow("justify-center")}
+            {metragensRow("justify-center")}
+          </div>
 
           {/* Spacer */}
           <div className="flex-1" />
