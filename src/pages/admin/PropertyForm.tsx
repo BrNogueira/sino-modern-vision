@@ -316,6 +316,31 @@ const PhotoUploadSection = ({
   );
 };
 
+// Extrai latitude/longitude de um link do Google Maps ou do código de um iframe de embed.
+// Cobre: iframe embed (!3d<lat>!2d<lng>), URL @lat,lng, q=/ll=/query=lat,lng.
+const extractLatLng = (input: string): { lat: string; lng: string } | null => {
+  const s = input.trim();
+  if (!s) return null;
+  // Embed do Google: ...!2d<lng>!3d<lat>...
+  const embed = s.match(/!3d(-?\d+\.\d+).*?!2d(-?\d+\.\d+)/) || s.match(/!2d(-?\d+\.\d+).*?!3d(-?\d+\.\d+)/);
+  if (embed) {
+    const has3dFirst = s.indexOf("!3d") < s.indexOf("!2d");
+    const lat = has3dFirst ? embed[1] : embed[2];
+    const lng = has3dFirst ? embed[2] : embed[1];
+    return { lat, lng };
+  }
+  // URL com @lat,lng (ex.: /maps/@-29.68,-51.04,15z)
+  const at = s.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (at) return { lat: at[1], lng: at[2] };
+  // Parâmetros q= / ll= / query= com "lat,lng"
+  const q = s.match(/(?:[?&](?:q|ll|query)=)(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (q) return { lat: q[1], lng: q[2] };
+  // Par de números "lat,lng" solto
+  const pair = s.match(/(-?\d{1,3}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+  if (pair) return { lat: pair[1], lng: pair[2] };
+  return null;
+};
+
 const PropertyForm = () => {
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
@@ -674,6 +699,23 @@ const PropertyForm = () => {
             {textField("Complemento", "complemento", "Apto 301")}
             {textField("Latitude", "latitude", "-29.6842")}
             {textField("Longitude", "longitude", "-51.0497")}
+            <div className="space-y-1.5 md:col-span-3">
+              <Label className="text-foreground text-sm">Google Maps (link ou iframe)</Label>
+              <Textarea
+                placeholder='Cole o link do Google Maps ou o código do <iframe> de "Compartilhar › Incorporar um mapa"'
+                rows={2}
+                onChange={(e) => {
+                  const coords = extractLatLng(e.target.value);
+                  if (coords) {
+                    setForm((prev) => ({ ...prev, latitude: coords.lat, longitude: coords.lng }));
+                    toast({ title: "Coordenadas extraídas do Google Maps", description: `Lat ${coords.lat}, Lng ${coords.lng}` });
+                  }
+                }}
+              />
+              <p className="text-xs text-muted-foreground">
+                Cole aqui e as coordenadas são preenchidas automaticamente. O mapa aparece na página do imóvel.
+              </p>
+            </div>
           </div>
         </section>
 

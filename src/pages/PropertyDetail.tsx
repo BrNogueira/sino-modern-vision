@@ -566,11 +566,30 @@ const PropertyDetail = () => {
             )}
 
 
-            {/* Map - only for admin/corretor */}
-            {property.latitude && property.longitude && (hasRole("admin") || hasRole("corretor")) && (
+            {/* Localização no mapa — iframe do Google (público), a partir de lat/long */}
+            {property.latitude != null && property.longitude != null && (
               <div>
                 <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
                   <h3 className="font-bold uppercase tracking-wide text-lg md:text-3xl">Localização no Mapa</h3>
+                </div>
+                <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${property.latitude},${property.longitude}&z=16&output=embed`}
+                    title="Localização no mapa"
+                    className="w-full h-[400px] border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Mapa interno com imóveis próximos — só admin/corretor */}
+            {property.latitude != null && property.longitude != null && (hasRole("admin") || hasRole("corretor")) && (
+              <div>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
+                  <h3 className="font-bold uppercase tracking-wide text-lg md:text-3xl">Imóveis Próximos (interno)</h3>
                 </div>
                 <div className="border border-t-0 border-border rounded-b-lg overflow-hidden">
                   <PropertyMap properties={properties} highlightCode={property.code} className="h-[400px] w-full" />
