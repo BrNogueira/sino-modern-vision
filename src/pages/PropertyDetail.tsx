@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import HomeBackNav from "@/components/HomeBackNav";
 import SectionEditDialog from "@/components/SectionEditDialog";
 import InlinePhotoEditor from "@/components/InlinePhotoEditor";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
@@ -167,7 +168,6 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 /* ─── Main Page ─── */
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
   const { properties: dbProperties, updateProperty } = useAdminProperties();
   const properties = useMemo(
     () => [...dbProperties.filter((p) => p.ativo).map(zapToProperty), ...staticProperties],
@@ -318,15 +318,8 @@ const PropertyDetail = () => {
 
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
-          <Link to="/" className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl" style={{ color: "#F2C21A" }}>
-            <Home className="w-4 h-4" />
-            Início
-          </Link>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl" style={{ color: "#F2C21A" }}>
-            <ChevronLeft className="w-4 h-4" />
-            Voltar
-          </button>
+        <div className="container mx-auto px-4 flex items-center justify-center gap-6 py-2 md:py-3">
+          <HomeBackNav />
         </div>
       </div>
 

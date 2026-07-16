@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { LayoutGrid, List, ArrowUpDown, Home, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { LayoutGrid, List, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import HomeBackNav from "@/components/HomeBackNav";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
@@ -21,7 +22,6 @@ function pageWindow(current: number, total: number): number[] {
 
 const Listing = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { properties: dbProperties, loading } = useAdminProperties();
   const { categorias } = useCategorias();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -152,24 +152,8 @@ const Listing = () => {
             </p>
           </div>
 
-          {/* Início / Voltar — texto amarelo, sem fundo (paleta do "Buscar") */}
           <div className="order-last w-full flex items-center justify-center gap-6 md:order-none md:w-auto">
-            <Link
-              to="/"
-              className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity"
-              style={{ color: "#F2C21A", fontSize: "1rem" }}
-            >
-              <Home className="w-4 h-4" />
-              Início
-            </Link>
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity"
-              style={{ color: "#F2C21A", fontSize: "1rem" }}
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Voltar
-            </button>
+            <HomeBackNav />
           </div>
 
           <div className="flex items-center gap-3">
