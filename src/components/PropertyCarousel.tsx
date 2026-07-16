@@ -41,10 +41,12 @@ const PropertyCarousel = () => {
           <div className="w-20 h-0.5 bg-primary mx-auto mt-4" />
         </div>
 
-        {/* Carrossel exibindo 3 imóveis por vez no desktop (2 em tablet, 1 no mobile). */}
+        {/* Carrossel exibindo 3 imóveis por vez no desktop (2 em tablet, 1 no mobile).
+            O viewport do Embla tem overflow-hidden e cortaria o popup de descrição
+            que aparece abaixo do card — o pb/-mb dá área de clip extra para ele. */}
         <Carousel
           opts={{ align: "start", loop: featured.length > 3 }}
-          className="w-full px-0 md:px-12 mt-8 md:mt-[70px]"
+          className="w-full px-0 md:px-12 mt-8 md:mt-[70px] [&>div]:pb-44 [&>div]:-mb-44"
         >
           <CarouselContent className="-ml-8">
             {featured.map((property) => (
