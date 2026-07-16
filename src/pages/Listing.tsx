@@ -109,18 +109,21 @@ const Listing = () => {
       );
     }
 
+    // Busca livre: normaliza acentos/caixa e exige que TODA palavra do termo
+    // apareça em algum campo do imóvel (título, tipo, localização, código, UF).
     const q = searchParams.get("q");
     if (q) {
-      const query = q.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.title.toLowerCase().includes(query) ||
-          p.type.toLowerCase().includes(query) ||
-          p.location.toLowerCase().includes(query) ||
-          p.city.toLowerCase().includes(query) ||
-          (p.state ?? "").toLowerCase().includes(query) ||
-          toUf(p.state).toLowerCase() === query
-      );
+      const tokens = norm(q).split(/\s+/).filter(Boolean);
+      if (tokens.length) {
+        result = result.filter((p) => {
+          const haystack = norm(
+            [p.title, p.type, p.location, p.city, p.neighborhood, p.state, toUf(p.state), p.code]
+              .filter(Boolean)
+              .join(" ")
+          );
+          return tokens.every((t) => haystack.includes(t));
+        });
+      }
     }
 
     result.sort((a, b) =>
