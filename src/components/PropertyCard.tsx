@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, GroupIcon } from "lucide-react";
+import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, GroupIcon, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
@@ -182,52 +182,94 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
     </>
   );
 
-  // ── Layout LISTA: imagem à esquerda, informações à direita ──────────────
+  // ── Layout LISTA: seguindo as proporções/posições da referência ─────────
   if (layout === "list") {
+    const metragens = [
+      property.areaTerreno ? { label: "Terreno", value: property.areaTerreno } : null,
+      (property as any).areaTotal ? { label: "Terreno", value: (property as any).areaTotal } : null,
+      property.areaConstruida ? { label: "Casa", value: property.areaConstruida } : null,
+      (property as any).areaUtil ? { label: "Útil", value: (property as any).areaUtil } : null,
+    ].filter(Boolean) as { label: string; value: number }[];
+    // Dedup por label (evita "Terreno" duas vezes quando areaTerreno e areaTotal coexistem).
+    const metragensUnicas = metragens.filter(
+      (m, i, arr) => arr.findIndex((x) => x.label === m.label) === i,
+    );
+    if (metragensUnicas.length === 0 && displayArea) {
+      metragensUnicas.push({ label: "Área", value: Number(displayArea) });
+    }
+
+    const pills = [
+      property.bedrooms ? { icon: Bed, label: `${property.bedrooms} quartos` } : null,
+      property.suites ? { icon: Star, label: `${property.suites} suíte${property.suites > 1 ? "s" : ""}` } : null,
+      property.bathrooms ? { icon: Bath, label: `${property.bathrooms} banheiros` } : null,
+      property.lavabos ? { icon: Droplets, label: `${property.lavabos} lavabo${property.lavabos > 1 ? "s" : ""}` } : null,
+      property.parking ? { icon: Car, label: `${property.parking} vagas` } : null,
+      property.hasPool ? { icon: Waves, label: "piscina" } : null,
+    ].filter(Boolean) as { icon: typeof Bed; label: string }[];
+
     return (
       <div className="group/card bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col md:flex-row overflow-hidden">
-        {/* Imagem à esquerda */}
-        <div className="relative w-full md:w-[340px] lg:w-[380px] h-[220px] md:h-auto md:min-h-[260px] shrink-0">
+        {/* Imagem à esquerda (~40%) */}
+        <div className="relative w-full md:w-[40%] lg:w-[42%] h-[240px] md:h-auto md:min-h-[300px] shrink-0">
           {imageSlider("")}
+          {/* Código sobre a foto (canto superior esquerdo) */}
+          <span className="absolute top-3 left-3 z-20 bg-primary text-primary-foreground text-xs font-bold uppercase px-2.5 py-1 rounded-md shadow-sm">
+            Cód: {property.code}
+          </span>
         </div>
 
-        {/* Conteúdo à direita */}
-        <div className="flex-1 min-w-0 p-5 flex flex-col">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              {property.type && (
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">{property.type}</p>
-              )}
-              <div className="flex items-center gap-2 mt-1 text-foreground">
-                <MapPin className="w-4 h-4 text-primary shrink-0" />
-                <span className="text-lg font-bold truncate">{property.location}</span>
+        {/* Painel à direita */}
+        <div className="flex-1 min-w-0 flex flex-col">
+          {/* Header verde com o título */}
+          <Link to={`/imovel/${slug}`} className="bg-primary text-primary-foreground px-4 py-2.5 hover:brightness-95 transition">
+            <h3 className="font-bold uppercase text-sm md:text-lg leading-tight line-clamp-2">{property.title}</h3>
+          </Link>
+
+          <div className="flex-1 flex flex-col gap-3 p-4">
+            {/* Localização */}
+            <div className="flex items-center gap-2 text-foreground">
+              <MapPin className="w-4 h-4 text-primary shrink-0" />
+              <span className="text-sm md:text-base font-semibold truncate">{property.location}</span>
+            </div>
+
+            {/* Metragens */}
+            {metragensUnicas.length > 0 && (
+              <div className="flex items-start gap-5 md:gap-8">
+                {metragensUnicas.map((m) => (
+                  <div key={m.label} className="flex flex-col items-center gap-1 text-center">
+                    <span className="text-xs md:text-sm font-bold text-foreground">{m.label}</span>
+                    <span className="w-7 h-6 border border-foreground/30 rounded flex items-center justify-center text-[9px] text-muted-foreground">m²</span>
+                    <span className="text-sm md:text-base font-bold text-foreground whitespace-nowrap">{m.value}m²</span>
+                  </div>
+                ))}
               </div>
-            </div>
-            <span className="text-xs font-bold text-muted-foreground whitespace-nowrap shrink-0">
-              Cód: {property.code}
-            </span>
-          </div>
+            )}
 
-          {hasFeatures && (
-            <div className="flex items-start justify-start gap-5 flex-wrap my-4">
-              {featureItems}
-            </div>
-          )}
+            {/* Pílulas de características (verde) */}
+            {pills.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {pills.map((p, i) => (
+                  <div key={i} className="flex flex-col items-center justify-center gap-0.5 bg-primary text-primary-foreground rounded-lg px-3 py-1.5 min-w-[62px]">
+                    <p.icon className="w-4 h-4" strokeWidth={2} />
+                    <span className="text-[10px] font-semibold leading-none whitespace-nowrap">{p.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
-          <div className="flex-1" />
-          <div className="border-t border-border mb-3" />
-
-          <div className="flex items-end justify-between gap-3">
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">Valor do imóvel</span>
-              <span className="text-xl font-bold text-foreground whitespace-nowrap">{priceLabel}</span>
+            {/* Preço + botão */}
+            <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div className="rounded-md border border-border bg-background px-4 py-2">
+                <span className="text-lg md:text-xl font-bold text-foreground whitespace-nowrap">{priceLabel}</span>
+              </div>
+              <Link
+                to={`/imovel/${slug}`}
+                className="font-bold uppercase text-sm px-4 py-2.5 rounded-md whitespace-nowrap hover:brightness-95 active:scale-[0.97] transition"
+                style={{ background: "#F2C21A", color: "#2F2F2F" }}
+              >
+                Saiba mais
+              </Link>
             </div>
-            <Link
-              to={`/imovel/${slug}`}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm px-4 py-2 rounded-md transition-colors whitespace-nowrap"
-            >
-              Ver Detalhes
-            </Link>
           </div>
         </div>
       </div>
