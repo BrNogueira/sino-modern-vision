@@ -248,7 +248,7 @@ const AdminCorretorImoveis = () => {
   const RowActions = ({ p, slug }: { p: ZapImovel; slug: string }) => (
     <>
       <Button variant="ghost" size="icon" asChild title="Visualizar no site">
-        <Link to={`/imovel/${slug}-${p.id}`} target="_blank">
+        <Link to={`/imovel/${slug}-${p.codigoImovel}`} target="_blank">
           <ExternalLink className="w-4 h-4" />
         </Link>
       </Button>

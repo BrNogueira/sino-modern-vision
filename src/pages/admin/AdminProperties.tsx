@@ -290,12 +290,12 @@ const AdminProperties = () => {
   const ActionButtons = ({ p }: { p: ZapImovel }) => (
     <>
       <Button variant="ghost" size="icon" asChild title="Visualizar imóvel">
-        <Link to={`/imovel/${generateSlug(p.tituloImovel)}-${p.id}`}>
+        <Link to={`/imovel/${generateSlug(p.tituloImovel)}-${p.codigoImovel}`}>
           <Eye className="w-4 h-4" />
         </Link>
       </Button>
       <Button variant="ghost" size="icon" asChild title="Editar na página">
-        <Link to={`/imovel/${generateSlug(p.tituloImovel)}-${p.id}`}>
+        <Link to={`/imovel/${generateSlug(p.tituloImovel)}-${p.codigoImovel}`}>
           <ExternalLink className="w-4 h-4" />
         </Link>
       </Button>
