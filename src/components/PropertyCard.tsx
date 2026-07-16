@@ -193,8 +193,11 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
             {/* Metragens */}
             {metragensRow()}
 
+            {/* Divider */}
+            <div className="mt-auto border-t border-border" />
+
             {/* Preço + botão */}
-            <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
               <div className="rounded-md border border-border bg-background px-4 py-2">
                 <span className="text-lg md:text-xl font-bold text-foreground whitespace-nowrap">{priceLabel}</span>
               </div>

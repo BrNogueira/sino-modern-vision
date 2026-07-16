@@ -807,14 +807,6 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Apta a financiamento bancário */}
-            {property.aceitaFinanciamento && (
-              <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="font-medium text-foreground text-base md:text-3xl">Apta a financiamento bancário</span>
-              </div>
-            )}
-
             {/* Valor de Venda */}
             {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
               <div className="rounded-xl border border-border bg-card p-5">
@@ -861,18 +853,6 @@ const PropertyDetail = () => {
                 ))}
               </div>
             )}
-
-            {/* Condições de Pagamento */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-border bg-muted/50">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                {isAluguel ? (
-                  <span className="text-base md:text-3xl font-medium text-muted-foreground italic">Valores sujeito a alterações</span>
-                ) : (
-                  <span className="font-medium text-foreground text-base md:text-3xl">condições de pagamento: {property.condicoesPagamento || "consulte"}</span>
-                )}
-              </div>
-            </div>
 
             {/* Documentação para Locação — só exibir se for locação */}
             {isAluguel && (
