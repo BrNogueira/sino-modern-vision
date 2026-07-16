@@ -44,6 +44,10 @@ const transactionTypeFromOferta = (
   return "venda";
 };
 
+// Imóvel disponível para locação (modalidade explícita ou derivada de oferta/preços).
+export const isImovelAluguel = (z: ZapImovel): boolean =>
+  transactionTypeFromOferta(z.tipoOferta, z.precoVenda ?? undefined, z.precoAluguel ?? undefined, z.modalidade) !== "venda";
+
 export const zapToProperty = (z: ZapImovel): Property => {
   const fotosUrls = (Array.isArray(z.fotos) ? z.fotos : [])
     .map((f: any) => (typeof f === "string" ? f : f?.url))

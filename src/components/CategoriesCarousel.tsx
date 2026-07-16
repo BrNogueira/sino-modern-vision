@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCategorias } from "@/contexts/CategoriasContext";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { isImovelAluguel } from "@/lib/zapToProperty";
 import propertyCasa from "@/assets/property-casa.jpg";
 
 const CategoriesSection = () => {
@@ -28,8 +29,11 @@ const CategoriesSection = () => {
     return null;
   }
 
-  const countFor = (categoriaId: string) =>
-    properties.filter((p) => p.categoriaId === categoriaId && p.ativo).length;
+  // Categoria "aluguel" conta por modalidade; as demais, por categoria_id.
+  const countFor = (cat: { id: string; slug: string }) =>
+    properties.filter(
+      (p) => p.ativo && (cat.slug === "aluguel" ? isImovelAluguel(p) : p.categoriaId === cat.id),
+    ).length;
 
   return (
     <section id="categorias" className="pt-0 pb-16 bg-background">
@@ -40,7 +44,7 @@ const CategoriesSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {visibleCategorias.map((cat) => {
-            const count = countFor(cat.id);
+            const count = countFor(cat);
             const image = cat.fotoUrl || propertyCasa;
             return (
               <Link

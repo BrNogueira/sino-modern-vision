@@ -10,7 +10,7 @@ import SearchBar from "@/components/SearchBar";
 import { properties as staticProperties } from "@/data/properties";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { useCategorias } from "@/contexts/CategoriasContext";
-import { zapToProperty } from "@/lib/zapToProperty";
+import { zapToProperty, isImovelAluguel } from "@/lib/zapToProperty";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -40,7 +40,11 @@ const Listing = () => {
   const allProperties = useMemo(() => {
     let dbList = dbProperties.filter((p) => p.ativo);
     if (categoriaFiltro) {
-      dbList = dbList.filter((p) => p.categoriaId === categoriaFiltro.id);
+      // Categoria "aluguel" é por modalidade; as demais, por categoria_id.
+      dbList =
+        categoriaFiltro.slug === "aluguel"
+          ? dbList.filter(isImovelAluguel)
+          : dbList.filter((p) => p.categoriaId === categoriaFiltro.id);
     }
     const fromDb = dbList.map(zapToProperty);
     if (fromDb.length > 0) return fromDb;
