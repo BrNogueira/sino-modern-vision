@@ -256,6 +256,13 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
             {metragensRow("justify-center")}
           </div>
 
+          {/* Descrição */}
+          {property.description && (
+            <p className="text-sm text-muted-foreground text-center leading-relaxed line-clamp-4 mb-2">
+              {property.description}
+            </p>
+          )}
+
           {/* Spacer */}
           <div className="flex-1" />
 
@@ -280,14 +287,6 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
         </div>
       </div>
 
-      {/* Hover popup below card - desktop only */}
-      {property.description && (
-        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full mt-1 z-40 w-[92%] bg-black rounded-lg shadow-lg p-4 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <p className="text-white text-center text-base leading-relaxed">
-            {property.description}
-          </p>
-        </div>
-      )}
     </div>
   );
 };
