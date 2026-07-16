@@ -267,6 +267,21 @@ const PropertyDetail = () => {
     ? editableFields.observacao
     : (baseProperty.descricaoCompleta || baseProperty.description || "");
   const caracteristicas = property.caracteristicas ?? [];
+  const fmtBRL = (n?: number) => n?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const fichaTecnica: { label: string; value: string | number }[] = [
+    { label: "Código", value: property.code },
+    { label: "Tipo", value: property.type },
+    { label: "Subtipo", value: property.subTipo },
+    { label: "Categoria", value: property.categoriaImovel },
+    { label: "Endereço", value: property.enderecoCompleto },
+    { label: "Bairro", value: property.neighborhood },
+    { label: "Zona", value: property.zona },
+    { label: "Cidade", value: property.city && property.state ? `${property.city} - ${property.state}` : property.city },
+    { label: "CEP", value: property.cep },
+    { label: "Ano de construção", value: property.anoConstrucao },
+    { label: "IPTU", value: property.iptu ? fmtBRL(property.iptu)! : undefined },
+    { label: "Condomínio", value: property.valorCondominioFormatted },
+  ].filter((r): r is { label: string; value: string | number } => r.value !== undefined && r.value !== null && r.value !== "");
   const hasAcabamentos = property.acabamentos && property.acabamentos.length > 0;
   const hasAmenidades = property.amenidades && property.amenidades.length > 0;
   const hasFotosAreaComum = property.fotosAreaComum && property.fotosAreaComum.length > 0;
@@ -494,6 +509,43 @@ const PropertyDetail = () => {
               </div>
             )}
 
+            {/* Vídeo do imóvel */}
+            {property.videoUrl && (
+              <div>
+                <div className="bg-primary text-primary-foreground px-4 py-2.5 rounded-t-lg">
+                  <h3 className="font-bold uppercase tracking-wide text-lg md:text-3xl">Vídeo</h3>
+                </div>
+                <div className="border border-t-0 border-border rounded-b-lg overflow-hidden bg-card">
+                  {getEmbedUrl(property.videoUrl) ? (
+                    <div className="relative w-full aspect-video">
+                      <iframe
+                        src={getEmbedUrl(property.videoUrl)!}
+                        title="Vídeo do imóvel"
+                        className="absolute inset-0 w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  ) : (
+                    <video src={property.videoUrl} controls className="w-full max-h-[420px] bg-black" />
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Tour virtual 360º */}
+            {property.linkTourVirtual && (
+              <a
+                href={property.linkTourVirtual}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent text-accent-foreground font-bold text-base md:text-2xl uppercase hover:bg-accent/80 transition-colors"
+              >
+                <Info className="w-5 h-5" />
+                Tour Virtual 360º
+              </a>
+            )}
+
             {/* Fotos de Área de Uso Comum — max 4 thumbnails, own lightbox */}
             {hasFotosAreaComum && (
               <div>
@@ -530,7 +582,7 @@ const PropertyDetail = () => {
           <div className="lg:col-span-1 space-y-4">
 
             {/* Metragem */}
-            {(property.areaTerreno || property.areaConstruida || property.area) && (
+            {(property.areaTerreno || property.areaConstruida || property.area || property.areaTotal || property.areaUtil || property.areaDimensions) && (
               <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
                 <div className="relative flex items-center justify-center bg-primary px-7 py-4">
                   <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground">Metragem</h3>
@@ -561,38 +613,80 @@ const PropertyDetail = () => {
                         <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaConstruida} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                   )}
-                  {property.area && !property.areaConstruida && !property.areaTerreno && (
+                  {property.areaTotal && !property.areaConstruida && !property.areaTerreno && (
+                    <div className="flex items-center w-full">
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><LandPlot className="w-[18px] h-[18px] text-primary" /> total:</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaTotal} m<sup className="text-[0.7em]">2</sup></span>
+                      </div>
+                  )}
+                  {property.areaUtil && (
+                    <div className="flex items-center w-full">
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> útil:</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaUtil} m<sup className="text-[0.7em]">2</sup></span>
+                      </div>
+                  )}
+                  {property.area && !property.areaConstruida && !property.areaTerreno && !property.areaTotal && !property.areaUtil && (
                     <div className="flex items-center w-full">
                         <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> área:</span>
                         <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.area} m<sup className="text-[0.7em]">2</sup></span>
+                      </div>
+                  )}
+                  {property.areaDimensions && (
+                    <div className="flex items-center w-full">
+                        <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Square className="w-[18px] h-[18px] text-primary" /> dimensões:</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaDimensions}</span>
                       </div>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Ficha Técnica — tipo, ano, IPTU */}
-            {(property.type || property.anoConstrucao || property.iptu) && (
+            {/* Ficha Técnica — todos os dados do cadastro */}
+            {fichaTecnica.length > 0 && (
               <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Ficha Técnica</h3>
                 <div className="flex flex-col gap-2 bg-background p-[15px]">
-                  {property.type && (
-                    <div className="flex items-center justify-between text-base md:text-2xl">
-                      <span className="text-black">Tipo:</span>
-                      <span className="font-bold text-primary">{property.type}</span>
+                  {fichaTecnica.map((row) => (
+                    <div key={row.label} className="flex items-center justify-between gap-3 text-base md:text-2xl">
+                      <span className="text-black">{row.label}:</span>
+                      <span className="font-bold text-primary text-right">{row.value}</span>
                     </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Garantias de Locação */}
+            {property.transactionType !== "venda" && (property.garantias?.length ?? 0) > 0 && (
+              <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
+                <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Garantias Aceitas</h3>
+                <div className="flex flex-col gap-1.5 bg-background p-[15px]">
+                  {property.garantias!.map((g, i) => (
+                    <div key={i} className="flex items-center gap-2 text-base md:text-2xl">
+                      <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">{g}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Proprietário — só admin/corretor */}
+            {(hasRole("admin") || hasRole("corretor")) && (property.proprietario?.nome || property.proprietario?.telefone) && (
+              <div className="rounded-[20px] overflow-hidden bg-background border border-primary">
+                <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Proprietário</h3>
+                <div className="flex flex-col gap-2 bg-background p-[15px]">
+                  {property.proprietario?.nome && (
+                    <div className="flex items-center justify-between gap-3 text-base md:text-2xl"><span className="text-black">Nome:</span><span className="font-bold text-primary text-right">{property.proprietario.nome}</span></div>
                   )}
-                  {property.anoConstrucao && (
-                    <div className="flex items-center justify-between text-base md:text-2xl">
-                      <span className="text-black">Ano de construção:</span>
-                      <span className="font-bold text-primary">{property.anoConstrucao}</span>
-                    </div>
+                  {property.proprietario?.telefone && (
+                    <div className="flex items-center justify-between gap-3 text-base md:text-2xl"><span className="text-black">Telefone:</span><span className="font-bold text-primary text-right">{property.proprietario.telefone}</span></div>
                   )}
-                  {property.iptu && (
-                    <div className="flex items-center justify-between text-base md:text-2xl">
-                      <span className="text-black">IPTU:</span>
-                      <span className="font-bold text-primary">{property.iptu.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
-                    </div>
+                  {property.proprietario?.email && (
+                    <div className="flex items-center justify-between gap-3 text-base md:text-2xl"><span className="text-black">E-mail:</span><span className="font-bold text-primary text-right break-all">{property.proprietario.email}</span></div>
+                  )}
+                  {property.proprietario?.documento && (
+                    <div className="flex items-center justify-between gap-3 text-base md:text-2xl"><span className="text-black">Documento:</span><span className="font-bold text-primary text-right">{property.proprietario.documento}</span></div>
                   )}
                 </div>
               </div>
@@ -939,6 +1033,15 @@ function AmenidadeIcon({ name }: { name: string }) {
 }
 
 /* ── Build characteristics ── */
+// Converte URLs de YouTube/Vimeo em URL de embed; retorna null p/ arquivos de vídeo diretos.
+function getEmbedUrl(url: string): string | null {
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+  return null;
+}
+
 function buildCharacteristics(p: Property) {
   const items: { icon: React.ElementType; label: string; value: string | number }[] = [];
   if (p.bedrooms) items.push({ icon: Bed, label: p.suites ? `quartos (${p.suites} suíte${p.suites > 1 ? "s" : ""})` : "quartos", value: p.bedrooms });

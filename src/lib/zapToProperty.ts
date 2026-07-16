@@ -1,8 +1,11 @@
 import type { Property } from "@/data/properties";
 import type { ZapImovel } from "@/types/zapImoveis";
 import { ensureStringArray } from "@/lib/imovelNormalize";
-import { featureCategories } from "@/types/zapImoveis";
+import { featureCategories, garantiasLabels, type GarantiasAluguel } from "@/types/zapImoveis";
 import { propertyPlaceholder, resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
+
+const buildGarantias = (g?: GarantiasAluguel): string[] =>
+  g ? (Object.keys(garantiasLabels) as (keyof GarantiasAluguel)[]).filter((k) => g[k]).map((k) => garantiasLabels[k]) : [];
 
 // Agrupa as features marcadas (true) por categoria, com emoji + label, para exibição.
 const buildCaracteristicas = (flags?: Record<string, boolean>) => {
@@ -91,6 +94,25 @@ export const zapToProperty = (z: ZapImovel): Property => {
     aceitaFinanciamento: !!z.features?.apta_financiamento,
     iptu: z.iptu ?? undefined,
     anoConstrucao: z.anoConstrucao ?? undefined,
+    subTipo: z.subTipoImovel || undefined,
+    categoriaImovel: z.categoriaImovel || undefined,
+    areaTotal: z.areaTotal ?? undefined,
+    areaUtil: z.areaUtil ?? undefined,
+    valorCondominio: z.valorCondominio ?? undefined,
+    valorCondominioFormatted: z.valorCondominio ? formatBRL(z.valorCondominio) : undefined,
+    enderecoCompleto: [z.endereco, z.numero].filter(Boolean).join(", ") +
+      (z.complemento ? ` — ${z.complemento}` : ""),
+    cep: z.cep || undefined,
+    zona: z.zona || undefined,
+    videoUrl: z.videoUrl || undefined,
+    linkTourVirtual: z.linkTourVirtual || undefined,
+    garantias: buildGarantias(z.garantias),
+    proprietario: {
+      nome: z.proprietarioNome || undefined,
+      telefone: z.proprietarioTelefone || undefined,
+      email: z.proprietarioEmail || undefined,
+      documento: z.proprietarioDocumento || undefined,
+    },
     latitude: z.latitude ? Number(z.latitude) : undefined,
     longitude: z.longitude ? Number(z.longitude) : undefined,
     condominioId: z.condominioId ?? null,

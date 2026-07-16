@@ -47,6 +47,21 @@ export interface Property {
   caracteristicas?: { title: string; items: string[] }[];
   iptu?: number;
   anoConstrucao?: number;
+  subTipo?: string;
+  categoriaImovel?: string;
+  areaTotal?: number;
+  areaUtil?: number;
+  valorCondominio?: number;
+  valorCondominioFormatted?: string;
+  enderecoCompleto?: string;
+  cep?: string;
+  zona?: string;
+  videoUrl?: string;
+  linkTourVirtual?: string;
+  /** Garantias aceitas (aluguel), como labels. */
+  garantias?: string[];
+  /** Dados do proprietário — exibidos só para admin/corretor. */
+  proprietario?: { nome?: string; telefone?: string; email?: string; documento?: string };
   acabamentos?: string[];
   amenidades?: string[];
   aceitaFinanciamento?: boolean;
