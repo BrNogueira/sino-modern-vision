@@ -318,12 +318,12 @@ const PropertyDetail = () => {
 
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-3 md:gap-4 py-2 md:py-3">
-          <Link to="/" className="flex items-center gap-1 md:gap-2 font-bold uppercase rounded-[10px] px-4 py-2 hover:brightness-95 active:scale-[0.97] transition text-base md:text-xl" style={{ background: "#F2C21A", color: "#2F2F2F" }}>
+        <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
+          <Link to="/" className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl" style={{ color: "#F2C21A" }}>
             <Home className="w-4 h-4" />
             Início
           </Link>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1 md:gap-2 font-bold uppercase rounded-[10px] px-4 py-2 hover:brightness-95 active:scale-[0.97] transition text-base md:text-xl" style={{ background: "#F2C21A", color: "#2F2F2F" }}>
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl" style={{ color: "#F2C21A" }}>
             <ChevronLeft className="w-4 h-4" />
             Voltar
           </button>
