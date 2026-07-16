@@ -546,6 +546,10 @@
   gap: 0.5rem;
 }
 
+.header-search-container .search-bar__row--top {
+  align-items: center;
+}
+
 .header-search-container .search-bar__input-group,
 .header-search-container .search-bar__button,
 .header-search-container .search-bar__select-button {

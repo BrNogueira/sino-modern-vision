@@ -152,20 +152,20 @@ const Listing = () => {
             </p>
           </div>
 
-          {/* Início / Voltar — centralizados no bloco, em amarelo */}
-          <div className="order-last w-full flex items-center justify-center gap-6 md:order-none md:w-auto">
+          {/* Início / Voltar — botões amarelos, mesma paleta do "Buscar" */}
+          <div className="order-last w-full flex items-center justify-center gap-3 md:order-none md:w-auto">
             <Link
               to="/"
-              className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity"
-              style={{ color: "#E7C205", fontSize: "1rem" }}
+              className="flex items-center gap-1 md:gap-2 font-bold uppercase rounded-[10px] px-4 py-2 hover:brightness-95 active:scale-[0.97] transition"
+              style={{ background: "#F2C21A", color: "#2F2F2F", fontSize: "1rem" }}
             >
               <Home className="w-4 h-4" />
               Início
             </Link>
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-1 md:gap-2 font-bold uppercase hover:opacity-80 transition-opacity"
-              style={{ color: "#E7C205", fontSize: "1rem" }}
+              className="flex items-center gap-1 md:gap-2 font-bold uppercase rounded-[10px] px-4 py-2 hover:brightness-95 active:scale-[0.97] transition"
+              style={{ background: "#F2C21A", color: "#2F2F2F", fontSize: "1rem" }}
             >
               <ArrowLeft className="w-4 h-4" />
               Voltar

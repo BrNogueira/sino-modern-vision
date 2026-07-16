@@ -58,6 +58,7 @@ import { properties as staticProperties, type Property } from "@/data/properties
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { zapToProperty } from "@/lib/zapToProperty";
+import { fromRow } from "@/lib/imovelMapper";
 import { supabase } from "@/integrations/supabase/client";
 import { resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
 
@@ -176,11 +177,26 @@ const PropertyDetail = () => {
   // Casamos primeiro por esse código para nunca confundir imóveis de título igual;
   // por compatibilidade, aceitamos URLs antigas terminadas no id (UUID completo) e no slug do título.
   const trailingId = slug?.split("-").pop();
-  const baseProperty =
+  const matched =
     (trailingId && properties.find((p) => String(p.code) === trailingId)) ||
     properties.find((p) => p.id != null && slug != null && slug.endsWith(String(p.id))) ||
     properties.find((p) => generateSlug(p.title) === slug) ||
     properties[0];
+
+  // A lista (contexto) é enxuta p/ a home/listagem carregarem rápido; aqui buscamos o
+  // imóvel COMPLETO (observacao, features, garantias, etc.) sob demanda pelo id.
+  const [detailFull, setDetailFull] = useState<Property | null>(null);
+  useEffect(() => {
+    const pid = matched?.id;
+    if (!pid) { setDetailFull(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("imoveis").select("*").eq("id", pid).single();
+      if (!cancelled && data) setDetailFull(zapToProperty(fromRow(data)));
+    })();
+    return () => { cancelled = true; };
+  }, [matched?.id]);
+  const baseProperty = detailFull ?? matched;
   const { hasRole } = useAdminAuth();
 
   // Editable state for inline editing
@@ -302,12 +318,12 @@ const PropertyDetail = () => {
 
       {/* Navigation buttons */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-4 md:gap-6 py-2 md:py-3">
-          <Link to="/" className="flex items-center gap-1 md:gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl">
+        <div className="container mx-auto px-4 flex items-center justify-center gap-3 md:gap-4 py-2 md:py-3">
+          <Link to="/" className="flex items-center gap-1 md:gap-2 font-bold uppercase rounded-[10px] px-4 py-2 hover:brightness-95 active:scale-[0.97] transition text-base md:text-xl" style={{ background: "#F2C21A", color: "#2F2F2F" }}>
             <Home className="w-4 h-4" />
             Início
           </Link>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1 md:gap-2 text-primary font-bold uppercase hover:opacity-80 transition-opacity text-lg md:text-2xl">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1 md:gap-2 font-bold uppercase rounded-[10px] px-4 py-2 hover:brightness-95 active:scale-[0.97] transition text-base md:text-xl" style={{ background: "#F2C21A", color: "#2F2F2F" }}>
             <ChevronLeft className="w-4 h-4" />
             Voltar
           </button>

@@ -28,7 +28,9 @@ const HeroSection = () => {
   const [neighborhoodOpen, setNeighborhoodOpen] = useState(false);
   const [typeOpen, setTypeOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
-  const [heroBanner, setHeroBanner] = useState<string | null>(null);
+  const [heroBanner, setHeroBanner] = useState<string | null>(() => {
+    try { return localStorage.getItem("hero_banner"); } catch { return null; }
+  });
 
   const STATE_OPTIONS = ["RS", "SC", "PR"];
   const CITY_OPTIONS = ["Novo Hamburgo", "São Leopoldo", "Campo Bom"];
@@ -49,7 +51,10 @@ const HeroSection = () => {
         .select("value")
         .eq("key", "hero_banner")
         .single();
-      if (data) setHeroBanner(data.value);
+      if (data?.value) {
+        setHeroBanner(data.value);
+        try { localStorage.setItem("hero_banner", data.value); } catch { /* storage indisponível */ }
+      }
     };
     fetchHero();
   }, []);

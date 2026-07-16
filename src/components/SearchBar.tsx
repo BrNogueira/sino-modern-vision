@@ -183,9 +183,6 @@ const SearchBar = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             className="search-bar__input text-m"
           />
-          <button onClick={handleSearch} className="search-bar__submit text-m">
-            Buscar
-          </button>
         </div>
         <div className="relative search-bar__select-container" ref={modalidadeRef}>
           <button
@@ -219,6 +216,10 @@ const SearchBar = () => {
             </div>
           )}
         </div>
+
+        <button onClick={handleSearch} className="search-bar__submit text-m">
+          Buscar
+        </button>
       </div>
 
       {/* Row 2 */}
