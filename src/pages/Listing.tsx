@@ -142,7 +142,7 @@ const Listing = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="container mx-auto px-4 pt-8 pb-16">
+      <div className="container mx-auto px-4 pb-16">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 bg-card rounded-xl border border-border px-5 py-3 gap-4">
           <div>
             <span className="text-lg font-bold text-foreground">{filtered.length}</span>
@@ -203,8 +203,8 @@ const Listing = () => {
           <div
             className={
               viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 mt-8 md:mt-[70px]"
-                : "flex flex-col gap-4 mt-8 md:mt-[70px]"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 md:mt-[50px]"
+                : "flex flex-col gap-4 md:mt-[50px]"
             }
           >
             {paginated.map((property) => (
