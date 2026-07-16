@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapPin, Star, ChevronLeft, ChevronRight, Bed, Bath, Car, Waves, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
@@ -14,6 +14,20 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorited = isFavorite(property.code);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // No mobile o popup de descrição aparece quando o card entra na tela (não há hover).
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.intersectionRatio >= 0.6),
+      { threshold: [0, 0.6] },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const slug =
     property.title
@@ -160,10 +174,22 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
     </Link>
   );
 
+  // Popup preto de descrição abaixo do card: desktop no hover; mobile quando o card entra na tela.
+  const descriptionPopup = property.description && (
+    <div
+      className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 z-40 w-[92%] bg-black rounded-lg shadow-lg p-4 transition-opacity duration-300 pointer-events-none ${
+        inView ? "opacity-100" : "opacity-0"
+      } md:opacity-0 md:group-hover/card:opacity-100`}
+    >
+      <p className="text-white text-center text-base leading-relaxed">{property.description}</p>
+    </div>
+  );
+
   // ── Layout LISTA: seguindo as proporções/posições da referência ─────────
   if (layout === "list") {
     return (
-      <div className="group/card bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col md:flex-row overflow-hidden">
+      <div ref={rootRef} className="group/card relative">
+      <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col md:flex-row overflow-hidden">
         {/* Imagem à esquerda (~40%) */}
         <div className="relative w-full md:w-[40%] lg:w-[42%] h-[240px] md:h-auto md:min-h-[300px] shrink-0">
           {imageSlider("")}
@@ -212,12 +238,14 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
           </div>
         </div>
       </div>
+      {descriptionPopup}
+      </div>
     );
   }
 
   // ── Layout GRID (padrão): imagem em cima, conteúdo embaixo ───────────────
   return (
-    <div className="group/card relative h-full min-h-[560px]">
+    <div ref={rootRef} className="group/card relative h-full min-h-[560px]">
       <div className="bg-card rounded-2xl shadow-md border border-border hover:shadow-xl transition-shadow flex flex-col h-[620px] mt-[25px]">
         {/* Image area - flush with card edges */}
         <div className="relative h-[260px] md:h-[300px] shrink-0">
@@ -256,13 +284,6 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
             {metragensRow("justify-center")}
           </div>
 
-          {/* Descrição */}
-          {property.description && (
-            <p className="text-sm text-muted-foreground text-center leading-relaxed line-clamp-4 mb-2">
-              {property.description}
-            </p>
-          )}
-
           {/* Spacer */}
           <div className="flex-1" />
 
@@ -287,6 +308,7 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
         </div>
       </div>
 
+      {descriptionPopup}
     </div>
   );
 };
