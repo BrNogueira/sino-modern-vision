@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import type { Property } from "@/data/properties";
 import { propertyPlaceholder } from "@/lib/resolvePhotoUrl";
+import { displayDimensions } from "@/lib/areaDimensions";
 
 interface PropertyCardProps {
   property: Property;
@@ -44,13 +45,7 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
       : property.priceFormatted;
 
   const displayArea = property.area || (property as any).areaTotal || (property as any).areaUtil || property.areaTerreno || property.areaConstruida;
-  // Dimensão real é curta e sem HTML (ex.: "15x35"). Registros legados às vezes
-  // trazem uma descrição em HTML nesse campo — nesse caso, ignora para não quebrar o card.
-  const rawDimensions = property.areaDimensions || (property as any).area_dimensions;
-  const displayDimensions =
-    typeof rawDimensions === "string" && !/<[^>]+>/.test(rawDimensions) && rawDimensions.trim().length <= 30
-      ? rawDimensions.trim() || undefined
-      : undefined;
+  const dimensions = displayDimensions(property.areaDimensions || (property as any).area_dimensions);
 
   const hasFeatures =
     !!(property.bedrooms || property.bathrooms || property.suites || property.parking || property.hasPool || displayArea);
@@ -174,7 +169,7 @@ const PropertyCard = ({ property, layout = "grid" }: PropertyCardProps) => {
             <GroupIcon className="w-5 h-5 text-primary" strokeWidth={1.5} />
           </div>
           <span className="text-lg font-bold text-foreground">
-            {displayArea}m² {displayDimensions && `(${displayDimensions})`}
+            {displayArea}m² {dimensions && `(${dimensions})`}
           </span>
           <span className="text-xs font-bold text-muted-foreground">Área</span>
         </div>

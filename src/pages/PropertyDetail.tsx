@@ -61,6 +61,7 @@ import { zapToProperty } from "@/lib/zapToProperty";
 import { fromRow } from "@/lib/imovelMapper";
 import { supabase } from "@/integrations/supabase/client";
 import { resolvePhotoUrl } from "@/lib/resolvePhotoUrl";
+import { displayDimensions } from "@/lib/areaDimensions";
 
 const generateSlug = (title: string) =>
   title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -667,10 +668,10 @@ const PropertyDetail = () => {
                         <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.area} m<sup className="text-[0.7em]">2</sup></span>
                       </div>
                   )}
-                  {property.areaDimensions && (
+                  {displayDimensions(property.areaDimensions) && (
                     <div className="flex items-center w-full">
                         <span className="flex items-center gap-2.5 min-w-[120px] text-base md:text-3xl text-black font-normal"><Ruler className="w-[18px] h-[18px] text-primary" /> dimensões:</span>
-                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{property.areaDimensions}</span>
+                        <span className="font-bold text-primary ml-auto text-xl md:text-3xl">{displayDimensions(property.areaDimensions)}</span>
                       </div>
                   )}
                 </div>
