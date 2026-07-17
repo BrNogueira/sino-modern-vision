@@ -39,62 +39,93 @@ const TREND_TONE: Record<TrendTone, string> = {
   down: "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300",
 };
 
+const DAY_MS = 86_400_000;
+
+// Compara cadastros (created_at) dos últimos 30 dias com os 30 dias anteriores.
+// Retorna a % de variação e a cor: verde=alta, vermelho=queda, amarelo=estável.
+const calcGrowth = (items: { createdAt?: string | null }[]): { trend: string; tone: TrendTone } => {
+  const now = Date.now();
+  const cut30 = now - 30 * DAY_MS;
+  const cut60 = now - 60 * DAY_MS;
+  let recent = 0;
+  let prev = 0;
+  for (const it of items) {
+    if (!it.createdAt) continue;
+    const t = new Date(it.createdAt).getTime();
+    if (Number.isNaN(t)) continue;
+    if (t >= cut30) recent += 1;
+    else if (t >= cut60) prev += 1;
+  }
+  // Sem base no período anterior: só há alta se entraram novos; senão, estável.
+  if (prev === 0) {
+    return recent > 0
+      ? { trend: `+${recent}`, tone: "up" }
+      : { trend: "0%", tone: "flat" };
+  }
+  const pct = Math.round(((recent - prev) / prev) * 100);
+  const tone: TrendTone = pct > 0 ? "up" : pct < 0 ? "down" : "flat";
+  return { trend: `${pct > 0 ? "+" : ""}${pct}%`, tone };
+};
+
 const AdminDashboard = () => {
   const { properties } = useAdminProperties();
   const { profile, canAccess } = useAdminAuth();
 
-  const totalAtivos = properties.filter((p) => p.ativo).length;
-  const totalVenda = properties.filter((p) => p.precoVenda !== null).length;
-  const totalAluguel = properties.filter((p) => p.precoAluguel !== null).length;
-  const totalDestaques = properties.filter((p) => p.destaque).length;
+  const ativos = properties.filter((p) => p.ativo);
+  const venda = properties.filter((p) => p.precoVenda !== null);
+  const aluguel = properties.filter((p) => p.precoAluguel !== null);
+  const destaques = properties.filter((p) => p.destaque);
 
-  // % de imóveis ativos: real. Verde >= 70, amarelo 40-69, vermelho < 40.
-  const ativoPct = properties.length ? Math.round((totalAtivos / properties.length) * 100) : 0;
-  const ativoTone: TrendTone = ativoPct >= 70 ? "up" : ativoPct >= 40 ? "flat" : "down";
+  // Crescimento real: cadastros (created_at) nos últimos 30 dias vs os 30 anteriores.
+  const growth = calcGrowth(properties);
+  const growthAtivos = calcGrowth(ativos);
+  const growthVenda = calcGrowth(venda);
+  const growthAluguel = calcGrowth(aluguel);
+  const growthDestaques = calcGrowth(destaques);
 
   const stats: StatCard[] = [
     {
       label: "Total de Imóveis",
       value: properties.length,
       icon: Building2,
-      trend: "+12%",
-      trendTone: "up",
+      trend: growth.trend,
+      trendTone: growth.tone,
       gradient: "from-emerald-500/10 to-emerald-500/0",
       iconBg: "bg-emerald-500/10 text-emerald-600",
     },
     {
       label: "Imóveis Ativos",
-      value: totalAtivos,
+      value: ativos.length,
       icon: Activity,
-      trend: `${ativoPct}%`,
-      trendTone: ativoTone,
+      trend: growthAtivos.trend,
+      trendTone: growthAtivos.tone,
       gradient: "from-blue-500/10 to-blue-500/0",
       iconBg: "bg-blue-500/10 text-blue-600",
     },
     {
       label: "À Venda",
-      value: totalVenda,
+      value: venda.length,
       icon: DollarSign,
-      trend: "+5",
-      trendTone: "up",
+      trend: growthVenda.trend,
+      trendTone: growthVenda.tone,
       gradient: "from-amber-500/10 to-amber-500/0",
       iconBg: "bg-amber-500/10 text-amber-600",
     },
     {
       label: "Para Alugar",
-      value: totalAluguel,
+      value: aluguel.length,
       icon: Home,
-      trend: "+3",
-      trendTone: "up",
+      trend: growthAluguel.trend,
+      trendTone: growthAluguel.tone,
       gradient: "from-purple-500/10 to-purple-500/0",
       iconBg: "bg-purple-500/10 text-purple-600",
     },
     {
       label: "Em Destaque",
-      value: totalDestaques,
+      value: destaques.length,
       icon: Star,
-      trend: "★",
-      trendTone: "flat",
+      trend: growthDestaques.trend,
+      trendTone: growthDestaques.tone,
       gradient: "from-yellow-500/10 to-yellow-500/0",
       iconBg: "bg-yellow-500/10 text-yellow-600",
     },
