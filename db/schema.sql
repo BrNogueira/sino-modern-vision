@@ -291,6 +291,22 @@ CREATE TABLE IF NOT EXISTS site_settings (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS system_logs (
+  id          CHAR(36)     NOT NULL DEFAULT (UUID()),
+  tipo        VARCHAR(30)  NOT NULL,
+  acao        VARCHAR(30)  NOT NULL,
+  entidade    VARCHAR(120) NULL,
+  entidade_id VARCHAR(64)  NULL,
+  descricao   VARCHAR(500) NOT NULL,
+  usuario     VARCHAR(160) NULL,
+  role        VARCHAR(30)  NULL,
+  dados       JSON         NULL,
+  created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_system_logs_created (created_at),
+  KEY idx_system_logs_tipo (tipo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ── Seed: matriz de permissões por papel (reference data lida pelo app) ─────
 INSERT INTO role_permissions (id, role, module, can_view, can_edit, can_delete) VALUES
   (UUID(),'admin','dashboard',1,1,1),(UUID(),'admin','imoveis',1,1,1),

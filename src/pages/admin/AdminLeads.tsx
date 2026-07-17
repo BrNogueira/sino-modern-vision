@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logSystem } from "@/lib/systemLog";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -122,9 +123,11 @@ const AdminLeads = () => {
     if (form.id) {
       const { id, ...rest } = form;
       await supabase.from("leads").update({ ...rest, updated_at: new Date().toISOString() }).eq("id", id);
+      logSystem({ tipo: "lead", acao: "atualizado", entidade: form.nome, entidade_id: id, descricao: `Lead "${form.nome}" atualizado` });
       toast({ title: "Lead atualizado" });
     } else {
       await supabase.from("leads").insert({ ...form, created_by: user?.id });
+      logSystem({ tipo: "lead", acao: "criado", entidade: form.nome, descricao: `Lead "${form.nome}" cadastrado` });
       toast({ title: "Lead cadastrado" });
     }
     setDialogOpen(false);
@@ -138,13 +141,17 @@ const AdminLeads = () => {
   };
 
   const handleDelete = async (id: string) => {
+    const lead = items.find((l) => l.id === id);
     await supabase.from("leads").delete().eq("id", id);
+    logSystem({ tipo: "lead", acao: "excluido", entidade: lead?.nome, entidade_id: id, descricao: `Lead "${lead?.nome ?? id}" excluído` });
     toast({ title: "Lead excluído" });
     fetchData();
   };
 
   const handleStatusChange = async (id: string, status: string) => {
     await supabase.from("leads").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
+    const lead = items.find((l) => l.id === id);
+    logSystem({ tipo: "lead", acao: "status", entidade: lead?.nome, entidade_id: id, descricao: `Lead "${lead?.nome ?? id}" movido para "${status}"` });
     fetchData();
   };
 

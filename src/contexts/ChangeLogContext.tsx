@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { logSystem } from "@/lib/systemLog";
 
 export interface ChangeLogEntry {
   id: string;
@@ -30,6 +31,17 @@ export const ChangeLogProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       timestamp: new Date().toISOString(),
     };
     setLogs((prev) => [newEntry, ...prev]);
+    // Persiste na trilha de auditoria (alimenta notificações e /admin/logs).
+    logSystem({
+      tipo: "imovel",
+      acao: "alterado",
+      entidade: `${entry.propertyCode} — ${entry.propertyTitle}`,
+      entidade_id: entry.propertyCode,
+      descricao: `${entry.changedBy} alterou "${entry.field}" do imóvel ${entry.propertyCode}`,
+      usuario: entry.changedBy,
+      role: entry.role,
+      dados: { field: entry.field, oldValue: entry.oldValue, newValue: entry.newValue },
+    });
   }, []);
 
   const getLogsByProperty = useCallback(

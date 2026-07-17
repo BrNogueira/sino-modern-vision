@@ -56,6 +56,14 @@ const RESOURCES: ResourceConfig[] = [
     searchColumns: ["titulo", "local", "contato_nome", "imovel_label"],
   },
 
+  // Logs do sistema: qualquer usuário logado registra; leitura autenticada.
+  {
+    table: "system_logs",
+    writeRoles: STAFF,
+    defaultOrder: "created_at.desc",
+    searchColumns: ["descricao", "usuario", "entidade"],
+  },
+
   // Internos (exigem login; escrita restrita).
   { table: "profiles", writeRoles: ["admin"] },
   { table: "user_roles", writeRoles: ["admin"] },

@@ -40,6 +40,7 @@ const AdminRelatorios = lazy(() => import("./pages/admin/AdminRelatorios"));
 const AdminCorretores = lazy(() => import("./pages/admin/AdminCorretores"));
 const AdminAgenda = lazy(() => import("./pages/admin/AdminAgenda"));
 const AdminConfiguracoes = lazy(() => import("./pages/admin/AdminConfiguracoes"));
+const AdminLogs = lazy(() => import("./pages/admin/AdminLogs"));
 const AgenciamentosPage = lazy(() => import("./pages/admin/corretor/AgenciamentosPage"));
 const PreCadastrosPage = lazy(() => import("./pages/admin/corretor/PreCadastrosPage"));
 const MapaPage = lazy(() => import("./pages/admin/corretor/MapaPage"));
@@ -90,6 +91,7 @@ const App = () => (
                   <Route path="relatorios" element={<AdminRelatorios />} />
                   <Route path="corretores" element={<AdminCorretores />} />
                   <Route path="configuracoes" element={<AdminConfiguracoes />} />
+                  <Route path="logs" element={<AdminLogs />} />
                   <Route path="corretor" element={<AdminCorretorProfile />} />
                   <Route path="corretor/imoveis" element={<AdminCorretorImoveis />} />
                   <Route path="corretor/agenciamentos" element={<AgenciamentosPage />} />

@@ -1,6 +1,7 @@
 /* AdminPropertiesContext - persistência via Lovable Cloud */
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logSystem } from "@/lib/systemLog";
 import {
   ZapImovel,
   defaultFeatureFlags,
@@ -114,6 +115,14 @@ export const AdminPropertiesProvider: React.FC<{ children: React.ReactNode }> = 
       }
       const created = fromRow(data);
       setProperties((prev) => [created, ...prev]);
+      logSystem({
+        tipo: "imovel",
+        acao: "criado",
+        entidade: `${created.codigoImovel || created.id} — ${created.tituloImovel ?? ""}`.trim(),
+        entidade_id: created.id,
+        descricao: `Imóvel ${created.codigoImovel || created.id} cadastrado`,
+        usuario: user?.email ?? null,
+      });
       return created;
     },
     [],
@@ -132,16 +141,33 @@ export const AdminPropertiesProvider: React.FC<{ children: React.ReactNode }> = 
     }
     const updated = fromRow(data);
     setProperties((prev) => prev.map((p) => (p.id === id ? updated : p)));
+    const campos = Object.keys(updates).join(", ");
+    logSystem({
+      tipo: "imovel",
+      acao: "atualizado",
+      entidade: `${updated.codigoImovel || id} — ${updated.tituloImovel ?? ""}`.trim(),
+      entidade_id: id,
+      descricao: `Imóvel ${updated.codigoImovel || id} atualizado (${campos})`,
+      dados: { campos: Object.keys(updates) },
+    });
   }, []);
 
   const deleteProperty = useCallback(async (id: string) => {
+    const removed = properties.find((p) => p.id === id);
     const { error } = await supabase.from("imoveis").delete().eq("id", id);
     if (error) {
       console.error("Failed to delete imovel:", error);
       throw error;
     }
     setProperties((prev) => prev.filter((p) => p.id !== id));
-  }, []);
+    logSystem({
+      tipo: "imovel",
+      acao: "excluido",
+      entidade: removed ? `${removed.codigoImovel || id} — ${removed.tituloImovel ?? ""}`.trim() : id,
+      entidade_id: id,
+      descricao: `Imóvel ${removed?.codigoImovel || id} excluído`,
+    });
+  }, [properties]);
 
   const getProperty = useCallback(
     (id: string) => properties.find((p) => p.id === id),

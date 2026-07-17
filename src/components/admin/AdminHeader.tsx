@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Search, Bell, LogOut, User, Command, ExternalLink } from "lucide-react";
+import { Search, LogOut, User, Command, ExternalLink } from "lucide-react";
+import { AdminNotifications } from "./AdminNotifications";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -53,10 +54,7 @@ export function AdminHeader() {
         </a>
       </Button>
 
-      <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
-        <Bell className="w-4 h-4" />
-        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[hsl(48,100%,50%)] ring-2 ring-card" />
-      </Button>
+      <AdminNotifications />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
