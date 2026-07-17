@@ -285,6 +285,13 @@ const PropertyDetail = () => {
     : (baseProperty.descricaoCompleta || baseProperty.description || "");
   const caracteristicas = property.caracteristicas ?? [];
   const fmtBRL = (n?: number) => n?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  // Estado pode vir por extenso ("Rio Grande do Sul") — exibe a sigla para não quebrar linha.
+  const UF_BY_NAME: Record<string, string> = { "rio grande do sul": "RS", "santa catarina": "SC", parana: "PR" };
+  const toUf = (s?: string) => {
+    const n = (s ?? "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    if (!n) return "";
+    return n.length === 2 ? n.toUpperCase() : UF_BY_NAME[n] ?? s!;
+  };
   const fichaTecnica: { label: string; value: string | number }[] = [
     { label: "Código", value: property.code },
     { label: "Tipo", value: property.type },
@@ -293,7 +300,7 @@ const PropertyDetail = () => {
     { label: "Endereço", value: property.enderecoCompleto },
     { label: "Bairro", value: property.neighborhood },
     { label: "Zona", value: property.zona },
-    { label: "Cidade", value: property.city && property.state ? `${property.city} - ${property.state}` : property.city },
+    { label: "Cidade", value: property.city && property.state ? `${property.city} - ${toUf(property.state)}` : property.city },
     { label: "CEP", value: property.cep },
     { label: "Ano de construção", value: property.anoConstrucao },
     { label: "IPTU", value: property.iptu ? fmtBRL(property.iptu)! : undefined },
@@ -304,6 +311,22 @@ const PropertyDetail = () => {
   const hasFotosAreaComum = property.fotosAreaComum && property.fotosAreaComum.length > 0;
   const hasTaxas = property.taxasAdicionais && property.taxasAdicionais.length > 0;
   const isAluguel = property.transactionType === "aluguel";
+
+  // Blocos de valores: exibe venda E locação sempre que houver a informação,
+  // mesmo que a modalidade marcada não cubra ambas.
+  const showVenda =
+    property.transactionType === "venda" ||
+    property.transactionType === "venda/aluguel" ||
+    !!(property.precoVenda && property.precoVenda > 0);
+  const showAluguel =
+    property.transactionType === "aluguel" ||
+    property.transactionType === "venda/aluguel" ||
+    !!(property.valorAluguel && property.valorAluguel > 0);
+  // Taxas recorrentes (condomínio/IPTU) exibidas junto aos valores.
+  const taxasExtras = [
+    property.valorCondominioFormatted ? { nome: "Condomínio", valor: `${property.valorCondominioFormatted}/mês` } : null,
+    property.iptu ? { nome: "IPTU", valor: `${fmtBRL(property.iptu)!}/ano` } : null,
+  ].filter(Boolean) as { nome: string; valor: string }[];
 
   // Similar properties (same type or city, excluding current)
   const similarProperties = properties
@@ -667,8 +690,8 @@ const PropertyDetail = () => {
                 <h3 className="font-extrabold uppercase tracking-wider text-2xl text-center text-primary-foreground bg-primary px-7 py-4">Ficha Técnica</h3>
                 <div className="flex flex-col gap-2 bg-background p-[15px]">
                   {fichaTecnica.map((row) => (
-                    <div key={row.label} className="flex items-center justify-between gap-3 text-base md:text-2xl">
-                      <span className="text-black">{row.label}:</span>
+                    <div key={row.label} className="flex items-start justify-between gap-3 text-base md:text-2xl">
+                      <span className="text-black shrink-0">{row.label}:</span>
                       <span className="font-bold text-primary text-right">{row.value}</span>
                     </div>
                   ))}
@@ -822,7 +845,7 @@ const PropertyDetail = () => {
             )}
 
             {/* Valor de Venda */}
-            {(property.transactionType === "venda" || property.transactionType === "venda/aluguel") && (
+            {showVenda && (
               <div className="rounded-xl border border-border bg-card p-5">
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <p className="text-muted-foreground uppercase font-semibold text-base md:text-3xl">Valor de Venda</p>
@@ -836,12 +859,21 @@ const PropertyDetail = () => {
                     />
                   )}
                 </div>
-                <span className="font-bold text-primary text-2xl md:text-3xl">{property.priceFormatted}</span>
+                <span className="font-bold text-primary text-2xl md:text-3xl">
+                  {property.precoVenda ? fmtBRL(property.precoVenda) : property.priceFormatted}
+                </span>
+                {/* Sem bloco de locação, as taxas recorrentes aparecem aqui */}
+                {!showAluguel && taxasExtras.map((taxa) => (
+                  <div key={taxa.nome} className="flex justify-between items-center border-t border-border pt-2 mt-2">
+                    <span className="text-base md:text-3xl text-muted-foreground">{taxa.nome}:</span>
+                    <span className="text-base md:text-3xl font-semibold text-foreground">{taxa.valor}</span>
+                  </div>
+                ))}
               </div>
             )}
 
             {/* Bloco de Locação */}
-            {(property.transactionType === "aluguel" || property.transactionType === "venda/aluguel") && (
+            {showAluguel && (
               <div className="rounded-xl border border-border bg-card p-5 space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-base md:text-3xl text-muted-foreground uppercase font-semibold">Valores de Locação</p>
@@ -859,6 +891,12 @@ const PropertyDetail = () => {
                   <span className="text-base md:text-3xl text-muted-foreground">Aluguel:</span>
                   <span className="text-xl md:text-3xl font-bold text-primary">{property.valorAluguelFormatted || property.priceFormatted}</span>
                 </div>
+                {taxasExtras.map((taxa) => (
+                  <div key={taxa.nome} className="flex justify-between items-center border-t border-border pt-2">
+                    <span className="text-base md:text-3xl text-muted-foreground">{taxa.nome}:</span>
+                    <span className="text-base md:text-3xl font-semibold text-foreground">{taxa.valor}</span>
+                  </div>
+                ))}
                 {hasTaxas && property.taxasAdicionais!.map((taxa, i) => (
                   <div key={i} className="flex justify-between items-center border-t border-border pt-2">
                     <span className="text-base md:text-3xl text-muted-foreground">{taxa.nome}:</span>

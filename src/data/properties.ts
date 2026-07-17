@@ -21,6 +21,7 @@ export interface Property {
   state: string;
   neighborhood: string;
   price: number;
+  precoVenda?: number;
   priceFormatted: string;
   valorAluguel?: number;
   valorAluguelFormatted?: string;

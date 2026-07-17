@@ -79,6 +79,7 @@ export const zapToProperty = (z: ZapImovel): Property => {
     state: z.estado,
     neighborhood: z.bairro || "",
     price,
+    precoVenda: z.precoVenda ?? undefined,
     priceFormatted: z.precoVenda ? formatBRL(z.precoVenda) : formatBRL(z.precoAluguel),
     valorAluguel: z.precoAluguel,
     valorAluguelFormatted: z.precoAluguel ? `${formatBRL(z.precoAluguel)}/mês` : undefined,
