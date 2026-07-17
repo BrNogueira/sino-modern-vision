@@ -49,7 +49,10 @@ export const isImovelAluguel = (z: ZapImovel): boolean =>
   transactionTypeFromOferta(z.tipoOferta, z.precoVenda ?? undefined, z.precoAluguel ?? undefined, z.modalidade) !== "venda";
 
 export const zapToProperty = (z: ZapImovel): Property => {
-  const fotosUrls = (Array.isArray(z.fotos) ? z.fotos : [])
+  // A foto marcada como capa (principal) vem sempre primeiro; sort estável preserva a ordem das demais.
+  const isPrincipal = (f: any) => typeof f === "object" && f?.principal === true;
+  const fotosUrls = (Array.isArray(z.fotos) ? [...z.fotos] : [])
+    .sort((a, b) => Number(isPrincipal(b)) - Number(isPrincipal(a)))
     .map((f: any) => (typeof f === "string" ? f : f?.url))
     .filter(Boolean)
     .map((u: string) => resolvePhotoUrl(u));
