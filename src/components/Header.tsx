@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Search, ChevronDown, ChevronUp } from "lucide-react";
+import { Menu, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 import SearchBar from "./SearchBar";
@@ -21,24 +21,8 @@ const Header = () => {
     { label: "Contato", href: "/contato" },
   ];
 
-  // Desktop overlay menu (unchanged behavior)
-  const renderNavLinks = () => (
-    <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
-      {navLinks.map((link) => (
-        <Link
-          key={link.label}
-          to={link.href}
-          className="text-primary-foreground hover:text-primary-foreground/70 transition-colors py-2 text-lg"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          {link.label}
-        </Link>
-      ))}
-    </nav>
-  );
-
-  // Mobile drawer menu (Sheet) — slides in from the right, no fragile pixel offsets
-  const mobileMenu = (
+  // Menu drawer (Sheet) — desliza da direita, mesmo comportamento em mobile e desktop
+  const menuDrawer = (
     <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <SheetContent
         side="right"
@@ -85,23 +69,15 @@ const Header = () => {
           <div className="flex items-center gap-6">
             <button
               className="p-2 text-primary-foreground"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => setIsMenuOpen(true)}
               aria-label="Menu"
             >
-              {isMenuOpen && !isMobile ? <X className="w-10 h-10" strokeWidth={3} /> : <Menu className="w-10 h-10" strokeWidth={3} />}
+              <Menu className="w-10 h-10" strokeWidth={3} />
             </button>
           </div>
         </div>
 
-        {/* Mobile: drawer */}
-        {isMobile && mobileMenu}
-
-        {/* Desktop: overlay (unchanged) */}
-        {!isMobile && isMenuOpen && (
-          <div className="fixed inset-x-0 top-[180px] md:top-[400px] bottom-0 bg-primary/95 z-[100] overflow-y-auto">
-            {renderNavLinks()}
-          </div>
-        )}
+        {menuDrawer}
       </header>
     );
   }
@@ -141,10 +117,10 @@ const Header = () => {
           )}
           <button
             className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMenuOpen(true)}
             aria-label="Menu"
           >
-            {isMenuOpen && !isMobile ? <X className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} /> : <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} />}
+            <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={3} />
           </button>
         </div>
       </div>
@@ -156,16 +132,7 @@ const Header = () => {
         </div>
       )}
 
-      {/* Mobile: drawer */}
-      {isMobile && mobileMenu}
-
-      {/* Desktop: overlay (unchanged) */}
-      {!isMobile && isMenuOpen && (
-        <div className="fixed inset-x-0 top-[220px] lg:top-[160px] bottom-0 bg-primary/95 z-[100] overflow-y-auto backdrop-blur-sm">
-          {renderNavLinks()}
-        </div>
-      )}
-
+      {menuDrawer}
     </header>
   );
 };
