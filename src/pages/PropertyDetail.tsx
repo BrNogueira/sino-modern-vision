@@ -292,16 +292,19 @@ const PropertyDetail = () => {
     if (!n) return "";
     return n.length === 2 ? n.toUpperCase() : UF_BY_NAME[n] ?? s!;
   };
+  // Endereço completo e CEP identificam a localização exata — só admin/corretor;
+  // cliente vê apenas cidade e bairro.
+  const canSeeAddress = hasRole("admin") || hasRole("corretor");
   const fichaTecnica: { label: string; value: string | number }[] = [
     { label: "Código", value: property.code },
     { label: "Tipo", value: property.type },
     { label: "Subtipo", value: property.subTipo },
     { label: "Categoria", value: property.categoriaImovel },
-    { label: "Endereço", value: property.enderecoCompleto },
+    { label: "Endereço", value: canSeeAddress ? property.enderecoCompleto : undefined },
     { label: "Bairro", value: property.neighborhood },
     { label: "Zona", value: property.zona },
     { label: "Cidade", value: property.city && property.state ? `${property.city} - ${toUf(property.state)}` : property.city },
-    { label: "CEP", value: property.cep },
+    { label: "CEP", value: canSeeAddress ? property.cep : undefined },
     { label: "Ano de construção", value: property.anoConstrucao },
     { label: "IPTU", value: property.iptu ? fmtBRL(property.iptu)! : undefined },
     { label: "Condomínio", value: property.valorCondominioFormatted },
@@ -465,31 +468,14 @@ const PropertyDetail = () => {
                     Condomínio{condo?.nome ? ` ${condo.nome}` : ""}
                   </h3>
                 </div>
-                <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card space-y-3">
-                  <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
-                    <img
-                      src={condoFotos[condoImage]}
-                      alt={`Condomínio ${condo?.nome ?? ""} — foto ${condoImage + 1}`}
-                      className="w-full h-full object-cover cursor-pointer"
-                      onClick={() => openLightbox(condoImage, condoFotos)}
-                    />
-                    {condoFotos.length > 1 && (
-                      <>
-                        <button onClick={prevCondoImage} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronLeft className="w-5 h-5" /></button>
-                        <button onClick={nextCondoImage} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-md"><ChevronRight className="w-5 h-5" /></button>
-                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">{condoImage + 1} / {condoFotos.length}</div>
-                      </>
-                    )}
+                <div className="border border-t-0 border-border rounded-b-lg p-3 bg-card">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                    {condoFotos.map((img, i) => (
+                      <button key={i} onClick={() => openLightbox(i, condoFotos)} className="aspect-[4/3] rounded-lg overflow-hidden border border-border hover:opacity-80 transition-opacity">
+                        <img src={img} alt={`Condomínio ${condo?.nome ?? ""} — foto ${i + 1}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
                   </div>
-                  {condoFotos.length > 1 && (
-                    <div className="flex gap-2">
-                      {condoFotos.slice(0, 4).map((img, i) => (
-                        <button key={i} onClick={() => setCondoImage(i)} className={`flex-1 aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${condoImage === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"}`}>
-                          <img src={img} alt={`Condomínio foto ${i + 1}`} className="w-full h-full object-cover" />
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
             )}
