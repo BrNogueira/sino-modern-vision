@@ -364,6 +364,9 @@ export interface ZapImovel {
   // Condomínio vinculado (tabela condominios) — traz fotos de áreas comuns
   condominioId?: string | null;
 
+  // Corretor responsável (profiles.id) — alimenta "Meus Imóveis" e a coluna em Corretores
+  corretorId?: string | null;
+
   // Controle interno
   ativo: boolean;
   destaque: boolean;

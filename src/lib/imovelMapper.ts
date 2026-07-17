@@ -60,6 +60,7 @@ export function fromRow(row: any): ZapImovel {
   exclusivo: row.exclusivo,
   categoriaId: row.categoria_id ?? null,
   condominioId: row.condominio_id ?? null,
+  corretorId: row.corretor_id ?? null,
   createdAt: row.created_at,
   updatedAt: row.updated_at,
 };

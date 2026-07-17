@@ -139,12 +139,14 @@ CREATE TABLE IF NOT EXISTS imoveis (
   destaque   TINYINT(1) NOT NULL DEFAULT 0,
   exclusivo  TINYINT(1) NOT NULL DEFAULT 0,
 
-  created_by CHAR(36) NULL,
+  created_by  CHAR(36) NULL,
+  corretor_id CHAR(36) NULL,  -- → profiles.id (sem FK rígida; enforce no app)
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (id),
   UNIQUE KEY uq_imoveis_codigo (codigo_imovel),
+  KEY idx_imoveis_corretor (corretor_id),
   KEY idx_imoveis_ativo (ativo),
   KEY idx_imoveis_destaque (destaque),
   KEY idx_imoveis_cidade_bairro (cidade, bairro),

@@ -85,7 +85,7 @@ export const AdminPropertiesProvider: React.FC<{ children: React.ReactNode }> = 
     setLoading(true);
     const { data, error } = await supabase
       .from("imoveis")
-      .select("id,codigo_imovel,titulo_imovel,tipo_imovel,sub_tipo_imovel,categoria_imovel,tipo_oferta,modalidade,cep,estado,cidade,zona,bairro,endereco,numero,complemento,latitude,longitude,preco_venda,preco_aluguel,iptu,valor_condominio,area_total,area_util,area_dimensions,qtd_dormitorios,qtd_suites,qtd_banheiros,qtd_vagas,descricao_curta,fotos,video_url,link_tour_virtual,ano_construcao,proprietario_nome,proprietario_telefone,proprietario_email,proprietario_documento,ativo,destaque,exclusivo,categoria_id,condominio_id,created_at,updated_at")
+      .select("id,codigo_imovel,titulo_imovel,tipo_imovel,sub_tipo_imovel,categoria_imovel,tipo_oferta,modalidade,cep,estado,cidade,zona,bairro,endereco,numero,complemento,latitude,longitude,preco_venda,preco_aluguel,iptu,valor_condominio,area_total,area_util,area_dimensions,qtd_dormitorios,qtd_suites,qtd_banheiros,qtd_vagas,descricao_curta,fotos,video_url,link_tour_virtual,ano_construcao,proprietario_nome,proprietario_telefone,proprietario_email,proprietario_documento,ativo,destaque,exclusivo,categoria_id,condominio_id,corretor_id,created_at,updated_at")
       .order("created_at", { ascending: false });
     if (error) {
       console.error("Failed to load imoveis:", error);
@@ -103,7 +103,8 @@ export const AdminPropertiesProvider: React.FC<{ children: React.ReactNode }> = 
   const addProperty = useCallback(
     async (property: Omit<ZapImovel, "id" | "createdAt" | "updatedAt">) => {
       const { data: { user } } = await supabase.auth.getUser();
-      const payload = { ...toRow(property), created_by: user?.id ?? null };
+      // corretor_id: vínculo padrão = quem cadastrou (alimenta "Meus Imóveis").
+      const payload = { ...toRow(property), created_by: user?.id ?? null, corretor_id: user?.id ?? null };
       const { data, error } = await supabase
         .from("imoveis")
         .insert(payload)

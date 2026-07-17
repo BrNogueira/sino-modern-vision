@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import {
   Building2,
   Eye,
@@ -72,11 +73,12 @@ function coverUrl(fotos: ZapImovel["fotos"]): string | null {
 
 type Counts = { total: number; ativos: number; inativos: number };
 
-async function fetchCount(ativo?: boolean): Promise<number> {
+async function fetchCount(corretorId: string, ativo?: boolean): Promise<number> {
   const qs = new URLSearchParams({
     count: "exact",
     limit: "0",
     select: "id",
+    corretor_id: `eq.${corretorId}`,
   });
   if (ativo === true) qs.set("ativo", "eq.1");
   if (ativo === false) qs.set("ativo", "eq.0");
@@ -84,16 +86,16 @@ async function fetchCount(ativo?: boolean): Promise<number> {
   return res.total ?? 0;
 }
 
-async function fetchCounts(): Promise<Counts> {
+async function fetchCounts(corretorId: string): Promise<Counts> {
   const [total, ativos, inativos] = await Promise.all([
-    fetchCount(),
-    fetchCount(true),
-    fetchCount(false),
+    fetchCount(corretorId),
+    fetchCount(corretorId, true),
+    fetchCount(corretorId, false),
   ]);
   return { total, ativos, inativos };
 }
 
-async function fetchPage(page: number, search?: string): Promise<{ items: ZapImovel[]; total: number }> {
+async function fetchPage(corretorId: string, page: number, search?: string): Promise<{ items: ZapImovel[]; total: number }> {
   const offset = (page - 1) * ITEMS_PER_PAGE;
   const qs = new URLSearchParams({
     select: LIST_SELECT,
@@ -101,6 +103,7 @@ async function fetchPage(page: number, search?: string): Promise<{ items: ZapImo
     limit: String(ITEMS_PER_PAGE),
     offset: String(offset),
     count: "exact",
+    corretor_id: `eq.${corretorId}`,
   });
   const term = search?.trim();
   if (term) qs.set("q", term);
@@ -113,6 +116,7 @@ async function fetchPage(page: number, search?: string): Promise<{ items: ZapImo
 
 const AdminCorretorImoveis = () => {
   const { updateProperty, deleteProperty } = useAdminProperties();
+  const { user } = useAdminAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -150,9 +154,13 @@ const AdminCorretorImoveis = () => {
 
   const loadPage = useCallback(
     async (page: number, q: string) => {
+      if (!user?.id) return;
       setLoading(true);
       try {
-        const [{ items, total }, stats] = await Promise.all([fetchPage(page, q), fetchCounts()]);
+        const [{ items, total }, stats] = await Promise.all([
+          fetchPage(user.id, page, q),
+          fetchCounts(user.id),
+        ]);
         setProperties(items);
         setTotalItems(total);
         setCounts(stats);
@@ -174,7 +182,7 @@ const AdminCorretorImoveis = () => {
         setLoading(false);
       }
     },
-    [syncUrl],
+    [syncUrl, user?.id],
   );
 
   useEffect(() => {

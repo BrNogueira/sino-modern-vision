@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { useAdminProperties } from "@/contexts/AdminPropertiesContext";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,6 +34,7 @@ const CORRETOR_SORT: SortAccessors<CorretorRow, CorretorSortKey> = {
 
 const AdminCorretores = () => {
   const { hasRole } = useAdminAuth();
+  const { properties } = useAdminProperties();
   const [corretores, setCorretores] = useState<CorretorRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -66,6 +68,10 @@ const AdminCorretores = () => {
   });
   const { sort, toggle, sorted } = useTableSort(filtered, CORRETOR_SORT, { key: "full_name", dir: "asc" });
 
+  // Imóveis ativos vinculados a cada corretor (imoveis.corretor_id).
+  const imoveisPorCorretor = (corretorId: string) =>
+    properties.filter((p) => p.ativo && p.corretorId === corretorId).length;
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -97,6 +103,7 @@ const AdminCorretores = () => {
                 <SortableHead label="Nome" sortKey="full_name" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
                 <TableHead>Contato</TableHead>
                 <SortableHead label="CRECI" sortKey="creci" activeKey={sort.key} dir={sort.dir} onSort={toggle} />
+                <TableHead>Imóveis</TableHead>
                 <TableHead>Perfis</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
@@ -113,6 +120,9 @@ const AdminCorretores = () => {
                   </TableCell>
                   <TableCell className="text-sm">{c.creci || "—"}</TableCell>
                   <TableCell>
+                    <Badge variant="outline" className="text-xs">{imoveisPorCorretor(c.id)}</Badge>
+                  </TableCell>
+                  <TableCell>
                     <div className="flex gap-1 flex-wrap">
                       {c.roles.map(r => <Badge key={r} variant="secondary" className="text-xs">{ROLE_LABELS[r] || r}</Badge>)}
                     </div>
@@ -123,7 +133,7 @@ const AdminCorretores = () => {
                 </TableRow>
               ))}
               {sorted.length === 0 && (
-                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">Nenhum corretor encontrado.</TableCell></TableRow>
+                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Nenhum corretor encontrado.</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
