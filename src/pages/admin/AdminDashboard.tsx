@@ -15,11 +15,29 @@ import {
   Home,
   DollarSign,
   Building,
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { Badge } from "@/components/ui/badge";
+
+type TrendTone = "up" | "flat" | "down";
+type StatCard = {
+  label: string;
+  value: number;
+  icon: LucideIcon;
+  trend: string;
+  trendTone: TrendTone;
+  gradient: string;
+  iconBg: string;
+};
+
+// Contraste forte em light/dark: verde=alta, amarelo=estável, vermelho=baixa.
+const TREND_TONE: Record<TrendTone, string> = {
+  up: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300",
+  flat: "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300",
+  down: "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300",
+};
 
 const AdminDashboard = () => {
   const { properties } = useAdminProperties();
@@ -30,13 +48,17 @@ const AdminDashboard = () => {
   const totalAluguel = properties.filter((p) => p.precoAluguel !== null).length;
   const totalDestaques = properties.filter((p) => p.destaque).length;
 
-  const stats = [
+  // % de imóveis ativos: real. Verde >= 70, amarelo 40-69, vermelho < 40.
+  const ativoPct = properties.length ? Math.round((totalAtivos / properties.length) * 100) : 0;
+  const ativoTone: TrendTone = ativoPct >= 70 ? "up" : ativoPct >= 40 ? "flat" : "down";
+
+  const stats: StatCard[] = [
     {
       label: "Total de Imóveis",
       value: properties.length,
       icon: Building2,
       trend: "+12%",
-      trendUp: true,
+      trendTone: "up",
       gradient: "from-emerald-500/10 to-emerald-500/0",
       iconBg: "bg-emerald-500/10 text-emerald-600",
     },
@@ -44,8 +66,8 @@ const AdminDashboard = () => {
       label: "Imóveis Ativos",
       value: totalAtivos,
       icon: Activity,
-      trend: `${properties.length ? Math.round((totalAtivos / properties.length) * 100) : 0}%`,
-      trendUp: true,
+      trend: `${ativoPct}%`,
+      trendTone: ativoTone,
       gradient: "from-blue-500/10 to-blue-500/0",
       iconBg: "bg-blue-500/10 text-blue-600",
     },
@@ -54,7 +76,7 @@ const AdminDashboard = () => {
       value: totalVenda,
       icon: DollarSign,
       trend: "+5",
-      trendUp: true,
+      trendTone: "up",
       gradient: "from-amber-500/10 to-amber-500/0",
       iconBg: "bg-amber-500/10 text-amber-600",
     },
@@ -63,7 +85,7 @@ const AdminDashboard = () => {
       value: totalAluguel,
       icon: Home,
       trend: "+3",
-      trendUp: true,
+      trendTone: "up",
       gradient: "from-purple-500/10 to-purple-500/0",
       iconBg: "bg-purple-500/10 text-purple-600",
     },
@@ -72,7 +94,7 @@ const AdminDashboard = () => {
       value: totalDestaques,
       icon: Star,
       trend: "★",
-      trendUp: true,
+      trendTone: "flat",
       gradient: "from-yellow-500/10 to-yellow-500/0",
       iconBg: "bg-yellow-500/10 text-yellow-600",
     },
@@ -120,9 +142,9 @@ const AdminDashboard = () => {
                 <div className={`rounded-xl p-2 ${stat.iconBg}`}>
                   <stat.icon className="w-4 h-4" />
                 </div>
-                <Badge variant="secondary" className="text-[10px] h-5 bg-background/80 backdrop-blur">
+                <span className={`inline-flex items-center h-5 px-2 rounded-full text-[11px] font-bold ${TREND_TONE[stat.trendTone]}`}>
                   {stat.trend}
-                </Badge>
+                </span>
               </div>
               <p className="text-3xl font-bold text-foreground tracking-tight">{stat.value}</p>
               <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
