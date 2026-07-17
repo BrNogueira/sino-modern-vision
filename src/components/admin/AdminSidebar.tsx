@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Building2,
@@ -40,6 +40,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logoSinos from "@/assets/logo-sinos-imoveis.webp";
 import { Badge } from "@/components/ui/badge";
 
@@ -127,6 +135,7 @@ const NAV: NavEntry[] = [
 export function AdminSidebar() {
   const { state, toggleSidebar } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
   const { canAccess, profile, roles } = useAdminAuth();
   const collapsed = state === "collapsed";
 
@@ -199,14 +208,42 @@ export function AdminSidebar() {
             const visible = entry.children.filter((i) => canAccess(i.module));
             if (visible.length === 0) return null;
             const groupActive = visible.some((i) => isActive(i.href, i.exact));
+
+            // Modo reduzido: flyout à direita (Collapsible ficaria inacessível só com ícones).
+            if (collapsed) {
+              return (
+                <SidebarMenuItem key={entry.label}>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuButton tooltip={entry.label} isActive={groupActive} className={itemClass(groupActive)}>
+                        <entry.icon className="w-4 h-4 shrink-0" />
+                        <span>{entry.label}</span>
+                      </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-56">
+                      <DropdownMenuLabel>{entry.label}</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {visible.map((item) => (
+                        <DropdownMenuItem
+                          key={item.href}
+                          onClick={() => navigate(item.href)}
+                          className={`cursor-pointer gap-2 ${isActive(item.href, item.exact) ? "bg-muted font-medium" : ""}`}
+                        >
+                          {item.icon && <item.icon className="w-4 h-4 text-muted-foreground" />}
+                          {item.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </SidebarMenuItem>
+              );
+            }
+
             return (
               <Collapsible key={entry.label} defaultOpen={groupActive} className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      tooltip={entry.label}
-                      className={itemClass(groupActive && collapsed)}
-                    >
+                    <SidebarMenuButton tooltip={entry.label} className={itemClass(false)}>
                       <entry.icon className="w-4 h-4 shrink-0" />
                       <span>{entry.label}</span>
                       <ChevronRight className="ml-auto w-4 h-4 transition-transform group-data-[state=open]/collapsible:rotate-90" />
