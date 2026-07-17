@@ -1,8 +1,9 @@
 import { useState, useRef, useCallback } from "react";
-import { Pencil, X, Upload, GripVertical, Check, Plus } from "lucide-react";
+import { Pencil, X, Upload, GripVertical, Check, Plus, Loader2 } from "lucide-react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { useChangeLog } from "@/contexts/ChangeLogContext";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface InlinePhotoEditorProps {
   photos: string[];
@@ -25,19 +26,39 @@ const InlinePhotoEditor = ({
   const { addLog } = useChangeLog();
   const [editing, setEditing] = useState(false);
   const [editPhotos, setEditPhotos] = useState<string[]>(photos);
+  const [uploading, setUploading] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const dragItemRef = useRef<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const addPhotos = useCallback(
-    (files: FileList | File[]) => {
-      const fileArray = Array.from(files).filter((f) => f.type.startsWith("image/"));
-      if (!fileArray.length) return;
-      const newUrls = fileArray.map((f) => URL.createObjectURL(f));
-      setEditPhotos((prev) => [...prev, ...newUrls]);
-    },
-    []
-  );
+  // Upload real para o storage (blob: local seria efêmero e quebraria ao persistir).
+  const addPhotos = useCallback(async (files: FileList | File[]) => {
+    const fileArray = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (!fileArray.length) return;
+    setUploading(true);
+    try {
+      const uploaded: string[] = [];
+      for (const file of fileArray) {
+        const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error: upErr } = await supabase.storage
+          .from("imoveis-fotos")
+          .upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+        if (upErr) {
+          console.error("Photo upload failed:", upErr);
+          continue;
+        }
+        const { data: pub } = supabase.storage.from("imoveis-fotos").getPublicUrl(path);
+        uploaded.push(pub.publicUrl);
+      }
+      if (uploaded.length) setEditPhotos((prev) => [...prev, ...uploaded]);
+      if (uploaded.length < fileArray.length) {
+        toast({ title: "Algumas fotos falharam no upload", variant: "destructive" });
+      }
+    } finally {
+      setUploading(false);
+    }
+  }, []);
 
   const removePhoto = (index: number) => {
     setEditPhotos((prev) => prev.filter((_, i) => i !== index));
@@ -105,14 +126,16 @@ const InlinePhotoEditor = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors"
+              disabled={uploading}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60"
             >
-              <Plus className="w-3.5 h-3.5" />
-              Adicionar
+              {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+              {uploading ? "Enviando..." : "Adicionar"}
             </button>
             <button
               onClick={handleSave}
-              className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/80 transition-colors"
+              disabled={uploading}
+              className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/80 transition-colors disabled:opacity-60"
             >
               <Check className="w-4 h-4" />
             </button>

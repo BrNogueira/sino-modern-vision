@@ -46,7 +46,7 @@ const PropertyCarousel = () => {
             que aparece abaixo do card — o pb/-mb dá área de clip extra para ele. */}
         <Carousel
           opts={{ align: "start", loop: featured.length > 3 }}
-          className="w-full px-0 md:px-12 mt-8 md:mt-[70px] [&>div]:pb-44 [&>div]:-mb-44"
+          className="w-full px-0 md:px-12 mt-8 md:mt-[70px] [&>div]:pb-72 [&>div]:-mb-72"
         >
           <CarouselContent className="-ml-8">
             {featured.map((property) => (

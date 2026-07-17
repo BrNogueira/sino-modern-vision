@@ -115,9 +115,12 @@ function buildListingXml(r: Record<string, any>): string {
   if (r.video_url || fotos.length) {
     xml += `      <Media>\n`;
     if (r.video_url) xml += `        <Item medium="video">${escapeXml(r.video_url)}</Item>\n`;
-    fotos.forEach((foto, i) => {
-      const primary = foto.principal ? ` primary="true"` : "";
-      xml += `        <Item medium="image" caption="foto${i + 1}"${primary}>${escapeXml(foto.url)}</Item>\n`;
+    fotos.forEach((foto: any, i) => {
+      // Tolera itens como string (URL crua) ou objeto {url, principal}.
+      const url = typeof foto === "string" ? foto : foto?.url;
+      if (!url) return;
+      const primary = typeof foto === "object" && foto.principal ? ` primary="true"` : "";
+      xml += `        <Item medium="image" caption="foto${i + 1}"${primary}>${escapeXml(url)}</Item>\n`;
     });
     xml += `      </Media>\n`;
   }

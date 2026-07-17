@@ -375,7 +375,21 @@ const PropertyDetail = () => {
           {/* ══ LEFT COLUMN ══ */}
           <div className="lg:col-span-2 space-y-6">
 
-            <InlinePhotoEditor photos={gallery} propertyCode={property.code} propertyTitle={property.title} onSave={(newPhotos) => { setEditableGallery(newPhotos); setCurrentImage(0); }}>
+            <InlinePhotoEditor
+              photos={gallery}
+              propertyCode={property.code}
+              propertyTitle={property.title}
+              onSave={(newPhotos) => {
+                setEditableGallery(newPhotos);
+                setCurrentImage(0);
+                // Persiste ordem/capa no banco — a primeira foto é a capa exibida nos cards.
+                if (baseProperty.id) {
+                  updateProperty(baseProperty.id, {
+                    fotos: newPhotos.map((url, i) => ({ url, principal: i === 0 })),
+                  });
+                }
+              }}
+            >
               {/* Main image with Venda/Aluguel rounded badges + favorite star */}
               <div className="relative rounded-xl overflow-hidden bg-muted aspect-[16/10] border border-border">
                 <img src={gallery[currentImage]} alt={property.title} className="w-full h-full object-cover cursor-pointer" onClick={() => openLightbox(currentImage)} />
