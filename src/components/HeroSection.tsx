@@ -2,9 +2,18 @@ import { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown, Check, Star, ImageIcon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { favorites } = useFavorites();
+
+  // Contador ao lado de "Favoritos": só aparece quando há ao menos um selecionado.
+  const favoritesBadge = favorites.length > 0 && (
+    <span className="bg-yellow-400 text-black text-sm font-bold rounded-full min-w-[24px] h-6 px-1.5 flex items-center justify-center">
+      {favorites.length}
+    </span>
+  );
   
   const [searchText, setSearchText] = useState("");
   const [modalidade, setModalidade] = useState<string[]>([]);
@@ -460,6 +469,7 @@ const HeroSection = () => {
           >
             <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
             <span className="font-bold text-xl">Favoritos</span>
+            {favoritesBadge}
           </Link>
         </div>
       </div>
@@ -472,6 +482,7 @@ const HeroSection = () => {
         >
           <Star className="w-7 h-7 fill-yellow-400 text-yellow-400" />
           <span className="font-bold" style={{ fontSize: "1.5rem" }}>Favoritos</span>
+          {favoritesBadge}
         </Link>
       </div>
 
